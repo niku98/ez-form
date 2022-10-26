@@ -15,6 +15,7 @@ export interface FormField {
 	clearValidate: () => void;
 	value: ComputedRef<any>;
 	error: ComputedRef<ValidateError | undefined>;
+	dirty: ComputedRef<boolean>;
 }
 
 export interface FormInstance<
@@ -28,6 +29,7 @@ export interface FormInstance<
 	submit: () => void;
 	reset: (values?: Values, notify?: boolean) => void;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
+	isDirty: (name?: NamePath) => boolean;
 }
 
 export interface InnerFormInstance<
@@ -46,5 +48,3 @@ export interface FormInjectedValues extends FormInstance {
 }
 
 export const $formInjectKey = Symbol();
-
-export type FormExposed = Omit<FormInstance, "validateTrigger" | "validate">;

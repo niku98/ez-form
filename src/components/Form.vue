@@ -1,6 +1,15 @@
 <template>
-	<form :class="className" @submit.prevent="submit()">
-		<slot />
+	<form :class="className" @submit.prevent="submit()" @reset.prevent="reset()">
+		<slot
+			:values="formValues"
+			:errors="errors"
+			:submit="submit"
+			:reset="reset"
+			:validate="validate"
+			:getFieldValue="getFieldValue"
+			:setFieldValue="setFieldValue"
+			:isDirty="isDirty"
+		/>
 	</form>
 </template>
 
@@ -9,7 +18,6 @@ import useForm from "@/composables/useForm";
 import usePluginOptions from "@/composables/usePluginOptions";
 import {
 	$formInjectKey,
-	FormExposed,
 	FormField,
 	FormInjectedValues,
 	FormInstance,
@@ -214,6 +222,14 @@ function handleSubmit() {
 	changeErrors([]);
 }
 
+function isDirty(namePath?: NamePath) {
+	return objectValues(fields)
+		.filter(({ name }) => (namePath ? isEqual(name, namePath) : true))
+		.some(({ dirty }) => {
+			return dirty;
+		});
+}
+
 watch(formValues, (value: any) => {
 	emit("change", value);
 });
@@ -228,6 +244,7 @@ provide<FormInjectedValues>($formInjectKey, {
 	validate,
 	addField,
 	removeField,
+	isDirty,
 	get classPrefix() {
 		return props.classPrefix;
 	},
@@ -239,12 +256,17 @@ provide<FormInjectedValues>($formInjectKey, {
 	},
 });
 
-defineExpose<FormExposed>({
+defineExpose<FormInstance>({
 	values: formValues,
 	errors,
 	submit,
 	reset,
 	getFieldValue,
 	setFieldValue,
+	validate,
+	isDirty,
+	get validateTrigger() {
+		return props.validateTrigger;
+	},
 });
 </script>

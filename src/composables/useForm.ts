@@ -26,6 +26,9 @@ export default function useForm<
 	function setFieldValue() {}
 	function getFieldValue() {}
 	async function validate() {}
+	function isDirty() {
+		return false;
+	}
 
 	const formInstance: FormInstance<Values> = {
 		values: formValues,
@@ -35,6 +38,7 @@ export default function useForm<
 		setFieldValue,
 		getFieldValue,
 		validate,
+		isDirty,
 	};
 
 	return formInstance;

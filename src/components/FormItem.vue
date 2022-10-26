@@ -31,6 +31,7 @@ import FormItemView from "@/components/FormItemView.vue";
 import useFormItem from "@/composables/useFormItem";
 import {
 	FormInjectedValues,
+	FormItemInstance,
 	FormItemValueTransformer,
 	Rule,
 	ValidateTrigger,
@@ -84,6 +85,7 @@ const {
 	rawValue,
 	formItemId,
 	error,
+	dirty,
 	updateEventName,
 	injectedForm,
 	handleBlur,
@@ -140,4 +142,23 @@ const getInputItemProps = (vNode: VNode) => {
 		id: formItemId,
 	};
 };
+
+defineExpose<FormItemInstance>({
+	handleChange,
+	get rawValue() {
+		return rawValue.value;
+	},
+	get transformedValue() {
+		return inputValue.value;
+	},
+	get form() {
+		return injectedForm;
+	},
+	get error() {
+		return error.value;
+	},
+	get dirty() {
+		return dirty.value;
+	},
+});
 </script>

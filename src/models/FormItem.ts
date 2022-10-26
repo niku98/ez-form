@@ -1,11 +1,13 @@
-import { FormInjectedValues } from "@/models/Form";
-import { Rule, ValidateTrigger } from "@/models/Validation";
+import { Rule, ValidateError, ValidateTrigger } from "@/models/Validation";
+import { FormInstance } from "dist";
 
-export interface FormItemExposed {
-	value: any;
+export interface FormItemInstance {
+	rawValue: any;
+	transformedValue: any;
 	handleChange(value: any): any;
-	form: FormInjectedValues;
-	errors: any;
+	form: FormInstance;
+	error?: ValidateError;
+	dirty: boolean;
 }
 
 export interface FormItemValueTransformer<In = any, Out = any> {

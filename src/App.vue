@@ -1,6 +1,6 @@
 <template>
 	<img alt="Vue logo" src="./assets/logo.png" />
-	<SmartForm @submit="handleSubmit">
+	<Form @submit="handleSubmit">
 		<FormItem
 			label="Test"
 			name="test"
@@ -45,13 +45,14 @@
 			<button type="button" @click="add()">Add new user</button>
 		</FormList>
 		<button type="submit">Submit</button>
-	</SmartForm>
+		<button type="reset">Reset</button>
+	</Form>
 </template>
 
 <script lang="ts" setup>
 import FormItem from "@/components/FormItem.vue";
 import FormList from "@/components/FormList.vue";
-import SmartForm from "./components/Form.vue";
+import Form from "./components/Form.vue";
 
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup

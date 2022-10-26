@@ -74,6 +74,7 @@ export default function useFormItem(
 	const updateEventName = computed(
 		() => props.changeEventPropName ?? `update:${props.valuePropName}`
 	);
+	const dirty = ref(false);
 
 	// Handle validate
 	const validateTrigger = computed(() =>
@@ -151,6 +152,7 @@ export default function useFormItem(
 	function handleChange(event: any) {
 		// Get value from input and set to inputValue, rawValue will be set automatically
 		inputValue.value = props.getValueFromChangeEvent(event);
+		dirty.value = true;
 
 		if (validateTrigger.value.includes("change")) {
 			nextTick(() => {
@@ -183,6 +185,7 @@ export default function useFormItem(
 		validate,
 		clearValidate,
 		error: computed(() => error.value),
+		dirty: computed(() => dirty.value),
 	});
 
 	onBeforeUnmount(() => {
@@ -217,5 +220,6 @@ export default function useFormItem(
 		handleChange,
 		handleBlur,
 		validate,
+		dirty,
 	};
 }

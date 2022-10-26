@@ -66,7 +66,9 @@ $css-variable-names: (
 		&-input {
 			min-height: var(#{map.get($css-variable-names, "input-min-height")});
 
-			input {
+			input,
+			textarea,
+			select {
 				height: var(#{map.get($css-variable-names, "input-min-height")});
 				border: 1px solid
 					var(#{map.get($css-variable-names, "input-border-color")});
@@ -84,8 +86,20 @@ $css-variable-names: (
 			}
 		}
 
-		&.has-errors {
+		&:not(.no-style).has-errors {
 			margin-bottom: 0;
+
+			input,
+			textarea,
+			select {
+				border: 1px solid var(#{map.get($css-variable-names, "error-color")});
+
+				&:focus {
+					border-color: var(#{map.get($css-variable-names, "error-color")});
+					box-shadow: 0 0 3px 1px
+						var(#{map.get($css-variable-names, "error-color")});
+				}
+			}
 		}
 
 		&-errors {
