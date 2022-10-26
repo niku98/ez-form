@@ -1,0 +1,17 @@
+{
+	"files": [],
+	"references": [
+		{
+			"path": "./tsconfig.vite-config.json"
+		},
+		{
+			"path": "./tsconfig.app.json"
+		}
+	],
+	"compilerOptions": {
+		"paths": {
+			"@niku/vue3-form": ["./dist/index"]
+		},
+		"outDir": "./dist"
+	}
+}

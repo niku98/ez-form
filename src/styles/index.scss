@@ -1,0 +1,133 @@
+@use "sass:map";
+
+$prefix: "nk";
+$form-item-prefix: "#{$prefix}-form-item";
+$form-list-prefix: "#{$prefix}-form-list";
+$css-variable-names: (
+	"radius": --#{$prefix}-form-radius,
+	"required-mark-color": --#{$prefix}-form-required-mark-color,
+	"input-min-height": --#{$prefix}-form-input-min-height,
+	"input-border-color": --#{$prefix}-form-input-border-color,
+	"input-focus-color": --#{$prefix}-form-input-focus-color,
+	"error-color": --#{$prefix}-form-input-error-color,
+	"required-mark": --#{$prefix}-form-required-mark,
+);
+
+:root {
+	#{map.get($css-variable-names, "radius")}: 6px;
+	#{map.get($css-variable-names, "required-mark-color")}: red;
+	#{map.get($css-variable-names, "input-min-height")}: 32px;
+	#{map.get($css-variable-names, "input-border-color")}: #ddd;
+	#{map.get($css-variable-names, "input-focus-color")}: #4285f4;
+	#{map.get($css-variable-names, "error-color")}: red;
+	#{map.get($css-variable-names, "required-mark")}: "*";
+}
+
+.#{$prefix}-form {
+	.#{$form-item-prefix} {
+		border-width: 0px;
+		padding: 0;
+		margin-bottom: 1.2rem;
+		margin-left: 0;
+
+		* {
+			box-sizing: border-box;
+			outline: none;
+		}
+
+		&.no-style {
+			margin-bottom: 0;
+
+			.#{$form-item-prefix}-label,
+			.#{$form-item-prefix}-errors,
+			.#{$form-item-prefix}-extra {
+				display: none;
+			}
+		}
+
+		&-label {
+			font-size: 1rem;
+			font-weight: 400;
+			padding-bottom: 0.2rem;
+			display: inline-block;
+
+			&::before {
+				content: var(#{map.get($css-variable-names, "required-mark")});
+				color: var(#{map.get($css-variable-names, "required-mark-color")});
+				padding-right: 0.2rem;
+				display: none;
+			}
+
+			&::after {
+				content: ":";
+			}
+		}
+
+		&-input {
+			min-height: var(#{map.get($css-variable-names, "input-min-height")});
+
+			input {
+				height: var(#{map.get($css-variable-names, "input-min-height")});
+				border: 1px solid
+					var(#{map.get($css-variable-names, "input-border-color")});
+				border-radius: var(#{map.get($css-variable-names, "radius")});
+				padding: 0.5rem 0.6rem;
+				transition: all 0.3s;
+
+				&:focus {
+					border-color: var(
+						#{map.get($css-variable-names, "input-focus-color")}
+					);
+					box-shadow: 0 0 3px 1px
+						var(#{map.get($css-variable-names, "input-focus-color")});
+				}
+			}
+		}
+
+		&.has-errors {
+			margin-bottom: 0;
+		}
+
+		&-errors {
+			display: flex;
+			flex-direction: column;
+			animation: showErrors 0.3s ease-in-out;
+
+			span {
+				color: var(#{map.get($css-variable-names, "error-color")});
+				font-size: 0.8rem;
+				line-height: 1;
+				margin-top: 0.2rem;
+				margin-bottom: 0.2rem;
+			}
+		}
+
+		@keyframes showErrors {
+			from {
+				visibility: hidden;
+				opacity: 0;
+				transform-origin: 0 0;
+				transform: rotateX(-180deg);
+			}
+
+			to {
+				visibility: visible;
+				opacity: 1;
+				transform: rotateX(0deg);
+			}
+		}
+
+		&.#{$form-list-prefix} {
+			> .#{#{$form-item-prefix}}-label {
+				font-weight: 500;
+				font-size: 1.2rem;
+			}
+		}
+
+		&.required {
+			.#{$form-item-prefix}-label::before {
+				display: initial;
+			}
+		}
+	}
+}
