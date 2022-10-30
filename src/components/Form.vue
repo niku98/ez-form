@@ -17,7 +17,6 @@
 import useForm from "@/composables/useForm";
 import usePluginOptions from "@/composables/usePluginOptions";
 import {
-	$formInjectKey,
 	FormField,
 	FormInjectedValues,
 	FormInstance,
@@ -39,6 +38,7 @@ import {
 	objectValues,
 	set,
 } from "@/utilities";
+import { $formInjectKey } from "@/utilities/constants";
 import { computed, provide, reactive, ref, toRaw, watch } from "vue";
 
 export interface FormProps<Values extends object = any> {
@@ -63,7 +63,7 @@ const props = withDefaults(defineProps<FormProps>(), {
 	validateTrigger() {
 		return ["change"];
 	},
-	classPrefix: "nk",
+	classPrefix: "ez",
 });
 const emit = defineEmits<FormEmitter>();
 const pluginOptions = usePluginOptions();

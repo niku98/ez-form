@@ -4,24 +4,24 @@ import Form from "@/components/Form.vue";
 import FormItem from "@/components/FormItem.vue";
 import FormList from "@/components/FormList.vue";
 import { PluginOptions } from "@/models";
-import { $nkFormInjectKey } from "@/utilities/constants";
+import { $ezFormInjectKey } from "@/utilities/constants";
 export * from "./models";
-export { Form, FormItem, FormList };
+export { Form as EzForm, FormItem as EzFormItem, FormList as EzFormList };
 
 const defaultOptions: PluginOptions = {};
 
-const Vue3Form: Plugin = {
+const EzFormPlugin: Plugin = {
 	install(app, options?: typeof defaultOptions) {
 		const extendedOptions = Object.assign(defaultOptions, options);
 
 		if (extendedOptions.validateMessages) {
-			app.provide($nkFormInjectKey, extendedOptions);
+			app.provide($ezFormInjectKey, extendedOptions);
 		}
 
-		app.component("NkForm", Form);
-		app.component("NkFormItem", FormItem);
-		app.component("NkFormList", FormList);
+		app.component("EzForm", Form);
+		app.component("EzFormItem", FormItem);
+		app.component("EzFormList", FormList);
 	},
 };
 
-export default Vue3Form;
+export default EzFormPlugin;

@@ -46,5 +46,3 @@ export interface FormInjectedValues extends FormInstance {
 	validateMessages?: ValidateMessages;
 	classPrefix: string;
 }
-
-export const $formInjectKey = Symbol();
