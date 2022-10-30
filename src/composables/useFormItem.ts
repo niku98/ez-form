@@ -1,11 +1,11 @@
 import {
-	$formInjectKey,
 	FormInjectedValues,
 	FormItemProps,
 	ValidateError,
 	ValidateOption,
 } from "@/models";
 import { castPath, castToArray, clone, get, uniqueId } from "@/utilities";
+import { $formInjectKey } from "@/utilities/constants";
 import ValidationSchema from "async-validator";
 import {
 	computed,
