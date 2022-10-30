@@ -10,7 +10,7 @@
 	],
 	"compilerOptions": {
 		"paths": {
-			"@niku/vue3-form": ["./dist/index"]
+			"@niku/ez-form": ["./dist/index"]
 		},
 		"outDir": "./dist"
 	}
