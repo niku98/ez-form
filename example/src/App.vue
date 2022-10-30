@@ -1,6 +1,6 @@
 <template>
-	<NkForm @submit="handleSubmit">
-		<FormItem
+	<EzForm @submit="handleSubmit">
+		<EzFormItem
 			label="Test"
 			name="test"
 			:rules="[
@@ -12,41 +12,44 @@
 			no-style
 		>
 			<input />
-		</FormItem>
-		<FormItem label="First name" name="firstName" :rules="[{ required: true }]">
+		</EzFormItem>
+		<EzFormItem
+			label="First name"
+			name="firstName"
+			:rules="[{ required: true }]"
+		>
 			<input />
-		</FormItem>
+		</EzFormItem>
 
-		<FormList
+		<EzFormList
 			label="Users"
 			name="users"
 			:default-value="defaultList"
 			v-slot="{ namePaths, add }"
 		>
 			<div v-for="(namePath, index) in namePaths" :key="index">
-				<FormItem
+				<EzFormItem
 					label="Display name"
 					:name="[...namePath, 'displayName']"
 					:rules="[{ required: true }]"
 				>
 					<input />
-				</FormItem>
-				<FormItem
+				</EzFormItem>
+				<EzFormItem
 					label="Age"
 					:name="[...namePath, 'age']"
 					:rules="[{ required: true }]"
 				>
 					<input type="number" />
-				</FormItem>
+				</EzFormItem>
 			</div>
 			<button type="button" @click="add()">Add new user</button>
-		</FormList>
+		</EzFormList>
 		<button type="submit">Submit</button>
-	</NkForm>
+	</EzForm>
 </template>
 
 <script lang="ts" setup>
-import { FormItem, FormList } from "@niku/ez-form";
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
 

@@ -1,4 +1,5 @@
-import { $formInjectKey, FormInjectedValues, FormInstance } from "@/models";
+import { FormInjectedValues, FormInstance } from "@/models";
+import { $formInjectKey } from "@/utilities/constants";
 import { inject, reactive } from "vue";
 
 export default function useForm<
