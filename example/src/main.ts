@@ -1,4 +1,4 @@
-import "@niku/vue3-form/dist/styles/index.css";
+import "@niku/ez-form/dist/styles/index.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 

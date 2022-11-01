@@ -1,16 +1,20 @@
 {
-	"name": "@niku/vue3-form",
+	"name": "@niku/ez-form",
 	"version": "1.0.0",
 	"main": "dist/index.cjs.js",
 	"module": "dist/index.es.js",
 	"types": "dist",
 	"scripts": {
 		"dev": "vite",
-		"build": "vue-tsc --noEmit && vite build && yarn compile-style",
-		"compile-style": "sass --no-source-map ./src/styles/index.scss ./dist/styles/index.css && cp ./src/styles/index.scss ./dist/styles/index.scss",
+		"build": "vue-tsc --noEmit && vite build && yarn build:style",
+		"build:style": "sass --no-source-map ./src/styles/index.scss ./dist/styles/index.css && cp ./src/styles/index.scss ./dist/styles/index.scss",
+		"docs:dev": "DOCS=true && vitepress dev docs",
+		"docs:build": "DOCS=true && vitepress build docs",
+		"docs:serve": "vitepress serve docs",
+		"vitepress": "vitepress",
 		"preview": "vite preview",
 		"example": "yarn --cwd example",
-		"postinstall": "yarn link && yarn example && yarn example link @niku/vue3-form"
+		"postinstall": "yarn link && yarn example && yarn example link @niku/ez-form"
 	},
 	"files": [
 		"dist"
@@ -30,6 +34,7 @@
 		"typescript": "^4.8.4",
 		"vite": "^3.1.8",
 		"vite-plugin-dts": "^1.6.6",
+		"vitepress": "^1.0.0-alpha.25",
 		"vue": "^3.2.41",
 		"vue-tsc": "^1.0.8"
 	}
