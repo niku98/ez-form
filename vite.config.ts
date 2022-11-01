@@ -10,7 +10,7 @@ export default defineConfig({
 		reportCompressedSize: true,
 		lib: {
 			entry: "src/index.ts",
-			name: "Vue3Form",
+			name: "EzForm",
 			fileName(format) {
 				return `index.${format}.js`;
 			},
@@ -19,7 +19,7 @@ export default defineConfig({
 		rollupOptions: {
 			// make sure to externalize deps that shouldn't be bundled
 			// into your library
-			external: ["vue"],
+			external: ["vue", "async-validator"],
 			output: {
 				// Provide global variables to use in the UMD build
 				// for externalized deps
