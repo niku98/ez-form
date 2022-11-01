@@ -6,22 +6,23 @@ title: Why Ez Form?
 
 **Ez Form** is very fast. Easy-to-use with beginner-friendly documentation.
 
-## Form's State Management
+## Form's Data Management
 
-You are tired because of form state management. Don't worry, with **Ez Form**, Form's state will be managed inside it own.
+You are tired because of form data management. Don't worry, with **Ez Form**, Form's data will be managed inside it own.
 
-All the things you need to do is building your form's state structure.
+All the things you need to do is building your form's data structure.
 
 ```vue
 <template>
-	<Form @submit="handleSubmit">
-		<FormItem label="Username" name="username">
+	<EzForm @submit="handleSubmit">
+		<EzFormItem label="Username" name="username">
 			<input placeholder="Enter Username" />
-		</FormItem>
-		<FormItem label="Display name" name="displayName">
+		</EzFormItem>
+		<EzFormItem label="Display name" name="displayName">
 			<input placeholder="Enter Display name" />
-		</FormItem>
-	</Form>
+		</EzFormItem>
+		<button type="submit">Submit</button>
+	</EzForm>
 </template>
 
 <script lang="ts" setup>
@@ -42,15 +43,16 @@ function handleSubmit(values: User) {
 
 ```vue
 <template>
-	<Form @submit="handleSubmit">
-		<FormItem label="Username" name="username">
+	<EzForm @submit="handleSubmit">
+		<EzFormItem label="Username" name="username">
 			<!-- Ant Design's input -->
 			<a-input placeholder="Enter Username" />
-		</FormItem>
-		<FormItem label="Display name" name="displayName">
+		</EzFormItem>
+		<EzFormItem label="Display name" name="displayName">
 			<a-input placeholder="Enter Display name" />
-		</FormItem>
-	</Form>
+		</EzFormItem>
+		<button type="submit">Submit</button>
+	</EzForm>
 </template>
 
 <script lang="ts" setup>
