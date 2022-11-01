@@ -39,7 +39,7 @@ export function clone<T extends any[] | Object>(input: T): T {
 export function castPath(path: NamePath): string[] {
 	if (Array.isArray(path)) {
 		return path.reduce<string[]>((result, p) => {
-			result.push(...castPath(p));
+			result.push(String(p));
 
 			return result;
 		}, []);
