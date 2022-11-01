@@ -19,6 +19,7 @@
 			:removeByKey="removeByKey"
 			:swap="swap"
 			:replace="replace"
+			:move="move"
 			:form="injectedForm"
 		/>
 
@@ -179,6 +180,16 @@ function swap(firstIndex: number, secondIndex: number) {
 	const temp = array[firstIndex];
 	array[firstIndex] = array[secondIndex];
 	array[secondIndex] = temp;
+
+	handleChange(array);
+}
+
+function move(fromIndex: number, toIndex: number) {
+	const array = [...listValues.value];
+
+	const temp = array[fromIndex];
+	array.splice(fromIndex, 1);
+	array.splice(toIndex, 0, temp);
 
 	handleChange(array);
 }

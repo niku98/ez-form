@@ -122,4 +122,5 @@ The form above will have data structure like this:
 | removeByKey | Function to remove item from list by custom key          | `(key: string, value: any) => void`                          |
 | swap        | Function to swap two item by index                       | `(firstIndex: number, secondIndex: number) => void`          |
 | replace     | Function to replace an item of list with other value     | `(index: number, value: any) => void`                        |
+| move        | Function to move an item of list to other index          | `(fromIndex: number, toIndex: number) => void`               |
 | form        | Form's utility functions and data                        |                                                              |
