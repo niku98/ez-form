@@ -26,8 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import useForm from "@/composables/useForm";
-import { FormInjectedValues } from "@/models";
+import { useInjectForm } from "@/composables";
 import { computed } from "vue";
 
 const props = withDefaults(
@@ -43,7 +42,7 @@ const props = withDefaults(
 	}
 );
 
-const form = useForm() as FormInjectedValues;
+const form = useInjectForm();
 
 const classNames = computed(() => {
 	return {

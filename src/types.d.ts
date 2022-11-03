@@ -1,6 +1,6 @@
-import FormVue from "@/components/Form.vue";
-import FormItemVue from "@/components/FormItem.vue";
-import FormListVue from "@/components/FormList.vue";
+import FormVue from "@/components/EzForm.vue";
+import FormItemVue from "@/components/EzFormItem.vue";
+import FormListVue from "@/components/EzFormList.vue";
 
 declare module "@vue/runtime-core" {
 	export interface GlobalComponents {

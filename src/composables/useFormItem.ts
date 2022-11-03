@@ -1,26 +1,22 @@
+import useInjectForm from "@/composables/useInjectForm";
 import {
-	FormInjectedValues,
+	FormInstance,
 	FormItemProps,
 	ValidateError,
 	ValidateOption,
 } from "@/models";
 import { castPath, castToArray, clone, get, uniqueId } from "@/utilities";
-import { $formInjectKey } from "@/utilities/constants";
+import { WithRequiredProperty } from "@/utilities-types";
 import ValidationSchema from "async-validator";
 import {
 	computed,
-	inject,
 	nextTick,
 	onBeforeMount,
 	onBeforeUnmount,
+	Ref,
 	ref,
-	toRaw,
 	watch,
 } from "vue";
-
-type WithRequiredProperty<T, Keys extends keyof T> = T & {
-	[P in Keys]-?: T[P];
-};
 
 export default function useFormItem(
 	props: WithRequiredProperty<
@@ -28,24 +24,15 @@ export default function useFormItem(
 		"valueTransformer" | "getValueFromChangeEvent"
 	>,
 	emit: {
-		(event: "change", value: any, form: FormInjectedValues): void;
+		(event: "change", value: any, form: FormInstance): void;
 	}
 ) {
-	function useForm() {
-		const injected = inject<FormInjectedValues>($formInjectKey);
-
-		if (!injected) {
-			throw new Error("FormItem must be used in Form");
-		}
-
-		return injected;
-	}
-
-	const injectedForm = useForm();
+	const injectedForm = useInjectForm();
 
 	const formItemId = computed(() =>
 		props.name ? `${uniqueId()}_${castPath(props.name).join("_")}` : ""
 	);
+	const defaultValue: Ref<any> = ref(props.defaultValue);
 
 	/**
 	 * Raw value get from form
@@ -172,8 +159,8 @@ export default function useFormItem(
 	});
 
 	onBeforeMount(() => {
-		if (props.defaultValue !== undefined && rawValue.value === undefined) {
-			rawValue.value = clone(toRaw(props.defaultValue));
+		if (defaultValue.value !== undefined && rawValue.value === undefined) {
+			rawValue.value = clone(defaultValue.value);
 		}
 	});
 
@@ -184,6 +171,9 @@ export default function useFormItem(
 		value: computed(() => rawValue.value),
 		validate,
 		clearValidate,
+		get defaultValue() {
+			return defaultValue.value;
+		},
 		error: computed(() => error.value),
 		dirty: computed(() => dirty.value),
 	});

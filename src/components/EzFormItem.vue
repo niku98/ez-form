@@ -1,5 +1,5 @@
 <template>
-	<FormItemView
+	<EzFormItemView
 		:label="label"
 		:id-for="formItemId"
 		:required-mark="requiredMarkString"
@@ -23,60 +23,98 @@
 		<template v-if="slots.extra" #extra>
 			<slot name="extra" :form="injectedForm" />
 		</template>
-	</FormItemView>
+	</EzFormItemView>
 </template>
 
 <script lang="ts" setup>
-import FormItemView from "@/components/FormItemView.vue";
-import useFormItem from "@/composables/useFormItem";
-import {
-	FormInjectedValues,
+import EzFormItemView from "@/components/EzFormItemView.vue";
+import { useFormItem } from "@/composables";
+import type {
+	FormInstance,
 	FormItemInstance,
 	FormItemValueTransformer,
+	NamePath,
 	Rule,
 	ValidateTrigger,
 } from "@/models";
-import { computed, toRaw, useSlots, VNode } from "vue";
+import { computed, PropType, toRaw, useSlots, VNode } from "vue";
 
-export interface FormItemProps {
-	label?: string;
-	name?: string | number | (string | number)[];
-	defaultValue?: any;
-	valuePropName?: string;
-	changeEventPropName?: string;
-	blurEventPropName?: string;
-	getValueFromChangeEvent?: (event: any) => any;
-	hideTextError?: boolean;
-	valueTransformer?: FormItemValueTransformer;
-	classStyle?: string;
-	autoBinding?: boolean;
-	rules?: Rule;
-	requiredMark?: string | boolean;
-	validateTrigger?: ValidateTrigger | ValidateTrigger[];
-	validateFirst?: boolean;
-	noStyle?: boolean;
-}
-
-const props = withDefaults(defineProps<FormItemProps>(), {
-	valuePropName: "value",
-	blurEventPropName: "blur",
-	getValueFromChangeEvent: (event: any) => {
-		if (event?.target) {
-			return event.target.value ?? event.target.checked;
-		}
-
-		return event;
+const props = defineProps({
+	label: {
+		required: false,
+		type: String as PropType<string>,
 	},
-	valueTransformer: () => ({
-		in: (value) => value,
-		out: (value) => value,
-	}),
-	autoBinding: true,
-	requiredMark: true,
-	validateTrigger: "change",
+	name: {
+		required: false,
+		type: [String, Array] as PropType<NamePath>,
+	},
+	defaultValue: {
+		required: false,
+	},
+	valuePropName: {
+		required: false,
+		type: String as PropType<string>,
+		default: "value",
+	},
+	changeEventPropName: {
+		required: false,
+		type: String as PropType<string>,
+	},
+	blurEventPropName: {
+		required: false,
+		type: String as PropType<string>,
+		default: "blur",
+	},
+	getValueFromChangeEvent: {
+		required: false,
+		type: Function as PropType<(event: any) => any>,
+		default: (event: any) => {
+			if (event?.target) {
+				return event.target.value ?? event.target.checked;
+			}
+
+			return event;
+		},
+	},
+	valueTransformer: {
+		required: false,
+		type: Object as PropType<FormItemValueTransformer>,
+		default: () => ({
+			in: (value: any) => value,
+			out: (value: any) => value,
+		}),
+	},
+	autoBinding: {
+		required: false,
+		type: Boolean as PropType<boolean>,
+		default: true,
+	},
+	rules: {
+		required: false,
+		type: [Object, Array] as PropType<Rule>,
+	},
+	requiredMark: {
+		required: false,
+		type: [String, Boolean] as PropType<string | boolean>,
+		default: true,
+	},
+	validateTrigger: {
+		required: false,
+		type: [String, Array] as PropType<ValidateTrigger | ValidateTrigger[]>,
+		default: "change",
+	},
+	validateFirst: {
+		required: false,
+		type: Boolean as PropType<boolean>,
+	},
+	noStyle: {
+		required: false,
+		type: Boolean as PropType<boolean>,
+	},
 });
+
 const emit = defineEmits<{
-	(event: "change", value: any, form: FormInjectedValues): void;
+	(event: "change", value: any, form: FormInstance): void;
 }>();
 
 const {
