@@ -12,6 +12,8 @@
 		"paths": {
 			"@niku/ez-form": ["./dist/index"]
 		},
-		"outDir": "./dist"
+		"outDir": "./dist",
+		"declaration": true,
+		"declarationDir": "dist"
 	}
 }

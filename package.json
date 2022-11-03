@@ -1,13 +1,21 @@
 {
 	"name": "@niku/ez-form",
 	"version": "1.0.1",
-	"main": "dist/index.cjs.js",
-	"module": "dist/index.es.js",
-	"types": "dist",
+	"main": "./dist/index.cjs.js",
+	"module": "./dist/index.es.js",
+	"types": "./dist/index.d.ts",
+	"type": "module",
+	"license": "MIT",
 	"private": false,
+	"author": {
+		"name": "Niku",
+		"url": "https://github.com/niku98",
+		"email": "phammanh.1221998@gmail.com"
+	},
 	"scripts": {
 		"dev": "vite",
-		"build": "vue-tsc --noEmit && vite build && yarn build:style",
+		"build": "vue-tsc --noEmit && vite build && yarn build:style && yarn build:types",
+		"build:types": "vue-tsc --declaration --emitDeclarationOnly",
 		"build:style": "sass --no-source-map ./src/styles/index.scss ./dist/styles/index.css && cp ./src/styles/index.scss ./dist/styles/index.scss",
 		"docs:dev": "DOCS=true && vitepress dev docs",
 		"docs:build": "DOCS=true && vitepress build docs",
@@ -19,6 +27,32 @@
 	},
 	"files": [
 		"dist"
+	],
+	"exports": {
+		".": {
+			"import": "./dist/index.es.js",
+			"require": "./dist/index.cjs.js",
+			"types": "./dist/index.d.ts"
+		},
+		"./types": {
+			"types": "./dist/types.d.ts"
+		}
+	},
+	"publishConfig": {
+		"access": "public"
+	},
+	"keywords": [
+		"vue",
+		"vue3",
+		"vue 3",
+		"vuejs",
+		"vue-form",
+		"vuejs-form",
+		"form",
+		"form-handling",
+		"validate",
+		"validation",
+		"validator"
 	],
 	"dependencies": {
 		"async-validator": "^4.2.5"

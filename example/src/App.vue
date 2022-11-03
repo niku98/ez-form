@@ -1,16 +1,6 @@
 <template>
-	<EzForm @submit="handleSubmit">
-		<EzFormItem
-			label="Test"
-			name="test"
-			:rules="[
-				{ required: true },
-				{ type: 'string', pattern: /test/ },
-				{ pattern: /abc/ },
-			]"
-			validate-first
-			no-style
-		>
+	<EzForm @submit="handleSubmit" @reset="">
+		<EzFormItem label="Test" name="test" validate-first no-style>
 			<input />
 		</EzFormItem>
 		<EzFormItem
