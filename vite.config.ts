@@ -8,7 +8,7 @@ export default defineConfig({
 	plugins: [
 		vue(),
 		dts({
-			exclude: ["example/**", "node_modules/**"],
+			exclude: ["example/**", "node_modules/**", "**/env.d.ts"],
 			skipDiagnostics: true,
 			logDiagnostics: true,
 			insertTypesEntry: true,
