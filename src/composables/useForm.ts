@@ -186,8 +186,8 @@ export default function useForm<
 			);
 		}
 
-		allFields.forEach(({ clearValidate }) => {
-			clearValidate();
+		allFields.forEach(({ reset: resetField }) => {
+			resetField();
 		});
 
 		emit("reset");

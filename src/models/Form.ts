@@ -13,6 +13,7 @@ export interface FormField {
 	id: ComputedRef<string>;
 	validate: (options?: ValidateOption) => Promise<any>;
 	clearValidate: () => void;
+	reset: () => void;
 	defaultValue: any;
 	value: ComputedRef<any>;
 	error: ComputedRef<ValidateError | undefined>;
