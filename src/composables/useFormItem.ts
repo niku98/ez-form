@@ -171,6 +171,10 @@ export default function useFormItem(
 		value: computed(() => rawValue.value),
 		validate,
 		clearValidate,
+		reset() {
+			clearValidate();
+			dirty.value = false;
+		},
 		get defaultValue() {
 			return defaultValue.value;
 		},
