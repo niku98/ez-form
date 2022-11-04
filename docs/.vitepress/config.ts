@@ -26,8 +26,22 @@ export default defineConfig({
 				text: "Basic",
 				items: [
 					{ text: "Handling Form", link: "/guide/handling-form" },
+					{ text: "Nested data", link: "/guide/nested" },
 					{ text: "Validation", link: "/guide/validation" },
 					{ text: "Form List", link: "/guide/form-list" },
+				],
+			},
+			{
+				text: "Advanced",
+				items: [
+					{
+						text: "Using useForm",
+						link: "/guide/using-use-form",
+					},
+					{
+						text: "Custom Inputs",
+						link: "/guide/custom-inputs",
+					},
 				],
 			},
 		],
