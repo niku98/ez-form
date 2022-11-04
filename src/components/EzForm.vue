@@ -22,8 +22,7 @@ import type {
 	ValidateMessages,
 	ValidateTrigger,
 } from "@/models";
-import { $formInjectKey } from "@/utilities/constants";
-import { PropType, provide, watchEffect } from "vue";
+import { PropType, watchEffect } from "vue";
 
 export interface FormEmitter {
 	(event: "submit", values: any): void;
@@ -70,6 +69,8 @@ const props = defineProps({
 
 const emit = defineEmits<FormEmitter>();
 
+const form = useForm(props.form);
+
 const {
 	values,
 	errors,
@@ -78,16 +79,10 @@ const {
 	submit,
 	reset,
 	validate,
-	addField,
-	removeField,
 	className,
-	classPrefix,
 	isDirty,
-	rules,
 	updateSettings,
-	validateMessages,
-	validateTrigger,
-} = useForm(props.form);
+} = form;
 
 watchEffect(() => {
 	updateSettings({
@@ -96,41 +91,5 @@ watchEffect(() => {
 	});
 });
 
-provide<FormInstance>($formInjectKey, {
-	values,
-	errors,
-	setFieldValue,
-	getFieldValue,
-	submit,
-	reset,
-	validate,
-	addField,
-	removeField,
-	isDirty,
-	classPrefix,
-	validateMessages,
-	validateTrigger,
-	rules,
-	updateSettings,
-	className,
-});
-
-defineExpose<FormInstance>({
-	values,
-	errors,
-	submit,
-	reset,
-	getFieldValue,
-	setFieldValue,
-	validate,
-	isDirty,
-	classPrefix,
-	validateMessages,
-	validateTrigger,
-	addField,
-	className,
-	rules,
-	updateSettings,
-	removeField,
-});
+defineExpose<FormInstance>(form);
 </script>

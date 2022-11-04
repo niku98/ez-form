@@ -8,7 +8,7 @@
 				required: !!requiredMark,
 			},
 		]"
-		:style="requiredMarkStyle"
+		:style="fieldStyle"
 	>
 		<label v-if="label" :for="idFor" :class="classNames.label">{{
 			label
@@ -62,12 +62,12 @@ const classNames = computed(() => {
 	};
 });
 
-const requiredMarkStyle = computed(() => {
-	const cssVar = `--${form.classPrefix}-form-required-mark`;
+const fieldStyle = computed(() => {
+	const requiredMarkCssVar = `--${form.classPrefix}-form-required-mark`;
+	const colonCssVar = `--${form.classPrefix}-form-colon`;
 	return {
-		[cssVar]: props.requiredMark,
+		[requiredMarkCssVar]: props.requiredMark,
+		[colonCssVar]: `"${props.colon ? ":" : ""}"`,
 	};
 });
-
-const colonString = computed(() => `"${props.colon ? ":" : ""}"`);
 </script>

@@ -1,17 +1,8 @@
 <template>
-	<img alt="Vue logo" src="./assets/logo.png" />
-	<EzForm @submit="handleSubmit">
-		<EzFormItem
-			label="Test"
-			name="test"
-			:rules="[
-				{ required: true },
-				{ type: 'string', pattern: /test/ },
-				{ pattern: /abc/ },
-			]"
-			validate-first
-			no-style
-		>
+	<img alt="Vue logo" src="/logo.png" />
+	<EzForm @submit="handleSubmit" v-slot="{ errors }">
+		{{ errors }}
+		<EzFormItem label="Test" name="test[0].title" validate-first no-style>
 			<input />
 		</EzFormItem>
 		<EzFormItem
@@ -28,27 +19,25 @@
 			:default-value="defaultList"
 			v-slot="{ namePaths, add }"
 		>
-			<div :style="{ maxHeight: '500px', overflow: 'auto' }">
-				<div v-for="(namePath, index) in namePaths" :key="index">
-					<EzFormItem
-						label="Display name"
-						:name="[...namePath, 'displayName']"
-						:rules="[{ required: true }]"
-					>
-						<input />
-					</EzFormItem>
-					<EzFormItem
-						label="Age"
-						:name="[...namePath, 'age']"
-						:rules="[{ required: true }]"
-					>
-						<input type="number" />
-					</EzFormItem>
-				</div>
+			<div v-for="(namePath, index) in namePaths" :key="index">
+				<EzFormItem
+					label="Display name"
+					:name="[...namePath, 'displayName']"
+					:rules="[{ required: true }]"
+				>
+					<input />
+				</EzFormItem>
+				<EzFormItem
+					label="Age"
+					:name="[...namePath, 'age']"
+					:rules="[{ required: true }]"
+				>
+					<input type="number" />
+				</EzFormItem>
 			</div>
 			<button type="button" @click="add()">Add new user</button>
 		</EzFormList>
-		<button type="button" @click="">Submit</button>
+		<button type="submit">Submit</button>
 		<button type="reset">Reset</button>
 	</EzForm>
 </template>
@@ -65,7 +54,7 @@ function handleSubmit(values: any) {
 	console.log(values);
 }
 
-const defaultList = new Array(10).fill({ displayName: "test", age: 20 });
+const defaultList = new Array(200).fill({ displayName: "test", age: 20 });
 </script>
 
 <style>

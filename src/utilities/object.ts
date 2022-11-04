@@ -46,7 +46,7 @@ export function castPath(path: NamePath): string[] {
 	}
 
 	if (typeof path === "string") {
-		return path.split(".");
+		return path.replace(/\[([\d\w]+)\]/g, ".$1").split(".");
 	}
 
 	return [String(path)];

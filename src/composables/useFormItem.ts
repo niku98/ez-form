@@ -1,5 +1,5 @@
 import useInjectForm from "@/composables/useInjectForm";
-import {
+import type {
 	FormInstance,
 	FormItemProps,
 	ValidateError,
