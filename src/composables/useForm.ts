@@ -1,4 +1,4 @@
-import {
+import type {
 	FormField,
 	FormInstance,
 	FormSettings,
@@ -8,6 +8,7 @@ import {
 } from "@/models";
 
 import {
+	$formInjectKey,
 	castPath,
 	castToArray,
 	clone,
@@ -18,7 +19,7 @@ import {
 	set,
 } from "@/utilities";
 import { WithRequiredProperty } from "@/utilities-types";
-import { computed, reactive, ref, toRaw, watch } from "vue";
+import { computed, provide, reactive, ref, toRaw, watch } from "vue";
 
 export default function useForm<
 	Values extends object = Record<string | number | symbol, any>
@@ -244,6 +245,8 @@ export default function useForm<
 			return settings.validateTrigger;
 		},
 	};
+
+	provide<FormInstance>($formInjectKey, formInstance);
 
 	return formInstance;
 }

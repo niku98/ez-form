@@ -2,7 +2,7 @@ import EzForm from "@/components/EzForm.vue";
 import EzFormItem from "@/components/EzFormItem.vue";
 import EzFormList from "@/components/EzFormList.vue";
 import { PluginOptions } from "@/models";
-import { $ezFormPluginInjectKey } from "@/utilities/constants";
+import { $ezFormPluginInjectKey } from "@/utilities";
 import { Plugin } from "vue";
 
 export * from "@/composables";

@@ -83,14 +83,14 @@ function handleSubmit(values: RegisterUserRequest) {
 
 ## Nested Array
 
-Similar to object, you can also nest your data in an array. In _Name path_, just replacing property's name with a number. Example: `users.0.username` or `['users', 0, 'username']`.
+Similar to object, you can also nest your data in an array. In _Name path_, just replacing property's name with a number. Example: `users[0].username`, `users.0.username` or `['users', 0, 'username']`.
 
 ### Example
 
 ```vue
 <template>
 	<EzForm @submit="handleSubmit">
-		<EzFormItem label="Username" name="users.0.username">
+		<EzFormItem label="Username" name="users[0].username">
 			<input placeholder="Enter Username" />
 		</EzFormItem>
 		<EzFormItem label="First name" :name="['users', 0, 'firstName']">

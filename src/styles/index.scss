@@ -11,6 +11,7 @@ $css-variable-names: (
 	"input-focus-color": --#{$prefix}-form-input-focus-color,
 	"error-color": --#{$prefix}-form-input-error-color,
 	"required-mark": --#{$prefix}-form-required-mark,
+	"colon": --#{$prefix}-form-colon,
 );
 
 :root {
@@ -21,6 +22,7 @@ $css-variable-names: (
 	#{map.get($css-variable-names, "input-focus-color")}: #4285f4;
 	#{map.get($css-variable-names, "error-color")}: red;
 	#{map.get($css-variable-names, "required-mark")}: "*";
+	#{map.get($css-variable-names, "colon")}: "*";
 }
 
 .#{$prefix}-form {
@@ -59,7 +61,7 @@ $css-variable-names: (
 			}
 
 			&::after {
-				content: ":";
+				content: var(#{map.get($css-variable-names, "colon")});
 			}
 		}
 

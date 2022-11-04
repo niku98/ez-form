@@ -4,6 +4,7 @@
 		:id-for="formItemId"
 		:required-mark="requiredMarkString"
 		:no-style="noStyle"
+		:colon="colon"
 	>
 		<slot v-if="!autoBinding" v-bind="slotData" />
 		<template v-else>
@@ -108,6 +109,10 @@ const props = defineProps({
 		type: Boolean as PropType<boolean>,
 	},
 	noStyle: {
+		required: false,
+		type: Boolean as PropType<boolean>,
+	},
+	colon: {
 		required: false,
 		type: Boolean as PropType<boolean>,
 	},
