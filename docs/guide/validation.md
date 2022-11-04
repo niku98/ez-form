@@ -8,7 +8,7 @@ title: Validation
 
 There are two ways you can add rules to validate form.
 
-## With EzFormItem
+## FormItem Level
 
 **EzFormItem** has prop **_rules_** to get rules for each field in your form.
 
@@ -58,9 +58,9 @@ function handleError(errors) {
 </script>
 ```
 
-## With EzForm
+## Form Level
 
-**EzForm** component has a prop named _rules_ too. But it's type is difference from prop _rules_ of **EzFormItem**.
+You can pass your _validation's rules_ to **EzForm** using prop _rules_. It is similar to **EzFormItem's** prop _rules_.
 
 ```vue
 <template>
@@ -115,7 +115,7 @@ function handleError(errors) {
 </script>
 ```
 
-Rules has same **_name_** from **EzForm** and **EzFormItem** will be merged.
+Rules has same **_name_** in **EzForm** and **EzFormItem** will be merged.
 
 Example: Rules of `user.username` will be
 

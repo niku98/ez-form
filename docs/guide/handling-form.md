@@ -13,7 +13,11 @@ When building form with **Ez Form**, you only need to care about two components:
   - prop _name_ : Name path of your final form data/Form item's name.
   - slot _default_ : Pass your input into it.
 
-## Login form
+## Form Data And Handle Submit
+
+As you can see. There are no `v-model` in example. **Ez Form** . We will automatically bind `:value` and `@update:value` to **_FIRST NODE_** of **EzFormItem's** default slot. Form's data will be synced with input's data via name props you passed to **EzFormItem**.
+
+When form is submitted and form's data is valid. You may receive form's data via `@submit` event.
 
 ```vue
 <template>
@@ -24,6 +28,8 @@ When building form with **Ez Form**, you only need to care about two components:
 		<EzFormItem label="Password" name="password">
 			<input placeholder="Password" type="password" />
 		</EzFormItem>
+
+		<button type="submit">Submit</button>
 	</EzForm>
 </template>
 
@@ -43,79 +49,157 @@ The snippet above is an example of login form. After Form submit, console will l
 }
 ```
 
-## Nested
+## Initial Values
 
-In some case, you will need to work with nested form's data. With **Ez Form**, you just need to pass _Name path_ to **EzFormItem**'s prop _name_.
-
-The _Name path_ can be `string|number|Array<number | string>`.
-
-### Examples
-
-There are some examples to show how **Ez Form** deal with nested form's data.
-
-All examples will have same result as bellow:
-
-```ts
-{
-	user: {
-		username: "tester",
-		firstName: "Johnny",
-		lastName: "Pham",
-		password: "123456"
-	}
-}
-```
-
-#### String name path
+In some case, like editing data. You can provide initial values to **EzForm**. All input's value will be filled with data you provided.
 
 ```vue
 <template>
-	<EzForm @submit="handleSubmit">
-		<EzFormItem label="Username" name="user.username">
+	<EzForm
+		:initial-values="initialValues"
+		@submit="handleSubmit"
+		@reset="handleReset"
+	>
+		<EzFormItem label="Username" name="username" :rules="{ required: true }">
 			<input placeholder="Enter Username" />
 		</EzFormItem>
-		<EzFormItem label="First name" name="user.firstName">
-			<input placeholder="Enter your First name" />
+		<EzFormItem
+			label="Display name"
+			name="displayName"
+			:rules="{ required: true }"
+		>
+			<input placeholder="Enter Display name" />
 		</EzFormItem>
-		<EzFormItem label="First name" name="user.lastName">
-			<input placeholder="Enter your Last name" />
-		</EzFormItem>
-		<EzFormItem label="Password" name="user.password">
-			<input placeholder="Password" type="password" />
-		</EzFormItem>
+
+		<button type="submit">Submit</button>
 	</EzForm>
 </template>
 
 <script lang="ts" setup>
-function handleSubmit(values: RegisterUserRequest) {
-	console.log(values); // {user: {username: "tester", firstName: "Johnny", lastName: "Pham", password: "123456"}}
+export interface UserRequest {
+	username: string;
+	displayName: string;
+}
+
+const initialValues = reactive<UserRequest>({
+	username: "tester",
+	displayName: "Tester",
+});
+
+function handleSubmit(values: UserRequest) {
+	console.log(values); // {username: "tester", displayName: "Tester"}
 }
 </script>
 ```
 
-#### Array name path
+### Enable Reinitialize
+
+By default, if `initialValues` changed, form data will not be reinitialized to new `initialValues's` value.
+
+In some case, you may fill data received from api to form. So, the `initialValues` will be changed. You can pass prop `enableReinitialize` to **EzForm**, then anytime `initialValues` changes, the form wil reinitialize.
 
 ```vue
 <template>
-	<EzForm @submit="handleSubmit">
-		<EzFormItem label="Username" :name="['user', 'username']">
+	<EzForm
+		:initial-values="initialValues"
+		@submit="handleSubmit"
+		@reset="handleReset"
+	>
+		<EzFormItem label="Username" name="username" :rules="{ required: true }">
 			<input placeholder="Enter Username" />
 		</EzFormItem>
-		<EzFormItem label="First name" :name="['user', 'firstName']">
-			<input placeholder="Enter your First name" />
+		<EzFormItem
+			label="Display name"
+			name="displayName"
+			:rules="{ required: true }"
+		>
+			<input placeholder="Enter Display name" />
 		</EzFormItem>
-		<EzFormItem label="First name" :name="['user', 'lastName']">
-			<input placeholder="Enter your Last name" />
-		</EzFormItem>
-		<EzFormItem label="Password" :name="['user', 'password']">
-			<input placeholder="Password" type="password" />
-		</EzFormItem>
+
+		<button type="submit">Submit</button>
 	</EzForm>
 </template>
 
 <script lang="ts" setup>
-function handleSubmit(values: RegisterUserRequest) {
-	console.log(values); // {user: {username: "tester", firstName: "Johnny", lastName: "Pham", password: "123456"}}
+export interface UserRequest {
+	username: string;
+	displayName: string;
+}
+
+const initialValues = reactive<UserRequest>({
+	username: "",
+	displayName: "",
+});
+
+fetch("https://api.domain.com/users/1")
+	.then((res) => res.json())
+	.then((data) => {
+		Object.assign(initialValues, data);
+	});
+
+function handleSubmit(values: UserRequest) {
+	console.log(values); // {username: "tester", displayName: "Tester"}
+}
+</script>
+```
+
+## Handle Reset
+
+When form reset, form data and errors will be reset to default value. If you provide `initialValues`, form data will be reset to it. Then, an event called `@reset` wil be emitted.
+
+```vue
+<template>
+	<EzForm @submit="handleSubmit" @reset="handleReset">
+		<EzFormItem label="Username" name="username">
+			<input placeholder="Enter Username" />
+		</EzFormItem>
+		<EzFormItem label="Password" name="password">
+			<input placeholder="Password" type="password" />
+		</EzFormItem>
+
+		<button type="submit">Submit</button>
+		<button type="reset">Reset</button>
+	</EzForm>
+</template>
+
+<script lang="ts" setup>
+function handleSubmit(values: LoginRequest) {
+	console.log(values); // {username: "tester", password: "123456"}
+}
+
+function handleReset() {
+	console.log("Form reset");
+}
+</script>
+```
+
+## Handle Error
+
+When form submitting validate error, an event called `@error` will be emitted. You can do things when it emitted.
+
+```vue
+<template>
+	<EzForm @submit="handleSubmit" @error="handleError">
+		<EzFormItem label="Username" name="username" :rules="{ required: true }">
+			<input placeholder="Enter Username" />
+		</EzFormItem>
+		<EzFormItem label="Password" name="password" :rules="{ required: true }">
+			<input placeholder="Password" type="password" />
+		</EzFormItem>
+
+		<button type="submit">Submit</button>
+	</EzForm>
+</template>
+
+<script lang="ts" setup>
+import type { ValidateError } from "@niku/ez-form";
+
+function handleSubmit(values: LoginRequest) {
+	console.log(values); // {username: "tester", password: "123456"}
+}
+
+function handleError(errors: ValidateError[]) {
+	console.log("Form errors", errors);
 }
 </script>
 ```

@@ -1,33 +1,27 @@
 {
-  "editor.formatOnSave": true,
-  "editor.formatOnPaste": true,
-  "[typescriptreact]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[typescript]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "[jsonc]": {
-    "editor.defaultFormatter": "esbenp.prettier-vscode"
-  },
-  "typescript.preferences.importModuleSpecifier": "non-relative",
-  "files.eol": "\n",
-  "html.autoClosingTags": true,
-  "javascript.autoClosingTags": true,
-  "typescript.autoClosingTags": true,
-  "javascript.suggest.autoImports": true,
-  "typescript.suggest.autoImports": true,
-  "javascript.updateImportsOnFileMove.enabled": "always",
-  "typescript.updateImportsOnFileMove.enabled": "always",
-  "editor.codeActionsOnSave": {
-    "source.organizeImports": true
-  },
-  "css.customData": [
-    ".vscode/css_custom_data.json"
-  ],
-  "cSpell.words": [
-    "Antd",
-    "composables",
-    "Pinia"
-  ]
+	"editor.formatOnSave": true,
+	"editor.formatOnPaste": true,
+	"[typescriptreact]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[typescript]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "esbenp.prettier-vscode"
+	},
+	"typescript.preferences.importModuleSpecifier": "non-relative",
+	"files.eol": "\n",
+	"html.autoClosingTags": true,
+	"javascript.autoClosingTags": true,
+	"typescript.autoClosingTags": true,
+	"javascript.suggest.autoImports": true,
+	"typescript.suggest.autoImports": true,
+	"javascript.updateImportsOnFileMove.enabled": "always",
+	"typescript.updateImportsOnFileMove.enabled": "always",
+	"editor.codeActionsOnSave": {
+		"source.organizeImports": false
+	},
+	"css.customData": [".vscode/css_custom_data.json"],
+	"cSpell.words": ["Antd", "composables", "Pinia"]
 }
