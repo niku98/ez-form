@@ -2,6 +2,7 @@ import useInjectForm from "@/composables/useInjectForm";
 import type {
 	FormInstance,
 	FormItemProps,
+	UseFormItemResult,
 	ValidateError,
 	ValidateOption,
 } from "@/models";
@@ -26,7 +27,7 @@ export default function useFormItem(
 	emit: {
 		(event: "change", value: any, form: FormInstance): void;
 	}
-) {
+): UseFormItemResult {
 	const injectedForm = useInjectForm();
 
 	const formItemId = computed(() =>
@@ -58,9 +59,6 @@ export default function useFormItem(
 			rawValue.value = props.valueTransformer.out(newValue, injectedForm);
 		},
 	});
-	const updateEventName = computed(
-		() => props.changeEventPropName ?? `update:${props.valuePropName}`
-	);
 	const dirty = ref(false);
 
 	// Handle validate
@@ -208,7 +206,6 @@ export default function useFormItem(
 		requiredMarkString,
 		rawValue,
 		inputValue,
-		updateEventName,
 		error,
 		injectedForm,
 		handleChange,

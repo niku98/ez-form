@@ -12,7 +12,7 @@
 				v-for="(vNode, index) in getVNodesFromDefaultSlot()"
 				:is="vNode"
 				:key="vNode.patchFlag"
-				v-bind="index === 0 ? getInputItemProps(vNode) : undefined"
+				v-bind="index === inputNodeIndex ? getInputItemProps(vNode) : undefined"
 			/>
 		</template>
 
@@ -21,7 +21,7 @@
 				<span v-for="message in error?.messages">{{ message }}</span>
 			</slot>
 		</template>
-		<template v-if="slots.extra" #extra>
+		<template v-if="$slots.extra" #extra>
 			<slot name="extra" :form="injectedForm" />
 		</template>
 	</EzFormItemView>
@@ -29,7 +29,7 @@
 
 <script lang="ts" setup>
 import EzFormItemView from "@/components/EzFormItemView.vue";
-import { useFormItem } from "@/composables";
+import { useFormItem, useFormItemAutoBinding } from "@/composables";
 import type {
 	FormInstance,
 	FormItemInstance,
@@ -38,7 +38,7 @@ import type {
 	Rule,
 	ValidateTrigger,
 } from "@/models";
-import { computed, PropType, toRaw, useSlots, VNode } from "vue";
+import { PropType } from "vue";
 
 const props = defineProps({
 	label: {
@@ -90,6 +90,11 @@ const props = defineProps({
 		type: Boolean as PropType<boolean>,
 		default: true,
 	},
+	inputNodeIndex: {
+		required: false,
+		type: Number as PropType<number>,
+		default: 0,
+	},
 	rules: {
 		required: false,
 		type: [Object, Array] as PropType<Rule>,
@@ -122,6 +127,7 @@ const emit = defineEmits<{
 	(event: "change", value: any, form: FormInstance): void;
 }>();
 
+const formItemData = useFormItem(props, emit);
 const {
 	inputValue,
 	requiredMarkString,
@@ -129,62 +135,13 @@ const {
 	formItemId,
 	error,
 	dirty,
-	updateEventName,
 	injectedForm,
-	handleBlur,
 	handleChange,
-} = useFormItem(props, emit);
+} = formItemData;
 
 // Handle slots
-const slots = useSlots();
-
-const slotData = computed(() => {
-	return {
-		value: inputValue,
-		rawValue: rawValue,
-		handleChange,
-		form: injectedForm,
-		error: toRaw(error),
-	};
-});
-
-const getVNodesFromDefaultSlot = () => {
-	return (slots.default && slots.default(slotData)) ?? [];
-};
-
-const getInputItemProps = (vNode: VNode) => {
-	if (!props.autoBinding) {
-		return {};
-	}
-
-	if (
-		vNode.component === null &&
-		["input", "select", "textarea"].includes(String(vNode.type))
-	) {
-		return {
-			value: inputValue.value,
-			onInput: handleChange,
-			onChange: handleChange,
-			onBlur: handleBlur,
-			id: formItemId.value,
-		};
-	}
-
-	const eventName = `on${updateEventName.value[0].toUpperCase()}${updateEventName.value.slice(
-		1
-	)}`;
-	const blurEventName = `on${props.blurEventPropName[0].toUpperCase()}${props.blurEventPropName.slice(
-		1
-	)}`;
-	const valuePropName = props.valuePropName;
-
-	return {
-		[eventName]: handleChange,
-		[blurEventName]: handleBlur,
-		[valuePropName]: inputValue.value,
-		id: formItemId,
-	};
-};
+const { getInputItemProps, slotData, getVNodesFromDefaultSlot } =
+	useFormItemAutoBinding(formItemData, props);
 
 defineExpose<FormItemInstance>({
 	handleChange,

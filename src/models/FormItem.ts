@@ -1,5 +1,11 @@
-import { Rule, ValidateError, ValidateTrigger } from "@/models/Validation";
-import { FormInstance } from "dist";
+import { FormInstance } from "@/models/Form";
+import {
+	Rule,
+	ValidateError,
+	ValidateOption,
+	ValidateTrigger,
+} from "@/models/Validation";
+import { ComputedRef, Ref, WritableComputedRef } from "vue";
 
 export interface FormItemInstance {
 	rawValue: any;
@@ -19,12 +25,23 @@ export interface FormItemProps {
 	label?: string;
 	name?: string | number | (string | number)[];
 	defaultValue?: any;
-	valuePropName?: string;
-	changeEventPropName?: string;
 	getValueFromChangeEvent?: (event: any) => any;
 	valueTransformer?: FormItemValueTransformer;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	rules?: Rule;
 	requiredMark?: string | boolean;
 	validateFirst?: boolean;
+}
+
+export interface UseFormItemResult {
+	formItemId: ComputedRef<string>;
+	requiredMarkString: ComputedRef<string>;
+	rawValue: WritableComputedRef<any>;
+	inputValue: WritableComputedRef<any>;
+	error: Ref<ValidateError | undefined>;
+	injectedForm: FormInstance;
+	handleChange: (event: any) => void;
+	handleBlur: () => void;
+	validate: (options?: ValidateOption) => Promise<any>;
+	dirty: Ref<boolean>;
 }
