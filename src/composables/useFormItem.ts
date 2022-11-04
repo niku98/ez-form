@@ -1,13 +1,13 @@
 import useInjectForm from "@/composables/useInjectForm";
 import type {
 	FormInstance,
+	FormItemEmitter,
 	FormItemProps,
 	UseFormItemResult,
 	ValidateError,
 	ValidateOption,
 } from "@/models";
 import { castPath, castToArray, clone, get, uniqueId } from "@/utilities";
-import { WithRequiredProperty } from "@/utilities-types";
 import ValidationSchema from "async-validator";
 import {
 	computed,
@@ -20,13 +20,8 @@ import {
 } from "vue";
 
 export default function useFormItem(
-	props: WithRequiredProperty<
-		FormItemProps,
-		"valueTransformer" | "getValueFromChangeEvent"
-	>,
-	emit: {
-		(event: "change", value: any, form: FormInstance): void;
-	}
+	props: FormItemProps,
+	emit: FormItemEmitter
 ): UseFormItemResult {
 	const injectedForm = useInjectForm();
 

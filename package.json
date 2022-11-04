@@ -1,6 +1,6 @@
 {
 	"name": "@niku/ez-form",
-	"version": "1.1.4",
+	"version": "1.1.6",
 	"main": "./dist/index.cjs.js",
 	"module": "./dist/index.es.js",
 	"types": "./dist/index.d.ts",
@@ -21,7 +21,8 @@
 		"vitepress": "vitepress",
 		"preview": "vite preview",
 		"example": "yarn --cwd example",
-		"prepare-example": "yarn link && yarn example && yarn example link @niku/ez-form"
+		"prepare-example": "yarn link && yarn example && yarn example link @niku/ez-form",
+		"prepublishOnly": "yarn build"
 	},
 	"files": [
 		"dist"

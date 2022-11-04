@@ -25,12 +25,20 @@ export interface FormItemProps {
 	label?: string;
 	name?: string | number | (string | number)[];
 	defaultValue?: any;
-	getValueFromChangeEvent?: (event: any) => any;
-	valueTransformer?: FormItemValueTransformer;
+	getValueFromChangeEvent: (event: any) => any;
+	valueTransformer: FormItemValueTransformer;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	rules?: Rule;
 	requiredMark?: string | boolean;
 	validateFirst?: boolean;
+}
+
+export interface FormListProps extends FormItemProps {
+	defaultValue?: any[];
+}
+
+export interface FormItemEmitter {
+	(event: "change", value: any, form: FormInstance): void;
 }
 
 export interface UseFormItemResult {

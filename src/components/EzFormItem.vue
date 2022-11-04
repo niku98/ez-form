@@ -38,90 +38,10 @@ import type {
 	Rule,
 	ValidateTrigger,
 } from "@/models";
+import { getFormItemDefinePropsObject } from "@/utilities";
 import { PropType } from "vue";
 
-const props = defineProps({
-	label: {
-		required: false,
-		type: String as PropType<string>,
-	},
-	name: {
-		required: false,
-		type: [String, Array] as PropType<NamePath>,
-	},
-	defaultValue: {
-		required: false,
-	},
-	valuePropName: {
-		required: false,
-		type: String as PropType<string>,
-		default: "value",
-	},
-	changeEventPropName: {
-		required: false,
-		type: String as PropType<string>,
-	},
-	blurEventPropName: {
-		required: false,
-		type: String as PropType<string>,
-		default: "blur",
-	},
-	getValueFromChangeEvent: {
-		required: false,
-		type: Function as PropType<(event: any) => any>,
-		default: (event: any) => {
-			if (event?.target) {
-				return event.target.value ?? event.target.checked;
-			}
-
-			return event;
-		},
-	},
-	valueTransformer: {
-		required: false,
-		type: Object as PropType<FormItemValueTransformer>,
-		default: () => ({
-			in: (value: any) => value,
-			out: (value: any) => value,
-		}),
-	},
-	autoBinding: {
-		required: false,
-		type: Boolean as PropType<boolean>,
-		default: true,
-	},
-	inputNodeIndex: {
-		required: false,
-		type: Number as PropType<number>,
-		default: 0,
-	},
-	rules: {
-		required: false,
-		type: [Object, Array] as PropType<Rule>,
-	},
-	requiredMark: {
-		required: false,
-		type: [String, Boolean] as PropType<string | boolean>,
-		default: true,
-	},
-	validateTrigger: {
-		required: false,
-		type: [String, Array] as PropType<ValidateTrigger | ValidateTrigger[]>,
-		default: "change",
-	},
-	validateFirst: {
-		required: false,
-		type: Boolean as PropType<boolean>,
-	},
-	noStyle: {
-		required: false,
-		type: Boolean as PropType<boolean>,
-	},
-	colon: {
-		required: false,
-		type: Boolean as PropType<boolean>,
-	},
-});
+const props = defineProps(getFormItemDefinePropsObject());
 
 const emit = defineEmits<{
 	(event: "change", value: any, form: FormInstance): void;

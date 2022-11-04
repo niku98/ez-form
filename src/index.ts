@@ -6,10 +6,20 @@ import { $ezFormPluginInjectKey } from "@/utilities";
 import { Plugin } from "vue";
 
 export * from "@/composables";
+export {
+	getFormDefinePropsObject,
+	getFormItemDefinePropsObject,
+	getFormListDefinePropsObject,
+} from "@/utilities";
 export type {
+	FormEmitter,
 	FormInstance,
+	FormItemEmitter,
 	FormItemInstance,
+	FormItemProps,
 	FormItemValueTransformer,
+	FormListProps,
+	FormSettings,
 	NamePath,
 	Rule,
 	RuleItem,
