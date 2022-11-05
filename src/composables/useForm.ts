@@ -6,7 +6,6 @@ import type {
 	ValidateError,
 	ValidateOption,
 } from "@/models";
-
 import {
 	$formInjectKey,
 	castPath,
@@ -18,7 +17,6 @@ import {
 	objectValues,
 	set,
 } from "@/utilities";
-import { WithRequiredProperty } from "@/utilities-types";
 import { computed, provide, reactive, ref, toRaw, watch } from "vue";
 
 export default function useForm<
@@ -29,7 +27,7 @@ export default function useForm<
 	}
 
 	// Handle form settings
-	const settings = reactive<WithRequiredProperty<FormSettings, "classPrefix">>({
+	const settings = reactive<FormSettings>({
 		classPrefix: "ez",
 	});
 
@@ -233,7 +231,7 @@ export default function useForm<
 		addField,
 		removeField,
 		get classPrefix() {
-			return settings.classPrefix;
+			return settings.classPrefix ?? "";
 		},
 		get rules() {
 			return settings.rules;

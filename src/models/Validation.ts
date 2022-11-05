@@ -23,4 +23,4 @@ export interface ValidateError {
 	messages: string[];
 }
 
-export type ValidateMessages = AsyncValidateMessages;
+export interface ValidateMessages extends AsyncValidateMessages {}

@@ -15,14 +15,9 @@
 
 <script lang="ts" setup>
 import { useForm } from "@/composables";
-import type {
-	FormInstance,
-	Rules,
-	ValidateError,
-	ValidateMessages,
-	ValidateTrigger,
-} from "@/models";
-import { PropType, watchEffect } from "vue";
+import type { FormInstance, ValidateError } from "@/models";
+import { getFormDefinePropsObject } from "@/utilities";
+import { watchEffect } from "vue";
 
 export interface FormEmitter {
 	(event: "submit", values: any): void;
@@ -31,41 +26,7 @@ export interface FormEmitter {
 	(event: "error", errors: ValidateError[]): void;
 }
 
-const props = defineProps({
-	form: {
-		required: false,
-		type: Object as PropType<FormInstance>,
-	},
-	initialValues: {
-		required: false,
-		type: Object as PropType<Record<string, any>>,
-	},
-	enableReinitialize: {
-		required: false,
-		type: Boolean as PropType<boolean>,
-	},
-	clearOnReset: {
-		required: false,
-		type: Boolean as PropType<boolean>,
-	},
-	rules: {
-		required: false,
-		type: Object as PropType<Rules>,
-	},
-	validateTrigger: {
-		required: false,
-		type: [String, Array] as PropType<ValidateTrigger | ValidateTrigger[]>,
-	},
-	validateMessages: {
-		required: false,
-		type: Object as PropType<ValidateMessages>,
-	},
-	classPrefix: {
-		required: false,
-		type: String as PropType<string>,
-		default: "ez",
-	},
-});
+const props = defineProps(getFormDefinePropsObject());
 
 const emit = defineEmits<FormEmitter>();
 
