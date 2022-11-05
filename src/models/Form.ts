@@ -39,9 +39,7 @@ export interface FormEmitter {
 	(event: "error", errors: any): void;
 }
 
-export interface FormInstance<
-	Values extends object = Record<string | number | symbol, any>
-> {
+export interface FormInstance<Values extends object = any> {
 	values: Values;
 	errors: ValidateError[];
 	getFieldValue(name: NamePath): any;

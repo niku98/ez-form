@@ -20,7 +20,7 @@
 	"javascript.updateImportsOnFileMove.enabled": "always",
 	"typescript.updateImportsOnFileMove.enabled": "always",
 	"editor.codeActionsOnSave": {
-		"source.organizeImports": true
+		"source.organizeImports": false
 	},
 	"css.customData": [".vscode/css_custom_data.json"],
 	"cSpell.words": ["Antd", "composables", "Pinia"]

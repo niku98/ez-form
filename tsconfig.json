@@ -13,7 +13,7 @@
 			"@niku/ez-form": ["./dist/index"]
 		},
 		"outDir": "./dist",
-		"declaration": true,
-		"declarationDir": "dist"
+		"declaration": false,
+		"preserveSymlinks": true
 	}
 }

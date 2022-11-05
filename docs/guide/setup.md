@@ -25,7 +25,7 @@ yarn add @niku/ez-form
 ```ts
 // main.ts
 
-import "@niku/ez-form/styles.css";
+import "@niku/ez-form/styles/index.css";
 import { createApp } from "vue";
 import App from "@/src/App.vue";
 

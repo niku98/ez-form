@@ -1,9 +1,9 @@
 {
 	"name": "@niku/ez-form",
-	"version": "1.1.6",
-	"main": "./dist/index.cjs.js",
-	"module": "./dist/index.es.js",
-	"types": "./dist/index.d.ts",
+	"version": "1.1.12",
+	"main": "./index.cjs.js",
+	"module": "./index.es.js",
+	"types": "./index.d.ts",
 	"license": "MIT",
 	"private": false,
 	"author": {
@@ -13,34 +13,18 @@
 	},
 	"scripts": {
 		"dev": "vite",
-		"build": "vue-tsc --noEmit && vite build && yarn build:style",
+		"build": "vue-tsc --noEmit && vite build && yarn build:style && yarn copy:package-json",
 		"build:style": "sass --no-source-map ./src/styles/index.scss ./dist/styles/index.css && cp ./src/styles/index.scss ./dist/styles/index.scss",
+		"copy:package-json": "cp package.json dist/package.json",
+		"link-package": "cd dist && yarn unlink && yarn link && cd ..",
+		"publish-package": "yarn build && cd dist && npm login && npm publish",
 		"docs:dev": "DOCS=true && vitepress dev docs",
 		"docs:build": "DOCS=true && vitepress build docs",
 		"docs:serve": "vitepress serve docs",
 		"vitepress": "vitepress",
 		"preview": "vite preview",
 		"example": "yarn --cwd example",
-		"prepare-example": "yarn link && yarn example && yarn example link @niku/ez-form",
-		"prepublishOnly": "yarn build"
-	},
-	"files": [
-		"dist"
-	],
-	"exports": {
-		".": {
-			"import": "./dist/index.es.js",
-			"require": "./dist/index.cjs.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./styles.css": {
-			"import": "./dist/styles/index.css",
-			"require": "./dist/styles/index.css"
-		},
-		"./styles.scss": {
-			"import": "./dist/styles/index.scss",
-			"require": "./dist/styles/index.scss"
-		}
+		"prepare-example": "yarn link-package && yarn example && yarn example link @niku/ez-form"
 	},
 	"publishConfig": {
 		"access": "public"

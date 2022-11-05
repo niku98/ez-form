@@ -30,16 +30,8 @@
 <script lang="ts" setup>
 import EzFormItemView from "@/components/EzFormItemView.vue";
 import { useFormItem, useFormItemAutoBinding } from "@/composables";
-import type {
-	FormInstance,
-	FormItemInstance,
-	FormItemValueTransformer,
-	NamePath,
-	Rule,
-	ValidateTrigger,
-} from "@/models";
+import type { FormInstance, FormItemInstance } from "@/models";
 import { getFormItemDefinePropsObject } from "@/utilities";
-import { PropType } from "vue";
 
 const props = defineProps(getFormItemDefinePropsObject());
 

@@ -13,6 +13,7 @@
 		"preserveValueImports": false,
 		"isolatedModules": true,
 		"moduleResolution": "node",
-		"resolveJsonModule": true
+		"resolveJsonModule": true,
+		"strict": true
 	}
 }

@@ -7,9 +7,9 @@ import {
 	ValidateMessages,
 	ValidateTrigger,
 } from "@/models";
-import { PropType } from "vue";
+import type { PropType } from "vue";
 
-export function getFormDefinePropsObject() {
+export const getFormDefinePropsObject = () => {
 	return {
 		form: {
 			required: false,
@@ -45,9 +45,9 @@ export function getFormDefinePropsObject() {
 			default: "ez",
 		},
 	};
-}
+};
 
-export function getFormItemDefinePropsObject() {
+export const getFormItemDefinePropsObject = () => {
 	return {
 		label: {
 			required: false,
@@ -130,9 +130,9 @@ export function getFormItemDefinePropsObject() {
 			type: Boolean as PropType<boolean>,
 		},
 	};
-}
+};
 
-export function getFormListDefinePropsObject() {
+export const getFormListDefinePropsObject = () => {
 	return {
 		label: {
 			required: false,
@@ -207,4 +207,4 @@ export function getFormListDefinePropsObject() {
 			type: Boolean as PropType<boolean>,
 		},
 	};
-}
+};

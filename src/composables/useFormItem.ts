@@ -1,6 +1,5 @@
 import useInjectForm from "@/composables/useInjectForm";
 import type {
-	FormInstance,
 	FormItemEmitter,
 	FormItemProps,
 	UseFormItemResult,

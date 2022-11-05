@@ -64,7 +64,7 @@ export default function useFormItemAutoBinding(
 			[eventName]: handleChange,
 			[blurEventName]: handleBlur,
 			[valuePropName]: inputValue.value,
-			id: formItemId,
+			id: formItemId.value,
 		};
 	};
 

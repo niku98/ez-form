@@ -1,9 +1,9 @@
 import useFormItem from "@/composables/useFormItem";
 import {
-	FormInstance,
 	FormItemEmitter,
 	FormListProps,
 	NamePath,
+	UseFormListResult,
 } from "@/models";
 import { castToArray, clone } from "@/utilities";
 import { computed } from "vue";
@@ -11,7 +11,7 @@ import { computed } from "vue";
 export default function useFormList(
 	props: FormListProps,
 	emit: FormItemEmitter
-) {
+): UseFormListResult {
 	const formItemInstance = useFormItem(props, emit);
 	const { inputValue, handleChange, injectedForm } = formItemInstance;
 
@@ -43,7 +43,7 @@ export default function useFormList(
 
 	function getErrors(index?: number) {
 		if (index === undefined) {
-			return clone(errors);
+			return clone(errors.value);
 		}
 
 		return errors.value.filter(({ name }) =>

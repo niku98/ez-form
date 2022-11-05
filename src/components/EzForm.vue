@@ -15,15 +15,9 @@
 
 <script lang="ts" setup>
 import { useForm } from "@/composables";
-import type {
-	FormInstance,
-	Rules,
-	ValidateError,
-	ValidateMessages,
-	ValidateTrigger,
-} from "@/models";
+import type { FormInstance, ValidateError } from "@/models";
 import { getFormDefinePropsObject } from "@/utilities";
-import { PropType, watchEffect } from "vue";
+import { watchEffect } from "vue";
 
 export interface FormEmitter {
 	(event: "submit", values: any): void;

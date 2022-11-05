@@ -9,16 +9,29 @@ export default defineConfig({
 		vue(),
 		dts({
 			exclude: ["example/**", "node_modules/**", "**/env.d.ts"],
-			skipDiagnostics: true,
-			logDiagnostics: true,
-			insertTypesEntry: true,
-			staticImport: true,
-			include: ["src/**/*"],
 			beforeWriteFile(filePath, content) {
 				if (filePath.includes("EzForm.vue")) {
-					content =
-						"import { Rules, ValidateMessages, FormInstance, ValidateError } from '../models';\n" +
-						content;
+					// content = content.replace(" } from 'vue'", ", PropType } from 'vue'");
+					content = content.replace(
+						" } from '../models'",
+						", FormInstance, Rules, ValidateTrigger, ValidateMessages } from '../models'"
+					);
+
+					content = content.replace(
+						`{} | {
+    [x: string]: any;
+}>;`,
+						`{
+	form: FormInstance,
+	initialValues: Record<string, any>,
+	enableReinitialize: boolean,
+	clearOnReset: boolean,
+	rules: Rules,
+	validateTrigger: ValidateTrigger | ValidateTrigger[],
+	validateMessages: ValidateMessages,
+	classPrefix: string
+}>;`
+					);
 
 					content = content.replace(
 						"onSubmit?: (...args: any[]) => any;",
@@ -42,18 +55,55 @@ export default defineConfig({
 					filePath.includes("EzFormItem.vue") ||
 					filePath.includes("EzFormList.vue")
 				) {
+					// content = content.replace(" } from 'vue'", ", PropType } from 'vue'");
 					content =
-						"import { NamePath, FormItemValueTransformer, Rule, ValidateTrigger } from '../models';\n" +
+						"import { NamePath, FormInstance, Rule, ValidateTrigger, FormItemValueTransformer } from '../models';\n" +
 						content;
 
 					content = content.replace(
-						/validateTrigger: {(.*?)type: PropType<any>;(.*?)}/gs,
-						"validateTrigger: {$1type: PropType<ValidateTrigger | ValidateTrigger[]>;$2}"
+						`{} | {
+    [x: string]: any;
+}>;`,
+						`{
+	label: string,
+	name: NamePath,
+	defaultValue: ${filePath.includes("EzFormList.vue") ? "any[]" : "any"},
+	valuePropName: string,
+	changeEventPropName: string,
+	blurEventPropName: string,
+	getValueFromChangeEvent: (event: any) => any,
+	valueTransformer: FormItemValueTransformer,
+	autoBinding: boolean,
+	inputNodeIndex: number,
+	rules: Rule,
+	requiredMark: string | boolean,
+	validateTrigger: ValidateTrigger | ValidateTrigger[],
+	validateFirst: boolean,
+	noStyle: boolean,
+	colon: boolean
+}>;`
 					);
+				}
+
+				if (filePath.includes("form.d.ts")) {
+					content =
+						"import { FormInstance, FormItemValueTransformer, NamePath, Rule, Rules, ValidateMessages, ValidateTrigger } from '../models';\n" +
+						content;
+
 					content = content.replace(
-						"validateTrigger: any",
-						"validateTrigger: ValidateTrigger | ValidateTrigger[]"
+						/validateTrigger: {(.*?)type: PropType<any>(.*?)}/gs,
+						"validateTrigger: {$1type: PropType<ValidateTrigger | ValidateTrigger[]>$2}"
 					);
+					// content = content.replace(/default: \(\) => {(.*?)};/gs, "");
+					// content = content.replace(/default: (.*?);/gs, "");
+				}
+
+				if (filePath.includes("useInjectForm.d.ts")) {
+					content = "import { FormInstance } from '../models';\n" + content;
+				}
+
+				if (filePath.includes("usePluginOptions.d.ts")) {
+					content = "import { PluginOptions } from '../models';\n" + content;
 				}
 
 				return {
@@ -88,6 +138,7 @@ export default defineConfig({
 		},
 	},
 	resolve: {
+		preserveSymlinks: true,
 		alias: {
 			"@": fileURLToPath(new URL("./src", import.meta.url)),
 		},
