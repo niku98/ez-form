@@ -54,7 +54,7 @@ function handleSubmit(values: any) {
 	console.log(values);
 }
 
-const defaultList = new Array(200).fill({ displayName: "test", age: 20 });
+const defaultList = new Array(2).fill({ displayName: "test", age: 20 });
 </script>
 
 <style>

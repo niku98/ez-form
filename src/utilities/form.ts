@@ -44,6 +44,11 @@ export const getFormDefinePropsObject = () => {
 			type: String as PropType<string>,
 			default: "ez",
 		},
+		preserveValues: {
+			required: false,
+			type: Boolean as PropType<boolean>,
+			default: true,
+		},
 	};
 };
 

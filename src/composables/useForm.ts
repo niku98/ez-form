@@ -10,7 +10,9 @@ import {
 	$formInjectKey,
 	castPath,
 	castToArray,
+	clearObject,
 	clone,
+	deleteFrom,
 	emptyObject,
 	get,
 	isEqual,
@@ -44,8 +46,6 @@ export default function useForm<
 	const initialValues = computed(() =>
 		settings.initialValues ? clone(toRaw(settings.initialValues)) : {}
 	);
-
-	// Handle form logics
 	const formValues = reactive<Values>(initialValues.value) as Values;
 
 	// Handle initial values
@@ -98,6 +98,9 @@ export default function useForm<
 
 	function removeField(name: NamePath) {
 		const key = castPath(name).join(".");
+		if (settings.preserveValues === false) {
+			deleteFrom(formValues, name);
+		}
 		delete fields[key];
 	}
 
@@ -120,7 +123,13 @@ export default function useForm<
 		changeErrors(fieldsErrors.value);
 	});
 
-	// Form actions handling
+	// Validate
+	function clearValidate() {
+		objectValues(fields).forEach(({ clearValidate }) => {
+			clearValidate();
+		});
+	}
+
 	function validate(name?: string | NamePath[], options?: ValidateOption) {
 		const names = castToArray(name);
 
@@ -166,23 +175,25 @@ export default function useForm<
 		});
 	}
 
+	// Reset
 	function reset(values?: Record<string | number | symbol, any>) {
 		const hasInitialValue = !isEqual(initialValues.value, {});
 		const allFields = objectValues(fields);
+		clearObject(formValues);
+
+		Object.assign(
+			formValues,
+			allFields.reduce<any>((newValues, field) => {
+				field.defaultValue !== undefined &&
+					set(newValues, field.name, clone(field.defaultValue));
+				return newValues;
+			}, {})
+		);
 
 		if (values) {
-			Object.assign(formValues, values);
+			Object.assign(formValues, clone(values));
 		} else if (hasInitialValue) {
-			Object.assign(formValues, values ?? initialValues.value);
-		} else {
-			Object.assign(
-				formValues,
-				allFields.reduce<any>((newValues, field) => {
-					field.defaultValue !== undefined &&
-						set(newValues, field.name, clone(field.defaultValue));
-					return newValues;
-				}, {})
-			);
+			Object.assign(formValues, initialValues.value);
 		}
 
 		allFields.forEach(({ reset: resetField }) => {
@@ -192,6 +203,7 @@ export default function useForm<
 		emit("reset");
 	}
 
+	// Submit
 	function submit() {
 		validate()
 			.then(handleSubmit)
@@ -230,6 +242,7 @@ export default function useForm<
 		className,
 		addField,
 		removeField,
+		clearValidate,
 		get classPrefix() {
 			return settings.classPrefix ?? "";
 		},
