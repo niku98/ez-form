@@ -108,19 +108,19 @@ The form above will have data structure like this:
 
 **EzFormList** provide some data and function in `default slot` to help you with array field.
 
-| Name        | Description                                              | Type                                                         |
-| :---------- | :------------------------------------------------------- | :----------------------------------------------------------- |
-| value       | Value of form list                                       | `Array<any>`                                                 |
-| length      | Length of form list's value                              | `number`                                                     |
-| namePaths   | List generated name path to pass to form item            | `Array<string\|number>`                                      |
-| getNamePath | Function to generate name path of form item in form list | `(index: number, namePath: string) => Array<string\|number>` |
-| errors      | List error of form list                                  | `Array`                                                      |
-| getErrors   | Function to get list array of form list's item           | `(index: number) => Array`                                   |
-| hasError    | Function to check if form item has error if              | `(index: number) => boolean`                                 |
-| add         | Function to add item to form list                        | `(value?: any) => void`                                      |
-| remove      | Function to remove item from form list by index          | `(index: number) => void`                                    |
-| removeByKey | Function to remove item from list by custom key          | `(key: string, value: any) => void`                          |
-| swap        | Function to swap two item by index                       | `(firstIndex: number, secondIndex: number) => void`          |
-| replace     | Function to replace an item of list with other value     | `(index: number, value: any) => void`                        |
-| move        | Function to move an item of list to other index          | `(fromIndex: number, toIndex: number) => void`               |
-| form        | Form's utility functions and data                        |                                                              |
+| Name        | Description                                              | Type                                                          |
+| :---------- | :------------------------------------------------------- | :------------------------------------------------------------ |
+| value       | Value of form list                                       | `Array<any>`                                                  |
+| length      | Length of form list's value                              | `number`                                                      |
+| namePaths   | List generated name path to pass to form item            | `Array<string\|number>`                                       |
+| getNamePath | Function to generate name path of form item in form list | `(index: number, namePath: string) => Array<string\|number>`  |
+| errors      | List error of form list                                  | `Array`                                                       |
+| getErrors   | Function to get list array of form list's item           | `(index: number) => Array`                                    |
+| hasError    | Function to check if form item has error if              | `(index: number) => boolean`                                  |
+| add         | Function to add item to form list                        | `(value?: any) => void`                                       |
+| remove      | Function to remove item from form list by index          | `(index: number) => void`                                     |
+| removeByKey | Function to remove item from list by custom key          | `(key: string, value: any) => void`                           |
+| swap        | Function to swap two item by index                       | `(firstIndex: number, secondIndex: number) => void`           |
+| replace     | Function to replace an item of list with other value     | `(index: number, value: any) => void`                         |
+| move        | Function to move an item of list to other index          | `(fromIndex: number, toIndex: number) => void`                |
+| form        | Form's utility functions and data                        | [`FormInstance`](/api-reference/types/form.html#forminstance) |

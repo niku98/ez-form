@@ -30,6 +30,7 @@ export interface FormSettings<Values extends object = any> {
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	validateMessages?: ValidateMessages;
 	classPrefix?: string;
+	preserveValues?: boolean;
 }
 
 export interface FormEmitter {
@@ -45,6 +46,7 @@ export interface FormInstance<Values extends object = any> {
 	getFieldValue(name: NamePath): any;
 	setFieldValue(name: NamePath, value: any): void;
 	validate(name?: string | NamePath[], options?: ValidateOption): Promise<any>;
+	clearValidate(): void;
 	submit: () => void;
 	reset: (values?: Values) => void;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];

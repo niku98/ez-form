@@ -13,7 +13,7 @@ In most case, your input will have a lots of complex requirements. Or you may us
 - Prop `value`: Form data will be pass to your input via this prop.
 - Event `@update:value`: **Ez Form** will listen to this event to update data from your input.
 
-Look similar? Yes, it is **Vue 3** `v-model`, in this case, `v-model:value`. Normally, you usually use `v-model` to get data from input, so **Ez Form** do the same, but it is automatic.
+Look familiar? Yes, it is **Vue 3** `v-model`, in this case, `v-model:value`. Normally, you usually use `v-model` to get data from input, so **Ez Form** do the same, but it is automatic.
 
 In the other words, your input need provide a `v-model:value` to work with **Ez Form**.
 
