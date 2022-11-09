@@ -6,7 +6,7 @@ title: Using useForm
 
 In some case, you may control form from outside of it. So you can use composable `useForm` to control the form.
 
-`useForm` return a `FormInstance`, you need to pass it to **EzForm**. Then you can use `FormInstance's` methods to handle form.
+`useForm` return a [`FormInstance`](/api-reference/types/form.html#forminstance), you need to pass it to **EzForm**. Then you can use `FormInstance's` methods to handle form.
 
 #### Example
 
