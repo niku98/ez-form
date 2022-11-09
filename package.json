@@ -25,8 +25,8 @@
 		"copy:package-json": "cp package.json dist/package.json",
 		"copy:readme": "cp README.md dist/README.md",
 		"link-package": "cd dist && yarn unlink && yarn link && cd ..",
-		"publish-package": "yarn build && npm version && yarn copy:package-json && yarn copy:readme && cd dist && npm login && npm publish",
-		"docs:dev": "DOCS=true && vitepress dev docs",
+		"publish-package": "chmod +x publish-package.sh && ./publish-package.sh",
+		"docs:dev": "DOCS=true && vitepress dev docs --port 8989",
 		"docs:build": "DOCS=true && vitepress build docs",
 		"docs:serve": "vitepress serve docs",
 		"vitepress": "vitepress",
@@ -57,6 +57,7 @@
 		"vue": "^3.2.41"
 	},
 	"devDependencies": {
+		"@jsdevtools/npm-publish": "^1.4.3",
 		"@types/jsdom": "^20.0.0",
 		"@types/node": "^16.11.27",
 		"@vitejs/plugin-vue": "^3.1.2",

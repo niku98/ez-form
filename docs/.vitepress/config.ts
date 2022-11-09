@@ -3,7 +3,7 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
 	base: "/ez-form/",
 	title: "Ez Form - Modern Vue form",
-	head: [["link", { rel: "icon", href: "/favicon.ico" }]],
+	head: [["link", { rel: "icon", href: "/ez-form/favicon.ico" }]],
 	themeConfig: {
 		siteTitle: "Ez Form",
 		logo: "/logo.png",
@@ -45,6 +45,15 @@ export default defineConfig({
 							text: "Using useForm",
 							link: "/guide/using-use-form",
 						},
+						{
+							text: "Auto Binding",
+							link: "/guide/auto-binding",
+						},
+					],
+				},
+				{
+					text: "Customization",
+					items: [
 						{
 							text: "Custom Inputs",
 							link: "/guide/custom-inputs",
