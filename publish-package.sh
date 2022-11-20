@@ -1,1 +1,1 @@
-yarn build && yarn copy:package-json && yarn copy:readme && npm publish --registry https://registry.npmjs.org
+yarn build && yarn copy:package-json && yarn copy:readme && cd dist && npm publish --registry https://registry.npmjs.org

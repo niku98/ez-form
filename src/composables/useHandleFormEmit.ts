@@ -40,7 +40,7 @@ export default function useHandleFormEmit(
 	}
 
 	const resetForm = form.reset;
-	const reset: FormInstance["reset"] = (values) => {
+	const reset = (values?: any) => {
 		resetForm(values);
 		emit("reset");
 	};
