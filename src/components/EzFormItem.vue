@@ -1,7 +1,7 @@
 <template>
 	<EzFormItemView
 		:label="label"
-		:id-for="formItemId"
+		:id-for="meta.id"
 		:required-mark="requiredMarkString"
 		:no-style="noStyle"
 		:colon="colon"
@@ -16,20 +16,25 @@
 			/>
 		</template>
 
-		<template v-if="error" #errors>
-			<slot name="errors" :errors="error">
-				<span v-for="message in error?.messages">{{ message }}</span>
+		<template v-if="meta.error" #errors>
+			<slot name="errors" :errors="meta.error">
+				<span v-for="message in meta.error?.messages">{{ message }}</span>
 			</slot>
 		</template>
 		<template v-if="$slots.extra" #extra>
-			<slot name="extra" :form="injectedForm" />
+			<slot name="extra" :form="injectedForm" :formItem="formItemInstance" />
 		</template>
 	</EzFormItemView>
 </template>
 
 <script lang="ts" setup>
 import EzFormItemView from "@/components/EzFormItemView.vue";
-import { useFormItem, useFormItemAutoBinding } from "@/composables";
+import {
+	useFormItem,
+	useFormItemAutoBinding,
+	useHandleFormItemEmit,
+	useInjectForm,
+} from "@/composables";
 import type { FormInstance, FormItemInstance } from "@/models";
 import { getFormItemDefinePropsObject } from "@/utilities";
 
@@ -39,38 +44,16 @@ const emit = defineEmits<{
 	(event: "change", value: any, form: FormInstance): void;
 }>();
 
-const formItemData = useFormItem(props, emit);
-const {
-	inputValue,
-	requiredMarkString,
-	rawValue,
-	formItemId,
-	error,
-	dirty,
-	injectedForm,
-	handleChange,
-} = formItemData;
+const injectedForm = useInjectForm();
+const formItemInstance = useFormItem(props);
+const { meta, requiredMarkString } = formItemInstance;
+
+// Handle emit
+useHandleFormItemEmit(formItemInstance, emit);
 
 // Handle slots
 const { getInputItemProps, slotData, getVNodesFromDefaultSlot } =
-	useFormItemAutoBinding(formItemData, props);
+	useFormItemAutoBinding(formItemInstance, props);
 
-defineExpose<FormItemInstance>({
-	handleChange,
-	get rawValue() {
-		return rawValue.value;
-	},
-	get transformedValue() {
-		return inputValue.value;
-	},
-	get form() {
-		return injectedForm;
-	},
-	get error() {
-		return error.value;
-	},
-	get dirty() {
-		return dirty.value;
-	},
-});
+defineExpose<FormItemInstance>(formItemInstance);
 </script>

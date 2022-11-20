@@ -8,12 +8,20 @@ import {
 } from "@/models/Validation";
 import { ComputedRef } from "vue";
 
+export interface FormMeta<Values = any> {
+	name: string;
+	values: Values;
+	errors: ValidateError[];
+	dirty: boolean;
+}
+
 export interface FormField {
 	name: ComputedRef<NamePath>;
 	id: ComputedRef<string>;
 	validate: (options?: ValidateOption) => Promise<any>;
 	clearValidate: () => void;
 	reset: () => void;
+	markAsDirty: () => void;
 	defaultValue: any;
 	value: ComputedRef<any>;
 	error: ComputedRef<ValidateError | undefined>;
@@ -21,11 +29,10 @@ export interface FormField {
 }
 
 export interface FormSettings<Values extends object = any> {
+	name?: string;
 	form?: FormInstance;
-	emit?: FormEmitter;
 	initialValues?: Values;
 	enableReinitialize?: boolean;
-	clearOnReset?: boolean;
 	rules?: Rules;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	validateMessages?: ValidateMessages;
@@ -41,21 +48,33 @@ export interface FormEmitter {
 }
 
 export interface FormInstance<Values extends object = any> {
-	values: Values;
-	errors: ValidateError[];
+	meta: FormMeta;
+	validateTrigger?: ValidateTrigger | ValidateTrigger[];
+	rules?: Rules;
+	className: ComputedRef<string>;
+	validateMessages?: ValidateMessages;
+	classPrefix: string;
 	getFieldValue(name: NamePath): any;
 	setFieldValue(name: NamePath, value: any): void;
 	validate(name?: string | NamePath[], options?: ValidateOption): Promise<any>;
-	clearValidate(): void;
-	submit: () => void;
+	clearValidate(name?: NamePath): void;
+	submit: <
+		S extends FormSubmitCallback<Values> | undefined = undefined,
+		E extends FormErrorCallback | undefined = undefined
+	>(
+		onSuccess?: FormSubmitCallback<Values> | S,
+		onError?: FormErrorCallback | E
+	) => S extends FormSubmitCallback<Values>
+		? void
+		: E extends FormErrorCallback
+		? void
+		: Promise<Values>;
 	reset: (values?: Values) => void;
-	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	isDirty: (name?: NamePath) => boolean;
-	updateSettings(settings: FormSettings): void;
-	className: ComputedRef<string>;
 	addField(field: FormField): void;
+	updateSettings(settings: Partial<FormSettings>): void;
 	removeField(namePath: NamePath): void;
-	rules?: Rules;
-	validateMessages?: ValidateMessages;
-	classPrefix: string;
 }
+
+export type FormSubmitCallback<Values = any> = (values: Values) => void;
+export type FormErrorCallback = (errors: ValidateError[]) => void;

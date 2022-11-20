@@ -2,6 +2,12 @@
 title: Nested
 ---
 
+<script setup>
+	import NestedObjectExample from "examples/NestedObjectExample.vue";
+	import NestedArrayExample from "examples/NestedArrayExample.vue";
+	import NestedAvoidNestingExample from "examples/NestedAvoidNestingExample.vue";
+</script>
+
 # Nested
 
 ## Nested Object
@@ -10,24 +16,13 @@ In some case, you will need to work with nested form's data. With **Ez Form**, y
 
 The _Name path_ can be `string|number|Array<number | string>`.
 
-### Examples
-
-There are some examples to show how **Ez Form** deal with nested form's data.
-
-All examples will have same result as bellow:
-
-```ts
-{
-	user: {
-		username: "tester",
-		firstName: "Johnny",
-		lastName: "Pham",
-		password: "123456"
-	}
-}
-```
-
 #### String name path
+
+You can pass to prop `name` a `string`, with structure like this `user.username`, to display a nested object.
+
+<NestedObjectExample />
+
+::: details View Code
 
 ```vue
 <template>
@@ -54,7 +49,16 @@ function handleSubmit(values: RegisterUserRequest) {
 </script>
 ```
 
+:::
+<br/>
+
 #### Array name path
+
+Along with string, you can pass to prop `name` an array to display nested object, like `['user', 'username']`
+
+<NestedObjectExample />
+
+::: details View Code
 
 ```vue
 <template>
@@ -81,11 +85,30 @@ function handleSubmit(values: RegisterUserRequest) {
 </script>
 ```
 
+:::
+
+Two examples above will have same result as bellow:
+
+```ts
+{
+	user: {
+		username: "tester",
+		firstName: "Johnny",
+		lastName: "Pham",
+		password: "123456"
+	}
+}
+```
+
 ## Nested Array
 
 Similar to object, you can also nest your data in an array. In _Name path_, just replacing property's name with a number. Example: `users[0].username`, `users.0.username` or `['users', 0, 'username']`.
 
-### Example
+**Example**
+
+<NestedArrayExample />
+
+::: details View Code
 
 ```vue
 <template>
@@ -102,6 +125,8 @@ Similar to object, you can also nest your data in an array. In _Name path_, just
 		<EzFormItem label="Password" name="users.0.password">
 			<input placeholder="Password" type="password" />
 		</EzFormItem>
+
+		<button type="submit">Submit</button>
 	</EzForm>
 </template>
 
@@ -111,6 +136,8 @@ function handleSubmit(values: RegisterUserRequest) {
 }
 </script>
 ```
+
+:::
 
 Submitting the form above will receive the following result:
 
@@ -129,7 +156,13 @@ Submitting the form above will receive the following result:
 
 ## Avoiding Nesting
 
-In some case, you may have property's name like `user.fullName`. You can put that property's name to an array's element.
+In some case, you may have property's name like `user.fullName`. You can put that property's name to an array's element to avoid nesting.
+
+**Example**
+
+<NestedAvoidNestingExample/>
+
+::: details View Code
 
 ```vue
 <template>
@@ -137,6 +170,8 @@ In some case, you may have property's name like `user.fullName`. You can put tha
 		<EzFormItem label="Username" :name="['user.fullName']">
 			<input placeholder="Enter Username" />
 		</EzFormItem>
+
+		<button type="submit">Submit</button>
 	</EzForm>
 </template>
 
@@ -146,3 +181,5 @@ function handleSubmit(values: RegisterUserRequest) {
 }
 </script>
 ```
+
+:::

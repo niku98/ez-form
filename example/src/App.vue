@@ -1,5 +1,5 @@
 <template>
-	<EzForm @submit="handleSubmit" @reset="">
+	<EzForm @submit="handleSubmit">
 		<EzFormItem label="Test" name="test" validate-first no-style>
 			<input />
 		</EzFormItem>
@@ -36,7 +36,7 @@
 </template>
 
 <script lang="ts" setup>
-import { EzForm, getFormDefinePropsObject } from "@niku/ez-form";
+import { EzForm } from "@niku/ez-form";
 
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
@@ -44,8 +44,6 @@ import { EzForm, getFormDefinePropsObject } from "@niku/ez-form";
 function handleSubmit(values: any) {
 	console.log(values);
 }
-
-const props = defineProps(getFormDefinePropsObject());
 
 const defaultList = new Array(200).fill({ displayName: "test", age: 20 });
 </script>

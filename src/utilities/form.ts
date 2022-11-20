@@ -11,6 +11,10 @@ import type { PropType } from "vue";
 
 export const getFormDefinePropsObject = () => {
 	return {
+		name: {
+			required: false,
+			type: String as PropType<string>,
+		},
 		form: {
 			required: false,
 			type: Object as PropType<FormInstance>,
@@ -20,10 +24,6 @@ export const getFormDefinePropsObject = () => {
 			type: Object as PropType<Record<string, any>>,
 		},
 		enableReinitialize: {
-			required: false,
-			type: Boolean as PropType<boolean>,
-		},
-		clearOnReset: {
 			required: false,
 			type: Boolean as PropType<boolean>,
 		},

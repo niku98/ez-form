@@ -2,6 +2,11 @@
 title: Validation
 ---
 
+<script setup>
+	import ValidationFormItemLevel from "examples/ValidationFormItemLevel.vue";
+	import ValidationFormLevel from "examples/ValidationFormLevel.vue";
+</script>
+
 # Validation
 
 **Ez Form** use [`async-validator`](https://www.npmjs.com/package/async-validator) to handle form 's validation.
@@ -11,6 +16,10 @@ There are two ways you can add rules to validate form.
 ## FormItem Level
 
 **EzFormItem** has prop **_rules_** to get rules for each field in your form.
+
+<ValidationFormItemLevel/>
+
+::: details View Code
 
 ```vue
 <template>
@@ -58,9 +67,15 @@ function handleError(errors) {
 </script>
 ```
 
+:::
+
 ## Form Level
 
 You can pass your _validation's rules_ to **EzForm** using prop _rules_. It is similar to **EzFormItem's** prop _rules_.
+
+<ValidationFormLevel/>
+
+::: details View Code
 
 ```vue
 <template>
@@ -115,9 +130,11 @@ function handleError(errors) {
 </script>
 ```
 
+:::
+
 Rules has same **_name_** in **EzForm** and **EzFormItem** will be merged.
 
-Example: Rules of `user.username` will be
+**Example:** Rules of `user.username` will be
 
 ```ts
 [{ require: true }, { type: "string", min: 3 }];

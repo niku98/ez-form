@@ -6,15 +6,23 @@ import {
 	ValidateOption,
 	ValidateTrigger,
 } from "@/models/Validation";
-import { ComputedRef, Ref, WritableComputedRef } from "vue";
+import { ComputedRef } from "vue";
 
-export interface FormItemInstance {
+export interface FieldMeta {
+	/**
+	 * Raw value before being transformed
+	 */
 	rawValue: any;
+	/**
+	 * Value after being transformed by valueTransformer()
+	 */
 	transformedValue: any;
-	handleChange(value: any): any;
-	form: FormInstance;
+
 	error?: ValidateError;
 	dirty: boolean;
+	touched: boolean;
+	name?: NamePath;
+	id: string;
 }
 
 export interface FormItemValueTransformer<In = any, Out = any> {
@@ -26,8 +34,8 @@ export interface FormItemProps {
 	label?: string;
 	name?: string | number | (string | number)[];
 	defaultValue?: any;
-	getValueFromChangeEvent: (event: any) => any;
-	valueTransformer: FormItemValueTransformer;
+	getValueFromChangeEvent?: (event: any) => any;
+	valueTransformer?: FormItemValueTransformer;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	rules?: Rule;
 	requiredMark?: string | boolean;
@@ -42,30 +50,17 @@ export interface FormItemEmitter {
 	(event: "change", value: any, form: FormInstance): void;
 }
 
-export interface UseFormItemResult {
-	formItemId: ComputedRef<string>;
+export interface FormItemInstance {
+	meta: FieldMeta;
 	requiredMarkString: ComputedRef<string>;
-	rawValue: WritableComputedRef<any>;
-	inputValue: WritableComputedRef<any>;
-	error: Ref<ValidateError | undefined>;
-	injectedForm: FormInstance;
 	handleChange: (event: any) => void;
 	handleBlur: () => void;
+	registerFormField: (formInstance: FormInstance) => void;
 	validate: (options?: ValidateOption) => Promise<any>;
-	dirty: Ref<boolean>;
 }
 
-export interface UseFormListResult {
-	formItemId: ComputedRef<string>;
-	requiredMarkString: ComputedRef<string>;
-	rawValue: WritableComputedRef<any>;
-	inputValue: WritableComputedRef<any>;
-	error: Ref<ValidateError | undefined>;
-	injectedForm: FormInstance;
-	handleChange: (event: any) => void;
-	handleBlur: () => void;
-	validate: (options?: ValidateOption) => Promise<any>;
-	dirty: Ref<boolean>;
+export interface FormListInstance
+	extends Omit<FormItemInstance, "handleBlur" | "handleChange"> {
 	listValues: ComputedRef<any[]>;
 	namePrefix: ComputedRef<(string | number)[]>;
 	namePaths: ComputedRef<(string | number)[][]>;

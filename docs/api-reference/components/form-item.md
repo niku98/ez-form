@@ -30,3 +30,13 @@ title: FormItem
 | Name     | Description                          | Type                    |
 | :------- | :----------------------------------- | :---------------------- |
 | onChange | Trigger after form item data changed | `(values: any) => void` |
+
+## Scoped slot - Default
+
+| Name         | Description                                                   | Type                                                            |
+| :----------- | :------------------------------------------------------------ | :-------------------------------------------------------------- |
+| value        | Transformed value of form item, to pass to input.             | `any`                                                           |
+| rawValue     | Raw value of form item.                                       | `any`                                                           |
+| handleChange | Handle change function, to pass to your input's change event. | `(event: any) => void`                                          |
+| form         | A form instance                                               | [`FormInstance`](/api-reference/types/form.html#forminstance)   |
+| error        | Form item error                                               | [`ValidateError`](/api-reference/types/validation.html#general) |

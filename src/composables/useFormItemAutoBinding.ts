@@ -1,23 +1,17 @@
-import { UseFormItemResult } from "@/models";
-import { computed, toRaw, useSlots, VNode } from "vue";
+import useInjectForm from "@/composables/useInjectForm";
+import { FormItemInstance } from "@/models";
+import { computed, useSlots, VNode } from "vue";
 
 export default function useFormItemAutoBinding(
-	formItemInstance: UseFormItemResult,
+	formItemInstance: FormItemInstance,
 	props: {
 		changeEventPropName?: string;
 		blurEventPropName: string;
 		valuePropName: string;
 	}
 ) {
-	const {
-		inputValue,
-		rawValue,
-		handleBlur,
-		handleChange,
-		error,
-		formItemId,
-		injectedForm,
-	} = formItemInstance;
+	const { meta, handleBlur, handleChange } = formItemInstance;
+	const injectedForm = useInjectForm();
 
 	const updateEventName = computed(
 		() => props.changeEventPropName ?? `update:${props.valuePropName}`
@@ -26,11 +20,11 @@ export default function useFormItemAutoBinding(
 	const slots = useSlots();
 	const slotData = computed(() => {
 		return {
-			value: inputValue,
-			rawValue: rawValue,
+			value: meta.transformedValue,
+			rawValue: meta.rawValue,
 			handleChange,
 			form: injectedForm,
-			error: toRaw(error),
+			error: meta.error,
 		};
 	});
 
@@ -44,11 +38,11 @@ export default function useFormItemAutoBinding(
 			["input", "select", "textarea"].includes(String(vNode.type))
 		) {
 			return {
-				value: inputValue.value,
+				value: meta.transformedValue,
 				onInput: handleChange,
 				onChange: handleChange,
 				onBlur: handleBlur,
-				id: formItemId.value,
+				id: meta.id,
 			};
 		}
 
@@ -63,8 +57,8 @@ export default function useFormItemAutoBinding(
 		return {
 			[eventName]: handleChange,
 			[blurEventName]: handleBlur,
-			[valuePropName]: inputValue.value,
-			id: formItemId.value,
+			[valuePropName]: meta.transformedValue,
+			id: meta.id,
 		};
 	};
 

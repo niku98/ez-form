@@ -18,3 +18,57 @@ In the other words, your input need provide a `v-model:value` to work with **Ez 
 ## Blur event
 
 By default, **Ez Form** will listen to event `@blur` to determine is input blur. So your component can emit `@blur` to be compatible with **Ez Form**.
+
+## useFormItemAutoBinding()
+
+Use this composable to handle auto binding.
+
+**Type**
+
+```ts
+export default function useFormItemAutoBinding(
+	formItemInstance: FormItemInstance,
+	props: {
+		changeEventPropName?: string;
+		blurEventPropName: string;
+		valuePropName: string;
+	}
+): {
+	getVNodesFromDefaultSlot(): VNode[];
+	slotData: {
+		value: any;
+		rawValue: any;
+		handleChange(event?: any): void;
+		form: FormInstance;
+		error: ValidateError[];
+	};
+	getInputItemProps(vNode: VNode): any;
+};
+```
+
+**Example**
+
+```vue
+<template>
+	<div>
+		<component
+			v-for="(vNode, index) in getVNodesFromDefaultSlot()"
+			:is="vNode"
+			:key="vNode.patchFlag"
+			v-bind="index === inputNodeIndex ? getInputItemProps(vNode) : undefined"
+		/>
+	</div>
+</template>
+<script lang="ts" setup>
+import { useFormItem, useFormItemAutoBinding } from "@/composables";
+import { getFormItemDefinePropsObject } from "@/utilities";
+
+const props = defineProps(getFormItemDefinePropsObject());
+const formItemInstance = useFormItem(props);
+const { meta, requiredMarkString } = formItemInstance;
+
+// Handle auto binding
+const { getInputItemProps, slotData, getVNodesFromDefaultSlot } =
+	useFormItemAutoBinding(formItemInstance, props);
+</script>
+```
