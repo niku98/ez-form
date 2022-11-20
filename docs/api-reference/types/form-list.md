@@ -20,20 +20,11 @@ export interface FormListProps {
 }
 ```
 
-## UseFormListResult
+## FormListInstance
 
 ```ts
-export interface UseFormListResult {
-	formItemId: ComputedRef<string>;
-	requiredMarkString: ComputedRef<string>;
-	rawValue: WritableComputedRef<any>;
-	inputValue: WritableComputedRef<any>;
-	error: Ref<ValidateError | undefined>;
-	injectedForm: FormInstance;
-	handleChange: (event: any) => void;
-	handleBlur: () => void;
-	validate: (options?: ValidateOption) => Promise<any>;
-	dirty: Ref<boolean>;
+export interface FormListInstance
+	extends Omit<FormItemInstance, "handleBlur" | "handleChange"> {
 	listValues: ComputedRef<any[]>;
 	namePrefix: ComputedRef<(string | number)[]>;
 	namePaths: ComputedRef<(string | number)[][]>;

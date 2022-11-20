@@ -26,7 +26,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useInjectForm } from "@/composables";
+import { useEzFormPluginOptions, useInjectForm } from "@/composables";
 import { computed } from "vue";
 
 const props = withDefaults(
@@ -43,6 +43,7 @@ const props = withDefaults(
 );
 
 const form = useInjectForm();
+const pluginOptions = useEzFormPluginOptions();
 
 const classNames = computed(() => {
 	return {
@@ -67,7 +68,7 @@ const fieldStyle = computed(() => {
 	const colonCssVar = `--${form.classPrefix}-form-colon`;
 	return {
 		[requiredMarkCssVar]: props.requiredMark,
-		[colonCssVar]: `"${props.colon ? ":" : ""}"`,
+		[colonCssVar]: `"${props.colon ?? pluginOptions?.colon ? ":" : ""}"`,
 	};
 });
 </script>

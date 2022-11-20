@@ -1,10 +1,11 @@
 <template>
 	<form :class="className" @submit.prevent="submit()" @reset.prevent="reset()">
 		<slot
-			:values="values"
-			:errors="errors"
-			:submit="submit"
-			:reset="reset"
+			:values="meta.values"
+			:errors="meta.errors"
+			:dirty="meta.dirty"
+			:submit="form.submit"
+			:reset="form.reset"
 			:validate="validate"
 			:getFieldValue="getFieldValue"
 			:setFieldValue="setFieldValue"
@@ -14,7 +15,7 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm } from "@/composables";
+import { useForm, useHandleFormEmit } from "@/composables";
 import type { FormInstance, ValidateError } from "@/models";
 import { getFormDefinePropsObject } from "@/utilities";
 import { watchEffect } from "vue";
@@ -30,27 +31,26 @@ const props = defineProps(getFormDefinePropsObject());
 
 const emit = defineEmits<FormEmitter>();
 
-const form = useForm(props.form);
+const form = props.form ?? useForm(props);
 
 const {
-	values,
-	errors,
+	meta,
 	setFieldValue,
 	getFieldValue,
-	submit,
-	reset,
 	validate,
 	className,
 	isDirty,
 	updateSettings,
 } = form;
 
-watchEffect(() => {
-	updateSettings({
-		...props,
-		emit,
+const { reset, submit } = useHandleFormEmit(form, emit);
+if (props.form) {
+	watchEffect(() => {
+		updateSettings({
+			...props,
+		});
 	});
-});
+}
 
 defineExpose<FormInstance>(form);
 </script>

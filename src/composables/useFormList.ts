@@ -1,23 +1,29 @@
 import useFormItem from "@/composables/useFormItem";
+import useInjectForm from "@/composables/useInjectForm";
 import {
-	FormItemEmitter,
+	FormInstance,
+	FormListInstance,
 	FormListProps,
 	NamePath,
-	UseFormListResult,
 } from "@/models";
 import { castToArray, clone } from "@/utilities";
 import { computed } from "vue";
 
-export default function useFormList(
-	props: FormListProps,
-	emit: FormItemEmitter
-): UseFormListResult {
-	const formItemInstance = useFormItem(props, emit);
-	const { inputValue, handleChange, injectedForm } = formItemInstance;
+export default function useFormList<
+	F extends FormInstance | undefined = undefined
+>(
+	props: F extends FormInstance
+		? FormListProps & { name: string }
+		: FormListProps,
+	form?: FormInstance | F
+): FormListInstance {
+	const injectedForm = useInjectForm();
+	const formItemInstance = useFormItem(props, form);
+	const { meta, handleChange } = formItemInstance;
 
 	const listValues = computed<any[]>(() => {
-		return inputValue?.value && Array.isArray(inputValue?.value)
-			? inputValue?.value
+		return meta.transformedValue && Array.isArray(meta.transformedValue)
+			? meta.transformedValue
 			: [];
 	});
 
@@ -30,7 +36,7 @@ export default function useFormList(
 	});
 
 	const errors = computed(() =>
-		injectedForm.errors.filter(({ name }) =>
+		injectedForm.meta.errors.filter(({ name }) =>
 			castToArray(name).join(".").includes(namePrefix.value.join("."))
 		)
 	);
@@ -120,7 +126,10 @@ export default function useFormList(
 	}
 
 	return {
-		...formItemInstance,
+		meta: formItemInstance.meta,
+		registerFormField: formItemInstance.registerFormField,
+		requiredMarkString: formItemInstance.requiredMarkString,
+		validate: formItemInstance.validate,
 		listValues,
 		namePrefix,
 		namePaths,

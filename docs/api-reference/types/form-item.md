@@ -10,6 +10,20 @@ title: Form Item Typings
 export type NamePath = string | number | (string | number)[];
 ```
 
+## FieldMeta
+
+```ts
+export interface FieldMeta {
+	rawValue: any;
+	transformedValue: any;
+	error?: ValidateError;
+	dirty: boolean;
+	touched: boolean;
+	name?: NamePath;
+	id: string;
+}
+```
+
 ## FormItemValueTransformer
 
 ```ts
@@ -49,19 +63,16 @@ export interface FormItemEmitter {
 }
 ```
 
-## UseFormItemResult
+## FormItemInstance
 
 ```ts
-export interface UseFormItemResult {
-	formItemId: ComputedRef<string>;
+export interface FormItemInstance {
+	meta: FieldMeta;
 	requiredMarkString: ComputedRef<string>;
-	rawValue: WritableComputedRef<any>;
-	inputValue: WritableComputedRef<any>;
-	error: Ref<ValidateError | undefined>;
 	injectedForm: FormInstance;
 	handleChange: (event: any) => void;
 	handleBlur: () => void;
+	registerFormField: (formInstance: FormInstance) => void;
 	validate: (options?: ValidateOption) => Promise<any>;
-	dirty: Ref<boolean>;
 }
 ```

@@ -1,2 +1,2 @@
 /// <reference types="vite/client" />
-/// <reference types="@niku/ez-form/dist/types" />
+/// <reference types="@niku/ez-form/types" />

@@ -5,3 +5,32 @@
 .VPHero .image img {
 	max-height: 380px;
 }
+
+:root {
+	--bg-example: #eee;
+	--bg-example-button: #4285f4;
+	--bg-example-input: white;
+}
+
+.dark {
+	--bg-example: #1f1f1f;
+	--bg-example-button: #4285f4;
+	--bg-example-input: transparent;
+}
+
+.example-box {
+	background-color: var(--bg-example);
+	padding: 2rem;
+	border-radius: 0.5rem;
+}
+
+.example-box input {
+	background-color: var(--bg-example-input);
+}
+
+.example-box button {
+	color: white;
+	background-color: var(--bg-example-button);
+	padding: 0.3rem 0.7rem;
+	border-radius: 0.3rem;
+}

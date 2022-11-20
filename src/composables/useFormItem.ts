@@ -1,9 +1,10 @@
 import useInjectForm from "@/composables/useInjectForm";
+import useEzFormPluginOptions from "@/composables/usePluginOptions";
 import type {
-	FormItemEmitter,
+	FieldMeta,
+	FormInstance,
+	FormItemInstance,
 	FormItemProps,
-	UseFormItemResult,
-	ValidateError,
 	ValidateOption,
 } from "@/models";
 import { castPath, castToArray, clone, get, uniqueId } from "@/utilities";
@@ -13,52 +14,77 @@ import {
 	nextTick,
 	onBeforeMount,
 	onBeforeUnmount,
+	reactive,
 	Ref,
 	ref,
-	watch,
 } from "vue";
 
-export default function useFormItem(
-	props: FormItemProps,
-	emit: FormItemEmitter
-): UseFormItemResult {
-	const injectedForm = useInjectForm();
+export default function useFormItem<
+	F extends FormInstance | undefined = undefined
+>(
+	props: F extends FormInstance
+		? FormItemProps & { name: string }
+		: FormItemProps,
+	form?: FormInstance | F
+): FormItemInstance {
+	let injectedForm = form ?? useInjectForm();
 
-	const formItemId = computed(() =>
-		props.name ? `${uniqueId()}_${castPath(props.name).join("_")}` : ""
-	);
-	const defaultValue: Ref<any> = ref(props.defaultValue);
+	const internalValue: Ref<any> = ref<any>(undefined);
+	const uniqId = uniqueId();
 
-	/**
-	 * Raw value get from form
-	 */
-	const rawValue = computed({
-		get() {
-			return props.name ? get(injectedForm.values, props.name) : undefined;
+	const fieldMeta = reactive<FieldMeta>({
+		get rawValue() {
+			return props.name
+				? get(injectedForm.meta.values, props.name)
+				: internalValue.value;
 		},
-		set(newValue: any) {
-			props.name && injectedForm.setFieldValue(props.name, newValue);
+		set rawValue(newValue: any) {
+			this.dirty = true;
+			this.touched = true;
+
+			if (props.name && injectedForm) {
+				injectedForm.setFieldValue(props.name, newValue);
+			} else {
+				internalValue.value = newValue;
+			}
+		},
+
+		get transformedValue() {
+			return props.valueTransformer
+				? props.valueTransformer.in(this.rawValue, injectedForm)
+				: this.rawValue;
+		},
+		set transformedValue(newValue: any) {
+			this.rawValue = props.valueTransformer
+				? props.valueTransformer.out(newValue, injectedForm)
+				: newValue;
+		},
+
+		get name() {
+			return props.name;
+		},
+		dirty: false,
+		touched: false,
+		get id() {
+			return props.name
+				? `${injectedForm.meta.name}_${castPath(props.name).join("_")}`
+				: `${injectedForm.meta.name}_${uniqId}`;
 		},
 	});
 
-	/**
-	 * Value will be passed to input
-	 */
-	const inputValue = computed({
-		get() {
-			return props.valueTransformer.in(rawValue.value, injectedForm);
-		},
-
-		set(newValue: any) {
-			rawValue.value = props.valueTransformer.out(newValue, injectedForm);
-		},
-	});
-	const dirty = ref(false);
+	function resetFieldMeta() {
+		fieldMeta.dirty = false;
+		fieldMeta.touched = false;
+		fieldMeta.error = undefined;
+		if (props.defaultValue !== undefined) {
+			fieldMeta.rawValue = clone(props.defaultValue);
+		}
+	}
 
 	// Handle validate
 	const validateTrigger = computed(() =>
 		castToArray(
-			props.validateTrigger,
+			props.validateTrigger ?? "change",
 			castToArray(injectedForm.validateTrigger)
 		)
 	);
@@ -76,7 +102,10 @@ export default function useFormItem(
 
 		return internalRules.concat(rules);
 	});
-	const error = ref<ValidateError>();
+
+	function clearValidate() {
+		fieldMeta.error = undefined;
+	}
 
 	async function validate(options?: ValidateOption) {
 		const rules = options?.trigger
@@ -105,33 +134,41 @@ export default function useFormItem(
 
 		return new Promise<any>((resolve, reject) => {
 			validationSchema.validate(
-				{ [validationKey]: rawValue.value },
+				{ [validationKey]: fieldMeta.rawValue },
 				{ first: props.validateFirst ?? false },
 				(errorList) => {
 					if (errorList === null || errorList.length === 0) {
 						clearValidate();
-						resolve(rawValue.value);
+						resolve(fieldMeta.rawValue);
 					} else {
-						error.value = {
+						fieldMeta.error = {
 							name: props.name ?? [],
 							messages: errorList.map(({ message }) => message ?? ""),
 						};
-						reject(clone(error.value));
+						reject(clone(fieldMeta.error));
 					}
 				}
 			);
 		});
 	}
 
-	function clearValidate() {
-		error.value = undefined;
+	// Handle events
+	function getValueFromChangeEvent(event: any) {
+		if (event instanceof Event && event.target) {
+			return (
+				(event.target as HTMLInputElement).value ??
+				(event.target as HTMLInputElement).checked
+			);
+		}
+
+		return event;
 	}
 
-	// Handle events
 	function handleChange(event: any) {
 		// Get value from input and set to inputValue, rawValue will be set automatically
-		inputValue.value = props.getValueFromChangeEvent(event);
-		dirty.value = true;
+		fieldMeta.transformedValue = props.getValueFromChangeEvent
+			? props.getValueFromChangeEvent(event)
+			: getValueFromChangeEvent(event);
 
 		if (validateTrigger.value.includes("change")) {
 			nextTick(() => {
@@ -141,70 +178,76 @@ export default function useFormItem(
 	}
 
 	function handleBlur() {
+		fieldMeta.touched = true;
 		if (validateTrigger.value.includes("blur")) {
 			validate({ trigger: "blur" }).catch(() => {});
 		}
 	}
 
-	watch(rawValue, () => {
-		emit("change", rawValue.value, injectedForm);
-	});
-
 	onBeforeMount(() => {
-		if (defaultValue.value !== undefined && rawValue.value === undefined) {
-			rawValue.value = clone(defaultValue.value);
+		if (props.defaultValue !== undefined && fieldMeta.rawValue === undefined) {
+			fieldMeta.rawValue = clone(props.defaultValue);
 		}
 	});
 
 	// Handle add form field
-	injectedForm.addField({
-		name: computed(() => props.name ?? []),
-		id: formItemId,
-		value: computed(() => rawValue.value),
-		validate,
-		clearValidate,
-		reset() {
-			clearValidate();
-			dirty.value = false;
-		},
-		get defaultValue() {
-			return defaultValue.value;
-		},
-		error: computed(() => error.value),
-		dirty: computed(() => dirty.value),
-	});
+	function getFormFieldObject() {
+		return {
+			name: computed(() => props.name ?? []),
+			id: computed(() => fieldMeta.id),
+			value: computed(() => fieldMeta.rawValue),
+			validate,
+			clearValidate,
+			reset: resetFieldMeta,
+			get defaultValue() {
+				return props.defaultValue;
+			},
+			error: computed(() => fieldMeta.error),
+			dirty: computed(() => fieldMeta.dirty),
+			markAsDirty() {
+				fieldMeta.dirty = true;
+				fieldMeta.touched = true;
+			},
+		};
+	}
 
+	function registerFormField(formInstance: FormInstance) {
+		formInstance.addField(getFormFieldObject());
+
+		injectedForm = formInstance;
+	}
+
+	registerFormField(injectedForm);
 	onBeforeUnmount(() => {
 		props.name && injectedForm.removeField(props.name);
 	});
 
 	// Handle require mark
+	const pluginOptions = useEzFormPluginOptions();
 	const requiredMarkString = computed(() => {
 		const needRequiredMark = mergedRules.value.some((rule) => rule.required);
 		if (!needRequiredMark) {
 			return "";
 		}
 
+		const markString = pluginOptions?.requiredMark ?? "*";
+
 		switch (typeof props.requiredMark) {
 			case "boolean":
-				return props.requiredMark ? "'*'" : "";
+				return props.requiredMark ? `'${markString}'` : "";
 			case "string":
 				return `'${props.requiredMark}'`;
 			default:
-				return "'*'";
+				return `'${markString}'`;
 		}
 	});
 
 	return {
-		formItemId,
+		meta: fieldMeta,
 		requiredMarkString,
-		rawValue,
-		inputValue,
-		error,
-		injectedForm,
+		registerFormField,
 		handleChange,
 		handleBlur,
 		validate,
-		dirty,
-	};
+	} as FormItemInstance;
 }

@@ -1,7 +1,11 @@
+import useEzFormPluginOptions from "@/composables/usePluginOptions";
 import type {
+	FormErrorCallback,
 	FormField,
 	FormInstance,
+	FormMeta,
 	FormSettings,
+	FormSubmitCallback,
 	NamePath,
 	ValidateError,
 	ValidateOption,
@@ -13,40 +17,70 @@ import {
 	clearObject,
 	clone,
 	deleteFrom,
-	emptyObject,
 	get,
 	isEqual,
 	objectValues,
 	set,
+	uniqueId,
 } from "@/utilities";
-import { computed, provide, reactive, ref, toRaw, watch } from "vue";
+import {
+	computed,
+	provide,
+	reactive,
+	ref,
+	toRaw,
+	watch,
+	watchEffect,
+} from "vue";
 
 export default function useForm<
 	Values extends object = Record<string | number | symbol, any>
->(form?: FormInstance<Values>): FormInstance<Values> {
-	if (form) {
-		return form;
-	}
+>(props?: FormSettings): FormInstance<Values> {
+	const pluginOptions = useEzFormPluginOptions();
 
 	// Handle form settings
-	const settings = reactive<FormSettings>({
-		classPrefix: "ez",
-	});
+	const settings = reactive<FormSettings>(
+		toRaw(props) ?? {
+			classPrefix: "ez",
+			name: uniqueId(),
+		}
+	);
 
-	function updateSettings(newSettings: FormSettings) {
-		Object.assign(settings, newSettings);
+	// Generate form's name if not provided
+	settings.name = settings.name || uniqueId();
+
+	function updateSettings(newSettings: Partial<FormSettings>) {
+		Object.assign(settings, {
+			...newSettings,
+			name: newSettings.name || uniqueId(),
+		});
 	}
 
-	function emit(eventName: any, args?: any) {
-		settings.emit?.(eventName, args);
+	if (props) {
+		watch(props, () => {
+			updateSettings({ ...props });
+		});
 	}
+
+	// Handle form meta data
+	const getClonedInitialValues = () =>
+		settings.initialValues ? clone(toRaw(settings.initialValues)) : {};
 
 	const className = computed(() => `${settings.classPrefix}-form`);
+	const formMeta = reactive<FormMeta>({
+		dirty: false,
+		get name() {
+			return settings.name ?? "";
+		},
+		values: getClonedInitialValues(),
+		errors: [],
+	});
 
-	const initialValues = computed(() =>
-		settings.initialValues ? clone(toRaw(settings.initialValues)) : {}
-	);
-	const formValues = reactive<Values>(initialValues.value) as Values;
+	function resetFormMeta(values: any) {
+		formMeta.dirty = false;
+		formMeta.errors = [];
+		formMeta.values = values;
+	}
 
 	// Handle initial values
 	const stopWatchInitialValue = ref(createWatchInitialValue());
@@ -69,23 +103,14 @@ export default function useForm<
 		}
 
 		return watch(
-			() => initialValues.value,
+			() => settings.initialValues,
 			() => {
-				if (!isEqual(initialValues.value, formValues)) {
-					Object.assign(emptyObject(formValues), initialValues.value);
+				if (!isEqual(getClonedInitialValues(), formMeta.values)) {
+					reset();
 				}
 			},
 			{ deep: true }
 		);
-	}
-
-	// handle form values
-	function setFieldValue(name: NamePath, value: any) {
-		set(formValues, name, value);
-	}
-
-	function getFieldValue(name: NamePath) {
-		return get(formValues, name);
 	}
 
 	// Handle fields
@@ -99,35 +124,48 @@ export default function useForm<
 	function removeField(name: NamePath) {
 		const key = castPath(name).join(".");
 		if (settings.preserveValues === false) {
-			deleteFrom(formValues, name);
+			deleteFrom(formMeta.values, name);
 		}
 		delete fields[key];
 	}
 
-	// handle errors
-	const errors = reactive<FormInstance["errors"]>([]);
-	const fieldsErrors = computed(() => {
-		return objectValues(fields)
-			.map((field) => {
-				return field.error;
-			})
-			.filter((error) => error !== undefined) as ValidateError[];
-	});
+	function isDirty(namePath?: NamePath) {
+		if (!namePath) {
+			return formMeta.dirty;
+		}
 
-	function changeErrors(newErrors: FormInstance["errors"]) {
-		errors.splice(0);
-		errors.push(...newErrors);
+		return objectValues(fields)
+			.filter(({ name }) => (namePath ? isEqual(name, namePath) : true))
+			.some(({ dirty }) => {
+				return dirty;
+			});
 	}
 
-	watch(fieldsErrors, () => {
-		changeErrors(fieldsErrors.value);
-	});
+	function setFieldValue(name: NamePath, value: any, markAsDirty = true) {
+		set(formMeta.values, name, value);
+
+		// Mark form and field as dirty
+		if (markAsDirty) {
+			formMeta.dirty = true;
+			const field = fields[castPath(name).join(".")];
+			field && field.markAsDirty();
+		}
+	}
+
+	function getFieldValue(name: NamePath) {
+		return get(formMeta.values, name);
+	}
 
 	// Validate
-	function clearValidate() {
-		objectValues(fields).forEach(({ clearValidate }) => {
-			clearValidate();
-		});
+	function clearValidate(name?: NamePath) {
+		if (name) {
+			const path = castPath(name).join(".");
+			fields[path]?.clearValidate?.();
+		} else {
+			objectValues(fields).forEach(({ clearValidate }) => {
+				clearValidate();
+			});
+		}
 	}
 
 	function validate(name?: string | NamePath[], options?: ValidateOption) {
@@ -175,63 +213,69 @@ export default function useForm<
 		});
 	}
 
+	watchEffect(() => {
+		formMeta.errors = objectValues(fields)
+			.map((field) => {
+				return field.error;
+			})
+			.filter((error) => error !== undefined) as ValidateError[];
+	});
+
 	// Reset
 	function reset(values?: Record<string | number | symbol, any>) {
-		const hasInitialValue = !isEqual(initialValues.value, {});
+		const hasInitialValue = !isEqual(getClonedInitialValues(), {});
 		const allFields = objectValues(fields);
-		clearObject(formValues);
+		clearObject(formMeta.values);
 
-		Object.assign(
-			formValues,
+		resetFormMeta(
 			allFields.reduce<any>((newValues, field) => {
 				field.defaultValue !== undefined &&
 					set(newValues, field.name, clone(field.defaultValue));
 				return newValues;
 			}, {})
 		);
-
-		if (values) {
-			Object.assign(formValues, clone(values));
-		} else if (hasInitialValue) {
-			Object.assign(formValues, initialValues.value);
-		}
-
 		allFields.forEach(({ reset: resetField }) => {
 			resetField();
 		});
 
-		emit("reset");
+		if (values) {
+			Object.assign(formMeta.values, clone(values));
+		} else if (hasInitialValue) {
+			Object.assign(formMeta.values, getClonedInitialValues());
+		}
 	}
 
 	// Submit
-	function submit() {
-		validate()
-			.then(handleSubmit)
-			.catch((errors) => {
-				emit("error", errors);
-			});
-	}
+	const submit: FormInstance["submit"] = (
+		onSuccess?: FormSubmitCallback<Values>,
+		onError?: FormErrorCallback
+	) => {
+		if (onSuccess || onError) {
+			validate()
+				.then(() => {
+					const values = clone(formMeta.values);
+					onSuccess?.(values);
+				})
+				.catch((errors) => {
+					onError?.(errors);
+				});
+			return undefined as any;
+		}
 
-	function handleSubmit() {
-		emit("submit", clone(formValues));
-		changeErrors([]);
-	}
-
-	function isDirty(namePath?: NamePath) {
-		return objectValues(fields)
-			.filter(({ name }) => (namePath ? isEqual(name, namePath) : true))
-			.some(({ dirty }) => {
-				return dirty;
-			});
-	}
-
-	watch(formValues, (value: any) => {
-		emit("change", value);
-	});
+		return new Promise<Values>((resolve, reject) => {
+			validate()
+				.then(() => {
+					const values = clone(formMeta.values);
+					resolve(values);
+				})
+				.catch((errors) => {
+					reject(errors);
+				});
+		});
+	};
 
 	const formInstance: FormInstance<Values> = {
-		values: formValues,
-		errors,
+		meta: formMeta,
 		submit,
 		reset,
 		setFieldValue,
@@ -250,7 +294,7 @@ export default function useForm<
 			return settings.rules;
 		},
 		get validateMessages() {
-			return settings.validateMessages;
+			return settings.validateMessages ?? pluginOptions?.validateMessages;
 		},
 		get validateTrigger() {
 			return settings.validateTrigger;

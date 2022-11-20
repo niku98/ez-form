@@ -25,7 +25,6 @@ export default defineConfig({
 	form: FormInstance,
 	initialValues: Record<string, any>,
 	enableReinitialize: boolean,
-	clearOnReset: boolean,
 	rules: Rules,
 	validateTrigger: ValidateTrigger | ValidateTrigger[],
 	validateMessages: ValidateMessages,

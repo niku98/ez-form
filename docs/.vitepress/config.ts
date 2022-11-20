@@ -3,6 +3,8 @@ import { defineConfig } from "vitepress";
 export default defineConfig({
 	base: "/ez-form/",
 	title: "Ez Form - Modern Vue form",
+	description:
+		"Ez Form - Modern Vue form. Helping you to build a form faster with better performance. Supporting validation.",
 	head: [["link", { rel: "icon", href: "/ez-form/favicon.ico" }]],
 	themeConfig: {
 		siteTitle: "Ez Form",
@@ -11,7 +13,7 @@ export default defineConfig({
 			{ text: "Guide", link: "/guide/why-ez-form", activeMatch: "/guide/" },
 			{
 				text: "Api Reference",
-				link: "/api-reference/components/form",
+				link: "/api-reference/main-api/form-instance",
 				activeMatch: "/api-reference/",
 			},
 		],
@@ -46,6 +48,14 @@ export default defineConfig({
 							link: "/guide/using-use-form",
 						},
 						{
+							text: "Using useFormItem",
+							link: "/guide/using-use-form-item",
+						},
+						{
+							text: "Using useFormList",
+							link: "/guide/using-use-form-list",
+						},
+						{
 							text: "Auto Binding",
 							link: "/guide/auto-binding",
 						},
@@ -55,14 +65,43 @@ export default defineConfig({
 					text: "Customization",
 					items: [
 						{
-							text: "Custom Inputs",
-							link: "/guide/custom-inputs",
+							text: "Custom Input",
+							link: "/guide/custom-input",
+						},
+						{
+							text: "Custom Form",
+							link: "/guide/custom-form",
+						},
+						{
+							text: "Custom FormItem",
+							link: "/guide/custom-form-item",
+						},
+						{
+							text: "Custom FormList",
+							link: "/guide/custom-form-list",
 						},
 					],
 				},
 			],
 
 			"/api-reference/": [
+				{
+					text: "Main API",
+					items: [
+						{
+							text: "Form Instance",
+							link: "/api-reference/main-api/form-instance",
+						},
+						{
+							text: "FormItem Instance",
+							link: "/api-reference/main-api/form-item-instance",
+						},
+						{
+							text: "FormList Instance",
+							link: "/api-reference/main-api/form-list-instance",
+						},
+					],
+				},
 				{
 					text: "Components",
 					items: [

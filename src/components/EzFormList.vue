@@ -2,7 +2,7 @@
 	<EzFormItemView
 		:class="className"
 		:label="label"
-		:id-for="formItemId"
+		:id-for="meta.id"
 		:required-mark="requiredMarkString"
 		:no-style="noStyle"
 	>
@@ -34,7 +34,11 @@
 
 <script lang="ts" setup>
 import EzFormItemView from "@/components/EzFormItemView.vue";
-import { useFormList } from "@/composables";
+import {
+	useFormList,
+	useHandleFormItemEmit,
+	useInjectForm,
+} from "@/composables";
 import type { FormInstance } from "@/models";
 import { getFormListDefinePropsObject } from "@/utilities";
 import { computed } from "vue";
@@ -45,10 +49,12 @@ const emit = defineEmits<{
 	(event: "change", value: any, form: FormInstance): void;
 }>();
 
+const injectedForm = useInjectForm();
+const formListInstance = useFormList(props);
+
 const {
-	injectedForm,
+	meta,
 	requiredMarkString,
-	formItemId,
 	listValues,
 	namePaths,
 	errors,
@@ -61,7 +67,9 @@ const {
 	swap,
 	replace,
 	move,
-} = useFormList(props, emit);
+} = formListInstance;
+
+useHandleFormItemEmit(formListInstance, emit);
 
 const className = computed(() => `${injectedForm.classPrefix}-form-list`);
 </script>

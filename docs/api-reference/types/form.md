@@ -10,15 +10,20 @@ title: Form Typings
 export interface FormInstance<Values extends object = any> {
 	values: Values;
 	errors: ValidateError[];
+	dirty: boolean;
+	name: string;
 	getFieldValue(name: NamePath): any;
 	setFieldValue(name: NamePath, value: any): void;
 	validate(name?: string | NamePath[], options?: ValidateOption): Promise<any>;
-	clearValidate(): void;
-	submit: () => void;
+	clearValidate(name?: NamePath): void;
+	submit: (
+		onSuccess?: FormSubmitCallback<Values>,
+		onError?: FormErrorCallback
+	) => Promise<Values>;
 	reset: (values?: Values) => void;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	isDirty: (name?: NamePath) => boolean;
-	updateSettings(settings: FormSettings): void;
+	updateSettings(settings: Partial<FormSettings>): void;
 	className: ComputedRef<string>;
 	addField(field: FormField): void;
 	removeField(namePath: NamePath): void;
@@ -26,17 +31,19 @@ export interface FormInstance<Values extends object = any> {
 	validateMessages?: ValidateMessages;
 	classPrefix: string;
 }
+
+export type FormSubmitCallback<Values = any> = (values: Values) => void;
+export type FormErrorCallback = (errors: ValidateError[]) => void;
 ```
 
 ## FormSettings
 
 ```ts
 export interface FormSettings<Values extends object = any> {
+	name: string;
 	form?: FormInstance;
-	emit?: FormEmitter;
 	initialValues?: Values;
 	enableReinitialize?: boolean;
-	clearOnReset?: boolean;
 	rules?: Rules;
 	validateTrigger?: ValidateTrigger | ValidateTrigger[];
 	validateMessages?: ValidateMessages;
@@ -65,9 +72,21 @@ export interface FormField {
 	validate: (options?: ValidateOption) => Promise<any>;
 	clearValidate: () => void;
 	reset: () => void;
+	markAsDirty: () => void;
 	defaultValue: any;
 	value: ComputedRef<any>;
 	error: ComputedRef<ValidateError | undefined>;
 	dirty: ComputedRef<boolean>;
+}
+```
+
+## FormMeta
+
+```ts
+export interface FormMeta<Values = any> {
+	name: string;
+	values: Values;
+	errors: ValidateError[];
+	dirty: boolean;
 }
 ```

@@ -1,8 +1,8 @@
 ---
-title: Custom Inputs
+title: Custom Select Inputs
 ---
 
-# Select Input
+# Custom Select Input
 
 Please read [Auto Binding](/guide/auto-binding) first.
 
