@@ -6,6 +6,9 @@ export default defineConfig({
 	description:
 		"Ez Form - Modern Vue form. Helping you to build a form faster with better performance. Supporting validation.",
 	head: [["link", { rel: "icon", href: "/ez-form/favicon.ico" }]],
+	markdown: {
+		lineNumbers: true,
+	},
 	themeConfig: {
 		siteTitle: "Ez Form",
 		logo: "/logo.png",
@@ -21,6 +24,10 @@ export default defineConfig({
 			{ icon: "github", link: "https://github.com/niku98/ez-form" },
 		],
 		outline: [2, 6],
+		footer: {
+			copyright: "Made by Niku with ❣",
+			message: "EzForm",
+		},
 
 		sidebar: {
 			"/guide/": [
@@ -29,6 +36,7 @@ export default defineConfig({
 					items: [
 						{ text: "Why Ez Form?", link: "/guide/why-ez-form" },
 						{ text: "Setup", link: "/guide/setup" },
+						{ text: "Devtool", link: "/guide/devtool" },
 					],
 				},
 				{
@@ -41,33 +49,25 @@ export default defineConfig({
 					],
 				},
 				{
-					text: "Advanced",
+					text: "Composables",
 					items: [
 						{
-							text: "Using useForm",
-							link: "/guide/using-use-form",
+							text: "useForm",
+							link: "/guide/use-form",
 						},
 						{
-							text: "Using useFormItem",
-							link: "/guide/using-use-form-item",
+							text: "useFormItem",
+							link: "/guide/use-form-item",
 						},
 						{
-							text: "Using useFormList",
-							link: "/guide/using-use-form-list",
-						},
-						{
-							text: "Auto Binding",
-							link: "/guide/auto-binding",
+							text: "useFormList",
+							link: "/guide/use-form-list",
 						},
 					],
 				},
 				{
 					text: "Customization",
 					items: [
-						{
-							text: "Custom Input",
-							link: "/guide/custom-input",
-						},
 						{
 							text: "Custom Form",
 							link: "/guide/custom-form",
@@ -79,6 +79,43 @@ export default defineConfig({
 						{
 							text: "Custom FormList",
 							link: "/guide/custom-form-list",
+						},
+						{
+							text: "Custom Input",
+							link: "/guide/custom-input",
+						},
+					],
+				},
+
+				{
+					text: "Utilities",
+					items: [
+						{
+							text: "Get Instances",
+							link: "/guide/get-instances",
+						},
+						{
+							text: "Get DefineProps Object",
+							link: "/guide/get-define-props-object",
+						},
+					],
+				},
+
+				{
+					text: "Under The Hood",
+					items: [
+						{
+							text: "Auto Binding",
+							link: "/guide/auto-binding",
+						},
+					],
+				},
+				{
+					text: "Migration Guide",
+					items: [
+						{
+							text: "1.2.x to 1.3.x",
+							link: "/guide/migration-guide/1.2-1.3",
 						},
 					],
 				},

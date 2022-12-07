@@ -236,10 +236,17 @@ Submit form's data.
 
 ```ts
 interface FormInstance {
-	submit: (
-		onSuccess?: FormSubmitCallback<Values>,
-		onError?: FormErrorCallback
-	) => Promise<Values>;
+	submit: <
+		S extends FormSubmitCallback<Values> | undefined = undefined,
+		E extends FormErrorCallback | undefined = undefined
+	>(
+		onSuccess?: FormSubmitCallback<Values> | S,
+		onError?: FormErrorCallback | E
+	) => S extends FormSubmitCallback<Values>
+		? void
+		: E extends FormErrorCallback
+		? void
+		: Promise<{ values?: Values; errors?: ValidateError[] }>;
 }
 ```
 
@@ -254,10 +261,24 @@ import { useForm } from "@niku/ez-form";
 const form = useForm();
 
 const foo = () => {
-	// Clear form validate
-	form.clearValidate();
-	// Clear field's validate
-	form.clearValidate("path.to.field");
+	// Submit with callbacks
+	form.submit(
+		(values) => {
+			console.log("Form submit", values);
+		},
+		(errors) => {
+			console.log("Form errors", errors);
+		}
+	);
+
+	// Submit with promise
+	form.submit().then(({ values, errors }) => {
+		if (errors) {
+			console.log("Form errors", errors);
+		} else {
+			console.log("Form submit", values);
+		}
+	});
 };
 </script>
 ```

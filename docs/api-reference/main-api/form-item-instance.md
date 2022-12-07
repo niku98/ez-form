@@ -175,6 +175,10 @@ Name of form item, use to register form item with form.
 
 Id of form item, can use as id of input.
 
+### formItem.meta\.formName
+
+Name of form, which this form item registered.
+
 ## formItem.requiredMarkString
 
 A computed, return a string that contain required mark string. If form item doesn't have rule `required`, it return empty string.
@@ -258,7 +262,7 @@ When you use `useFormItem`, if you provide a `name`, and inside a form, this fun
 
 ```ts
 export interface FormItemInstance {
-	registerFormField: (formInstance: FormInstance) => void;
+	registerFormField: (formInstance?: FormInstance) => void;
 }
 ```
 
@@ -283,6 +287,43 @@ formItem.registerFormField(form);
 </script>
 ```
 
+## formItem.unRegisterFormField()
+
+Un-Register form item from form instance.
+
+**Type**
+
+```ts
+export interface FormItemInstance {
+	unRegisterFormField: () => void;
+}
+```
+
+**Example**
+
+```vue
+<template>
+	<input
+		:value="formItem.meta.transformedValue"
+		@input="formItem.handleChange"
+		@blur="formItem.handleBlur"
+	/>
+</template>
+
+<script lang="ts" setup>
+import { useForm, useFormItem } from "@niku/ez-form";
+
+const form = useForm();
+const formItem = useFormItem({ name: "test" });
+
+formItem.registerFormField(form);
+
+function foo() {
+	formItem.unRegisterFormField();
+}
+</script>
+```
+
 ## formItem.validate()
 
 Validate form item's value.
@@ -291,7 +332,9 @@ Validate form item's value.
 
 ```ts
 export interface FormItemInstance {
-	validate: (options?: ValidateOption) => Promise<any>;
+	validate: (
+		options?: ValidateOption
+	) => Promise<{ value?: any; error?: ValidateError }>;
 }
 ```
 

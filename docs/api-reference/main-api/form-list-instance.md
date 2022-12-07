@@ -6,7 +6,7 @@ title: FormList Instance API
 
 ## useFormList()
 
-Create form item instance, contains all form item's logic.
+Create form list instance, contains all form list's logic.
 
 **Type**
 
@@ -33,7 +33,7 @@ const formList = useFormList();
 
 ## formList.meta
 
-An object contains form item data and state.
+An object contains form list data and state.
 
 **Type**
 
@@ -61,7 +61,7 @@ export interface FormListInstance {
 
 ### formList.meta.rawValue
 
-Contains form item's raw data.
+Contains form list's raw data.
 
 **Example**
 
@@ -83,7 +83,7 @@ watch(
 
 ### formList.meta.transformedValue
 
-Contains form item's transformed data. Use to pass to input's value.
+Contains form list's transformed data. Use to pass to input's value.
 
 **Example**
 
@@ -105,7 +105,7 @@ watch(
 
 ### formList.meta.error
 
-Contains form item's error.
+Contains form list's error.
 
 **Example**
 
@@ -120,7 +120,7 @@ watch(
 	() => formList.error,
 	() => {
 		if (formList.error) {
-			alert("There are some errors with the form item!!");
+			alert("There are some errors with the form list!!");
 		}
 	}
 );
@@ -129,7 +129,7 @@ watch(
 
 ### formList.meta.dirty
 
-Determine if form item is `dirty`, changed data. Useful when you need to do things only when the form item is `dirty`.
+Determine if form list is `dirty`, changed data. Useful when you need to do things only when the form list is `dirty`.
 
 **Example**
 
@@ -141,7 +141,7 @@ const formList = useFormList();
 
 const foo = () => {
 	if (formList.dirty) {
-		alert("The form item is changed");
+		alert("The form list is changed");
 	}
 };
 </script>
@@ -149,7 +149,7 @@ const foo = () => {
 
 ### formList.meta.touched
 
-Determine if form item is `touched`, that mean user focused in input. Useful when you need to do things only when the form item is `touched`.
+Determine if form list is `touched`, that mean user focused in input. Useful when you need to do things only when the form list is `touched`.
 
 **Example**
 
@@ -161,7 +161,7 @@ const formList = useFormList();
 
 const foo = () => {
 	if (formList.touched) {
-		alert("The form item is touched");
+		alert("The form list is touched");
 	}
 };
 </script>
@@ -169,17 +169,21 @@ const foo = () => {
 
 ### formList.meta\.name
 
-Name of form item, use to register form item with form.
+Name of form list, use to register form list with form.
 
 ### formList.meta\.id
 
-Id of form item, can use as id of input.
+Id of form list, can use as id of input.
+
+### formItem.meta\.formName
+
+Name of form, which this form list registered.
 
 ## formList.requiredMarkString
 
-A computed, return a string that contain required mark string. If form item doesn't have rule `required`, it return empty string.
+A computed, return a string that contain required mark string. If form list doesn't have rule `required`, it return empty string.
 
-This is useful when you want to create your own form item.
+This is useful when you want to create your own form list.
 
 **Type**
 
@@ -213,15 +217,15 @@ export interface FormListInstance {
 }
 ```
 
-## formList.namePaths
+## formList.fields
 
-A computed, return an array of string and number, which is generated name paths, can be used to pass to children, form item.
+A computed, return an array of field, which is generated field's data of form list, can be used to pass to children of **EzFormList**.
 
 **Type**
 
 ```ts
 export interface FormListInstance {
-	namePaths: ComputedRef<(string | number)[]>;
+	fields: ComputedRef<FormListField[]>;
 }
 ```
 
@@ -230,11 +234,11 @@ export interface FormListInstance {
 ```vue
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ namePaths }">
+		<EzFormList v-slot="{ field }">
 			<EzFormItem
-				v-for="(namePath, index) in namePaths"
-				:key="index"
-				:name="[...namePath, "title"]"
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath('title')"
 				label="Title"
 			>
 				<input />
@@ -244,9 +248,9 @@ export interface FormListInstance {
 </template>
 ```
 
-## formList.errors
+## formList.errors <Badge type="warning" text="Deprecated" />
 
-A computed, return an array of `ValidateError`, contains all form list errors, include children form item's errors.
+A computed, return an array of `ValidateError`, contains all form list errors, include children form list's errors.
 
 **Type**
 
@@ -261,7 +265,7 @@ export interface FormListInstance {
 ```vue
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ namePaths, errors }">
+		<EzFormList v-slot="{ fields, errors }">
 			<div class="errors-box">
 				<template v-for="error in errors" :key="error.name">
 					<span v-for="message in error.messages" :key="message" class="error">
@@ -270,9 +274,9 @@ export interface FormListInstance {
 				</template>
 			</div>
 			<EzFormItem
-				v-for="(namePath, index) in namePaths"
-				:key="index"
-				:name="[...namePath, "title"]"
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath('title')"
 				label="Title"
 			>
 				<input />
@@ -284,15 +288,15 @@ export interface FormListInstance {
 
 ## formList.registerFormField()
 
-Register form item with form instance.
+Register form list with form instance.
 
-When you use `useFormList`, if you provide a `name`, and inside a form, this function will be called automatically. You only need to use this when register a form item that outside the form (rarely happened).
+When you use `useFormList`, if you provide a `name`, and inside a form, this function will be called automatically. You only need to use this when register a form list that outside the form (rarely happened).
 
 **Type**
 
 ```ts
 export interface FormListInstance {
-	registerFormField: (formInstance: FormInstance) => void;
+	registerFormField: (formInstance?: FormInstance) => void;
 }
 ```
 
@@ -309,15 +313,54 @@ formList.registerFormField(form);
 </script>
 ```
 
+## formList.unRegisterFormField()
+
+Un-Register form list from form instance.
+
+**Type**
+
+```ts
+export interface FormItemInstance {
+	unRegisterFormField: () => void;
+}
+```
+
+**Example**
+
+```vue
+<template>
+	<input
+		:value="formItem.meta.transformedValue"
+		@input="formItem.handleChange"
+		@blur="formItem.handleBlur"
+	/>
+</template>
+
+<script lang="ts" setup>
+import { useForm, useFormItem } from "@niku/ez-form";
+
+const form = useForm();
+const formItem = useFormItem({ name: "test" });
+
+formItem.registerFormField(form);
+
+function foo() {
+	formItem.unRegisterFormField();
+}
+</script>
+```
+
 ## formList.validate()
 
-Validate form item's value.
+Validate form list's value.
 
 **Type**
 
 ```ts
 export interface FormListInstance {
-	validate: (options?: ValidateOption) => Promise<any>;
+	validate: (
+		options?: ValidateOption
+	) => Promise<{ value?: any; error?: ValidateError }>;
 }
 ```
 
@@ -353,12 +396,8 @@ export interface FormListInstance {
 ```vue
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePaths }">
-			<EzFormItem
-				:key="index"
-				:name="getNamePath(0, "title")"
-				label="Title"
-			>
+		<EzFormList v-slot="{ getNamePath }">
+			<EzFormItem :key="index" :name="getNamePath(0, 'title')" label="Title">
 				<input />
 			</EzFormItem>
 		</EzFormList>
@@ -451,17 +490,153 @@ export interface FormListInstance {
 ```vue{12-14}
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePath, hasError, add }">
+		<EzFormList v-slot="{ fields, hasError, add }">
 			<EzFormItem
-				v-for="(namePath, index) in namePaths"
-				:key="index"
-				:name="[...namePath, "title"]"
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath('title')"
 				label="Title"
 			>
 				<input />
 			</EzFormItem>
 			<button @click="add()">
 				Add title
+			</button>
+		</EzFormList>
+	</EzForm>
+</template>
+```
+
+## formList.insert()
+
+Insert an element to an index of form list.
+
+**Type**
+
+```ts
+export interface FormListInstance {
+	insert(index: number, newValue?: any): void;
+}
+```
+
+**Example**
+
+```vue{12-14}
+<template>
+	<EzForm>
+		<EzFormList v-slot="{ fields, hasError, insert }">
+			<EzFormItem
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath("title")"
+				label="Title"
+			>
+				<input />
+			</EzFormItem>
+			<button @click="insert(1)">
+				Insert title to index 1
+			</button>
+		</EzFormList>
+	</EzForm>
+</template>
+```
+
+## formList.unshift()
+
+Add an element to first index of form list.
+
+**Type**
+
+```ts
+export interface FormListInstance {
+	unshift(newValue?: any): void;
+}
+```
+
+**Example**
+
+```vue{12-14}
+<template>
+	<EzForm>
+		<EzFormList v-slot="{ fields, hasError, unshift }">
+			<EzFormItem
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath("title")"
+				label="Title"
+			>
+				<input />
+			</EzFormItem>
+			<button @click="unshift()">
+				Insert title to first index
+			</button>
+		</EzFormList>
+	</EzForm>
+</template>
+```
+
+## formList.pop()
+
+Remove last element of form list.
+
+**Type**
+
+```ts
+export interface FormListInstance {
+	pop(): void;
+}
+```
+
+**Example**
+
+```vue{12-14}
+<template>
+	<EzForm>
+		<EzFormList v-slot="{ fields, hasError, pop }">
+			<EzFormItem
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath("title")"
+				label="Title"
+			>
+				<input />
+			</EzFormItem>
+			<button @click="pop()">
+				Remove last title
+			</button>
+		</EzFormList>
+	</EzForm>
+</template>
+```
+
+## formList.shift()
+
+Remove first element of form list.
+
+**Type**
+
+```ts
+export interface FormListInstance {
+	shift(): void;
+}
+```
+
+**Example**
+
+```vue{12-14}
+<template>
+	<EzForm>
+		<EzFormList v-slot="{ fields, hasError, shift }">
+			<EzFormItem
+				v-for="field in fields"
+				:key="field.key"
+				:name="field.getNamePath("title")"
+				label="Title"
+			>
+				<input />
+			</EzFormItem>
+			<button @click="shift()">
+				Remove first title
 			</button>
 		</EzFormList>
 	</EzForm>
@@ -485,18 +660,18 @@ export interface FormListInstance {
 ```vue{14-16}
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePath, hasError, add, remove }">
+		<EzFormList v-slot="{ fields, hasError, add, remove }">
 			<div
-				v-for="(namePath, index) in namePaths"
-				:key="index"
+				v-for="field in fields"
+				:key="field.key"
 			>
 				<EzFormItem
-					:name="[...namePath, "title"]"
+					:name="field.getNamePath('title')"
 					label="Title"
 				>
 					<input />
 				</EzFormItem>
-				<button @click="remove(index)">
+				<button @click="remove(field.index)">
 					Remove
 				</button>
 			</div>
@@ -525,13 +700,13 @@ export interface FormListInstance {
 ```vue{18-20}
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePath, hasError, add, remove, removeByKey }">
+		<EzFormList v-slot="{ fields, hasError, add, remove, removeByKey }">
 			<div
-				v-for="(namePath, index) in namePaths"
+				v-for="field in fields"
 				:key="index"
 			>
 				<EzFormItem
-					:name="[...namePath, "title"]"
+					:name="field.getNamePath('title')"
 					label="Title"
 				>
 					<input />
@@ -568,13 +743,13 @@ export interface FormListInstance {
 ```vue{18-20}
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePath, hasError, add, remove, replace }">
+		<EzFormList v-slot="{ fields, hasError, add, remove, replace }">
 			<div
-				v-for="(namePath, index) in namePaths"
-				:key="index"
+				v-for="field in fields"
+				:key="field.key"
 			>
 				<EzFormItem
-					:name="[...namePath, "title"]"
+					:name="field.getNamePath('title')"
 					label="Title"
 				>
 					<input />
@@ -611,13 +786,13 @@ export interface FormListInstance {
 ```vue{18-20}
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePath, hasError, add, remove, swap }">
+		<EzFormList v-slot="{ fields, hasError, add, remove, swap }">
 			<div
-				v-for="(namePath, index) in namePaths"
-				:key="index"
+				v-for="field in fields"
+				:key="field.key"
 			>
 				<EzFormItem
-					:name="[...namePath, "title"]"
+					:name="field.getNamePath('title')"
 					label="Title"
 				>
 					<input />
@@ -654,13 +829,13 @@ export interface FormListInstance {
 ```vue{18-20}
 <template>
 	<EzForm>
-		<EzFormList v-slot="{ getNamePath, hasError, add, remove, move }">
+		<EzFormList v-slot="{ fields, hasError, add, remove, move }">
 			<div
-				v-for="(namePath, index) in namePaths"
-				:key="index"
+				v-for="field in fields"
+				:key="field.key"
 			>
 				<EzFormItem
-					:name="[...namePath, "title"]"
+					:name="field.getNamePath('title')"
 					label="Title"
 				>
 					<input />

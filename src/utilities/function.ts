@@ -22,3 +22,24 @@ export function memorized<T extends Fn>(
 		return result;
 	};
 }
+
+export function debounce<T extends (...args: any[]) => any = () => any>(
+	fn: T,
+	wait = 100,
+	leading = true
+) {
+	let timer: NodeJS.Timeout;
+	let result: ReturnType<T>;
+	return (...args: Parameters<T>): ReturnType<T> => {
+		if (!timer && leading) {
+			result = fn(...args);
+		}
+
+		clearTimeout(timer);
+		timer = setTimeout(() => {
+			result = fn(...args);
+		}, wait);
+
+		return result;
+	};
+}

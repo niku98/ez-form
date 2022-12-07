@@ -9,12 +9,14 @@
 :root {
 	--bg-example: #eee;
 	--bg-example-button: #4285f4;
+	--bg-example-button-danger: #f44336;
 	--bg-example-input: white;
 }
 
 .dark {
 	--bg-example: #1f1f1f;
 	--bg-example-button: #4285f4;
+	--bg-example-button-danger: #f44336;
 	--bg-example-input: transparent;
 }
 
@@ -28,9 +30,13 @@
 	background-color: var(--bg-example-input);
 }
 
-.example-box button {
+.example-box button:not([class*="ant"]) {
 	color: white;
 	background-color: var(--bg-example-button);
 	padding: 0.3rem 0.7rem;
 	border-radius: 0.3rem;
+}
+
+.example-box button.danger {
+	background-color: var(--bg-example-button-danger);
 }

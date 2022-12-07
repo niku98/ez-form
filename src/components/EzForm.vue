@@ -4,8 +4,8 @@
 			:values="meta.values"
 			:errors="meta.errors"
 			:dirty="meta.dirty"
-			:submit="form.submit"
-			:reset="form.reset"
+			:submit="submit"
+			:reset="reset"
 			:validate="validate"
 			:getFieldValue="getFieldValue"
 			:setFieldValue="setFieldValue"
@@ -15,10 +15,10 @@
 </template>
 
 <script lang="ts" setup>
-import { useForm, useHandleFormEmit } from "@/composables";
+import { useFormComponentLogics } from "@/composables";
 import type { FormInstance, ValidateError } from "@/models";
 import { getFormDefinePropsObject } from "@/utilities";
-import { watchEffect } from "vue";
+import { computed } from "vue";
 
 export interface FormEmitter {
 	(event: "submit", values: any): void;
@@ -31,26 +31,11 @@ const props = defineProps(getFormDefinePropsObject());
 
 const emit = defineEmits<FormEmitter>();
 
-const form = props.form ?? useForm(props);
+const { reset, submit, formInstance } = useFormComponentLogics(props, emit);
 
-const {
-	meta,
-	setFieldValue,
-	getFieldValue,
-	validate,
-	className,
-	isDirty,
-	updateSettings,
-} = form;
+const { meta, setFieldValue, getFieldValue, validate, isDirty } = formInstance;
 
-const { reset, submit } = useHandleFormEmit(form, emit);
-if (props.form) {
-	watchEffect(() => {
-		updateSettings({
-			...props,
-		});
-	});
-}
+const className = computed(() => `${formInstance.classPrefix}-form`);
 
-defineExpose<FormInstance>(form);
+defineExpose<FormInstance>(formInstance);
 </script>

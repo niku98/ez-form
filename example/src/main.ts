@@ -1,5 +1,5 @@
 import EzFormPlugin from "@niku/ez-form";
-import "@niku/ez-form/styles.css";
+import "@niku/ez-form/styles/index.css";
 import { createApp } from "vue";
 import App from "./App.vue";
 

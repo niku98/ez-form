@@ -28,3 +28,33 @@ features:
     title: Simple and minimal.
     details: Starting build your form with no configuration.
 ---
+
+<script setup>
+import { VPTeamMembers } from 'vitepress/theme'
+
+const members = [
+  {
+    avatar: 'https://www.github.com/niku98.png',
+    name: 'Niku',
+    title: 'Creator',
+    links: [
+      { icon: 'github', link: 'https://github.com/niku98' },
+    ]
+  },
+]
+</script>
+<style>
+  h2.author-title {
+    font-size: 2rem;
+    margin: 2rem 0;
+    margin-top: 10rem;
+  }
+</style>
+
+<center>
+<h2 class="author-title">
+Author
+</h2>
+</center>
+
+<VPTeamMembers size="small" :members="members" />

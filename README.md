@@ -32,11 +32,10 @@ Easy & Fast Form
 ✍ **Validation:** Validate your form very easy with Async validator.
 
 🛠️ **Simple:** Starting build your form with no configuration.
+🔌 **Devtool:** Inspect your forms with Vue Devtool.
 
 <br>
 
 ## 📖 Documentation:
 
 [Read Documentation](https://niku98.github.io/ez-form/)
-
-Documentation is still in progress. But you can check it out for basic usage.

@@ -14,7 +14,7 @@ export default defineConfig({
 					// content = content.replace(" } from 'vue'", ", PropType } from 'vue'");
 					content = content.replace(
 						" } from '../models'",
-						", FormInstance, Rules, ValidateTrigger, ValidateMessages } from '../models'"
+						", FormInstance, Rules, ValidateTrigger, ValidateMessages, FormSlotProps } from '../models'"
 					);
 
 					content = content.replace(
@@ -29,7 +29,13 @@ export default defineConfig({
 	validateTrigger: ValidateTrigger | ValidateTrigger[],
 	validateMessages: ValidateMessages,
 	classPrefix: string
-}>;`
+}> & {
+    new (): {
+    $slots: {
+      default: (arg: FormSlotProps) => import("vue").VNode[];
+    };
+  };
+};`
 					);
 
 					content = content.replace(
@@ -54,10 +60,38 @@ export default defineConfig({
 					filePath.includes("EzFormItem.vue") ||
 					filePath.includes("EzFormList.vue")
 				) {
+					const isFormList = filePath.includes("EzFormList.vue");
 					// content = content.replace(" } from 'vue'", ", PropType } from 'vue'");
 					content =
-						"import { NamePath, FormInstance, Rule, ValidateTrigger, FormItemValueTransformer } from '../models';\n" +
+						"import { NamePath, FormInstance, Rule, ValidateTrigger, FormItemValueTransformer, " +
+						(isFormList
+							? "FormListSlotProps, FormListSlotErrorsProps, FormListSlotExtraProps"
+							: "FormItemSlotProps, FormItemSlotErrorsProps, FormItemSlotExtraProps") +
+						" } from '../models';\n" +
 						content;
+
+					const formListSlotTyping = `& {
+    new (): {
+    $slots: {
+      default: (arg: FormListSlotProps) => import("vue").VNode[];
+			errors: (arg: FormListSlotErrorsProps) => import("vue").VNode[];
+      extra: (arg: FormListSlotExtraProps) => import("vue").VNode[];
+    };
+  };
+};`;
+
+					const formItemSlotTyping = `& {
+    new (): {
+    $slots: {
+      default: (arg: FormItemSlotProps) => import("vue").VNode[];
+      errors: (arg: FormItemSlotErrorsProps) => import("vue").VNode[];
+      extra: (arg: FormItemSlotExtraProps) => import("vue").VNode[];
+    };
+  };
+};`;
+					const slotTyping = isFormList
+						? formListSlotTyping
+						: formItemSlotTyping;
 
 					content = content.replace(
 						`{} | {
@@ -66,7 +100,7 @@ export default defineConfig({
 						`{
 	label: string,
 	name: NamePath,
-	defaultValue: ${filePath.includes("EzFormList.vue") ? "any[]" : "any"},
+	defaultValue: ${isFormList ? "any[]" : "any"},
 	valuePropName: string,
 	changeEventPropName: string,
 	blurEventPropName: string,
@@ -80,7 +114,7 @@ export default defineConfig({
 	validateFirst: boolean,
 	noStyle: boolean,
 	colon: boolean
-}>;`
+}> ${slotTyping}`
 					);
 				}
 

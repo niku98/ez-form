@@ -3,7 +3,11 @@
 		<EzFormItem label="Test" name="test" validate-first no-style>
 			<input />
 		</EzFormItem>
-		<EzFormItem label="First name" :rules="[{ required: true }]">
+		<EzFormItem
+			label="First name"
+			name="firstName"
+			:rules="[{ required: true }]"
+		>
 			<input />
 		</EzFormItem>
 
@@ -11,19 +15,19 @@
 			label="Users"
 			name="users"
 			:default-value="defaultList"
-			v-slot="{ namePaths, add }"
+			v-slot="{ fields, add }"
 		>
-			<div v-for="(namePath, index) in namePaths" :key="index">
+			<div v-for="field in fields" :key="field.key">
 				<EzFormItem
 					label="Display name"
-					:name="[...namePath, 'displayName']"
+					:name="field.getPath('displayName')"
 					:rules="[{ required: true }]"
 				>
 					<input />
 				</EzFormItem>
 				<EzFormItem
 					label="Age"
-					:name="[...namePath, 'age']"
+					:name="field.getPath('age')"
 					:rules="[{ required: true }]"
 				>
 					<input type="number" />
