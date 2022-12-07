@@ -9,37 +9,42 @@
 		<slot
 			:value="listValues"
 			:length="listValues.length"
-			:namePaths="namePaths"
+			:fields="fields"
 			:getNamePath="getNamePath"
 			:errors="errors"
 			:getErrors="getErrors"
 			:hasError="hasError"
 			:add="add"
+			:insert="insert"
+			:unshift="unshift"
+			:shift="shift"
+			:pop="pop"
 			:remove="remove"
 			:removeByKey="removeByKey"
 			:swap="swap"
 			:replace="replace"
 			:move="move"
-			:form="injectedForm"
+			:form="formInstance"
 		/>
 
 		<template v-if="$slots.errors" #errors>
-			<slot name="errors" :errors="errors" />
+			<slot
+				name="errors"
+				:error="meta.error"
+				:form="formInstance"
+				:formList="formListInstance"
+			/>
 		</template>
 		<template v-if="$slots.extra" #extra>
-			<slot name="extra" :form="injectedForm" />
+			<slot name="extra" :form="formInstance" :formList="formListInstance" />
 		</template>
 	</EzFormItemView>
 </template>
 
 <script lang="ts" setup>
 import EzFormItemView from "@/components/EzFormItemView.vue";
-import {
-	useFormList,
-	useHandleFormItemEmit,
-	useInjectForm,
-} from "@/composables";
-import type { FormInstance } from "@/models";
+import { useFormListComponentLogics } from "@/composables";
+import type { FormInstance, FormListInstance } from "@/models";
 import { getFormListDefinePropsObject } from "@/utilities";
 import { computed } from "vue";
 
@@ -49,19 +54,25 @@ const emit = defineEmits<{
 	(event: "change", value: any, form: FormInstance): void;
 }>();
 
-const injectedForm = useInjectForm();
-const formListInstance = useFormList(props);
+const { formListInstance, formInstance } = useFormListComponentLogics(
+	props,
+	emit
+);
 
 const {
 	meta,
 	requiredMarkString,
 	listValues,
-	namePaths,
+	fields,
 	errors,
 	getErrors,
 	getNamePath,
 	hasError,
 	add,
+	pop,
+	insert,
+	unshift,
+	shift,
 	remove,
 	removeByKey,
 	swap,
@@ -69,7 +80,7 @@ const {
 	move,
 } = formListInstance;
 
-useHandleFormItemEmit(formListInstance, emit);
+const className = computed(() => `${formInstance.classPrefix}-form-list`);
 
-const className = computed(() => `${injectedForm.classPrefix}-form-list`);
+defineExpose<FormListInstance>(formListInstance);
 </script>

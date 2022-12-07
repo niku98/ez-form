@@ -1,6 +1,6 @@
 import useInjectForm from "@/composables/useInjectForm";
-import { FormItemInstance } from "@/models";
-import { computed, useSlots, VNode } from "vue";
+import { FormItemInstance, FormItemSlotProps } from "@/models";
+import { computed, Fragment, h, Slot, useSlots, VNode } from "vue";
 
 export default function useFormItemAutoBinding(
 	formItemInstance: FormItemInstance,
@@ -18,7 +18,7 @@ export default function useFormItemAutoBinding(
 	);
 
 	const slots = useSlots();
-	const slotData = computed(() => {
+	const slotData = computed<FormItemSlotProps>(() => {
 		return {
 			value: meta.transformedValue,
 			rawValue: meta.rawValue,
@@ -29,6 +29,30 @@ export default function useFormItemAutoBinding(
 	});
 
 	const getVNodesFromDefaultSlot = () => {
+		return slots.default ? getVNodeFromSlot(slots.default) : [];
+	};
+
+	const getVNodeFromSlot = (slot: Slot): VNode[] => {
+		const vNodes = (slot && slot(slotData)) ?? [];
+
+		if (vNodes.length && vNodes[0].type === Fragment) {
+			const { children } = vNodes[0];
+			if (children === null) {
+				return [];
+			}
+
+			if (typeof children === "string") {
+				return [h(children)];
+			}
+
+			return [
+				...(Array.isArray(children)
+					? (children as VNode[])
+					: getVNodeFromSlot(children["default"] as any)),
+				...vNodes.slice(1),
+			];
+		}
+
 		return (slots.default && slots.default(slotData)) ?? [];
 	};
 

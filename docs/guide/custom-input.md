@@ -1,16 +1,25 @@
 ---
-title: Custom Select Inputs
+title: Custom Input
 ---
 
-# Custom Select Input
+# Custom Input
 
-Please read [Auto Binding](/guide/auto-binding) first.
+## How EzForm Deal With Input
+
+**EzForm** use Vue 3 `v-model` to pass and retrieve data from input.
+
+**See also:**
+
+- [Vue 3 Component Event](https://vuejs.org/guide/components/events.html#usage-with-v-model)
+- [Under the hood - Auto Binding](/guide/auto-binding)
+
+## Custom Select
 
 A simple example to describe how **Ez Form** deal with your input.
 
-Firstly, this is our Select Input.
+Firstly, this is our Select Input. We need define a prop called `value`, and an event emit with eventName called `update:value`.
 
-```vue
+```vue{29-37}
 <!-- Select.vue -->
 <template>
 	<div class="custom-select">

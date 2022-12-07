@@ -1,8 +1,8 @@
 ---
-title: Form
+title: EzForm Component API
 ---
 
-# Form
+# EzForm Component API
 
 ## Props
 

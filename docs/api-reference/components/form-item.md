@@ -1,14 +1,15 @@
 ---
-title: FormItem
+title: EzFormItem Component API
 ---
 
-# FormItem
+# EzFormItem Component API
 
 ## Props
 
 | Name                    | Description                                                                         | Type                                                                                       |
 | :---------------------- | :---------------------------------------------------------------------------------- | :----------------------------------------------------------------------------------------- |
 | name                    | Form item's name path to sync data                                                  | [`NamePath`](/api-reference/types/form-item.html#namepath)                                 |
+| formItem                | A FormItemInstance to control form item from outside                                | [`FormItemInstance`](/api-reference/types/form-item.html#formiteminstance)                 |
 | label                   | Form item's label                                                                   | `string`                                                                                   |
 | defaultValue            | Form item's default value                                                           | `any`                                                                                      |
 | valuePropName           | Input's value prop name to pass data to                                             | `string`                                                                                   |
@@ -31,7 +32,9 @@ title: FormItem
 | :------- | :----------------------------------- | :---------------------- |
 | onChange | Trigger after form item data changed | `(values: any) => void` |
 
-## Scoped slot - Default
+## Scoped slots
+
+### Slot Default
 
 | Name         | Description                                                   | Type                                                            |
 | :----------- | :------------------------------------------------------------ | :-------------------------------------------------------------- |
@@ -40,3 +43,11 @@ title: FormItem
 | handleChange | Handle change function, to pass to your input's change event. | `(event: any) => void`                                          |
 | form         | A form instance                                               | [`FormInstance`](/api-reference/types/form.html#forminstance)   |
 | error        | Form item error                                               | [`ValidateError`](/api-reference/types/validation.html#general) |
+
+### Slot Errors
+
+| Name     | Description          | Type                                                                  |
+| :------- | :------------------- | :-------------------------------------------------------------------- |
+| errors   | Errors of form item. | `ValidateError \| undefined`                                          |
+| form     |                      | [`FormInstance`](/api-reference/types/form.html#forminstance)         |
+| formItem |                      | [`FormItemInstance`](/api-reference/types/form-item#formiteminstance) |

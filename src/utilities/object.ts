@@ -52,6 +52,10 @@ export function castPath(path: NamePath): string[] {
 	return [String(path)];
 }
 
+export function castNamePathToString(path: NamePath): string {
+	return castPath(path).join(".");
+}
+
 export function get(input: any, path: NamePath, defaultValue: any = undefined) {
 	const keys = castPath(path);
 	let index = 0;

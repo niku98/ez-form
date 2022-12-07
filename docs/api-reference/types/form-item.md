@@ -21,6 +21,7 @@ export interface FieldMeta {
 	touched: boolean;
 	name?: NamePath;
 	id: string;
+	formName: string;
 }
 ```
 
@@ -45,6 +46,7 @@ export interface FormItemValueTransformer<In = any, Out = any> {
 export interface FormItemProps {
 	label?: string;
 	name?: string | number | (string | number)[];
+	formItem?: FormItemInstance;
 	defaultValue?: any;
 	getValueFromChangeEvent: (event: any) => any;
 	valueTransformer: FormItemValueTransformer;
@@ -72,7 +74,11 @@ export interface FormItemInstance {
 	injectedForm: FormInstance;
 	handleChange: (event: any) => void;
 	handleBlur: () => void;
-	registerFormField: (formInstance: FormInstance) => void;
-	validate: (options?: ValidateOption) => Promise<any>;
+	registerFormField: (formInstance?: FormInstance) => void;
+	unRegisterFormField: () => void;
+	validate: (
+		options?: ValidateOption
+	) => Promise<{ value?: any; error?: ValidateError }>;
+	clearValidate: () => void;
 }
 ```

@@ -2,11 +2,23 @@
 title: Form List
 ---
 
+<script setup>
+import FormListBasic from "examples/FormListBasic.vue";
+</script>
+
 # Form List
 
 **Ez Form** provide a component called **EzFormList** to help you with array field. You need to pass to it a `name` of field that holds array of data.
 
-```vue{32-57}
+**EzFormList** provide `slot default` with some utilities to help you with array field, handling it easier.
+
+**Example:**
+
+<FormListBasic />
+
+::: details View Code
+
+```vue{32-60}
 <template>
 	<EzForm @submit="handleSubmit" @error="handleError">
 		<EzFormItem
@@ -38,18 +50,18 @@ title: Form List
 			<input placeholder="Password" type="password" />
 		</EzFormItem>
 
-		<EzFormList label="Addresses" name="user.addresses" v-slot="{namePaths, add}">
-			<div v-for="(namePath, index) in namePaths" :key="index">
+		<EzFormList label="Addresses" name="user.addresses" v-slot="{fields, add, remove}">
+			<div v-for="field in fields" :key="field.key">
 				<EzFormItem
-					label="detail"
-					:name="[...namePath, 'detail']"
+					label="Detail"
+					:name="field.getNamePath('detail')"
 					:rules="[{ required: true }]"
 				>
 					<input />
 				</EzFormItem>
 				<EzFormItem
 					label="District"
-					:name="[...namePath, 'district']"
+					:name="field.getNamePath('district')"
 					:rules="[{ required: true }]"
 				>
 					<select>
@@ -60,6 +72,10 @@ title: Form List
 						<option value="d-5">District 5</option>
 					</select>
 				</EzFormItem>
+
+				<button type="button" @click="remove(field.index)">
+					Remove address
+				</button>
 			</div>
 
 			<button type="button" @click="add()">Add address</button>
@@ -78,6 +94,8 @@ function handleError(errors) {
 }
 </script>
 ```
+
+:::
 
 The form above will have data structure like this:
 
@@ -104,23 +122,10 @@ The form above will have data structure like this:
 }
 ```
 
-## Scoped slot data
+## Scoped slots
 
-**EzFormList** provide some data and function in `default slot` to help you with array field.
+**Slot Default**
 
-| Name        | Description                                              | Type                                                          |
-| :---------- | :------------------------------------------------------- | :------------------------------------------------------------ |
-| value       | Value of form list                                       | `Array<any>`                                                  |
-| length      | Length of form list's value                              | `number`                                                      |
-| namePaths   | List generated name path to pass to form item            | `Array<string\|number>`                                       |
-| getNamePath | Function to generate name path of form item in form list | `(index: number, namePath: string) => Array<string\|number>`  |
-| errors      | List error of form list                                  | `Array`                                                       |
-| getErrors   | Function to get list array of form list's item           | `(index: number) => Array`                                    |
-| hasError    | Function to check if form item has error if              | `(index: number) => boolean`                                  |
-| add         | Function to add item to form list                        | `(value?: any) => void`                                       |
-| remove      | Function to remove item from form list by index          | `(index: number) => void`                                     |
-| removeByKey | Function to remove item from list by custom key          | `(key: string, value: any) => void`                           |
-| swap        | Function to swap two item by index                       | `(firstIndex: number, secondIndex: number) => void`           |
-| replace     | Function to replace an item of list with other value     | `(index: number, value: any) => void`                         |
-| move        | Function to move an item of list to other index          | `(fromIndex: number, toIndex: number) => void`                |
-| form        | Form's utility functions and data                        | [`FormInstance`](/api-reference/types/form.html#forminstance) |
+- **EzFormList:** provide some data and function in `slot default` to help you with array field. You can see all them [here](/api-reference/components/form-list#slot-default)
+
+- **Slot Errors:** You can display custom error message using `slot error`. This slot has some props passed too. You can see them [here](/api-reference/components/form-list#slot-errors)

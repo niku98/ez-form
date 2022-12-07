@@ -23,6 +23,7 @@ export interface FieldMeta {
 	touched: boolean;
 	name?: NamePath;
 	id: string;
+	formName: string;
 }
 
 export interface FormItemValueTransformer<In = any, Out = any> {
@@ -33,6 +34,7 @@ export interface FormItemValueTransformer<In = any, Out = any> {
 export interface FormItemProps {
 	label?: string;
 	name?: string | number | (string | number)[];
+	formItem?: FormItemInstance;
 	defaultValue?: any;
 	getValueFromChangeEvent?: (event: any) => any;
 	valueTransformer?: FormItemValueTransformer;
@@ -42,36 +44,39 @@ export interface FormItemProps {
 	validateFirst?: boolean;
 }
 
-export interface FormListProps extends FormItemProps {
-	defaultValue?: any[];
-}
-
 export interface FormItemEmitter {
 	(event: "change", value: any, form: FormInstance): void;
 }
 
 export interface FormItemInstance {
+	__IS_FAKE__?: boolean;
 	meta: FieldMeta;
 	requiredMarkString: ComputedRef<string>;
 	handleChange: (event: any) => void;
 	handleBlur: () => void;
-	registerFormField: (formInstance: FormInstance) => void;
-	validate: (options?: ValidateOption) => Promise<any>;
+	registerFormField: (formInstance?: FormInstance) => void;
+	unRegisterFormField: () => void;
+	validate: (
+		options?: ValidateOption
+	) => Promise<{ value?: any; error?: ValidateError }>;
+	clearValidate: () => void;
 }
 
-export interface FormListInstance
-	extends Omit<FormItemInstance, "handleBlur" | "handleChange"> {
-	listValues: ComputedRef<any[]>;
-	namePrefix: ComputedRef<(string | number)[]>;
-	namePaths: ComputedRef<(string | number)[][]>;
-	errors: ComputedRef<ValidateError[]>;
-	getNamePath(index: number, name: NamePath): (string | number)[];
-	getErrors(index?: number): ValidateError[];
-	hasError(index: number): boolean;
-	add(newValue?: any): void;
-	remove(index: number): void;
-	removeByKey(key: string, value: any): void;
-	replace(index: number, newValue: any): void;
-	swap(firstIndex: number, secondIndex: number): void;
-	move(fromIndex: number, toIndex: number): void;
+export interface FormItemSlotProps {
+	value: FieldMeta["transformedValue"];
+	rawValue: FieldMeta["rawValue"];
+	error: FieldMeta["error"];
+	handleChange: FormItemInstance["handleChange"];
+	form: FormInstance;
+}
+
+export interface FormItemSlotErrorsProps {
+	errors: ValidateError | undefined;
+	form: FormInstance;
+	formItem: FormItemEmitter;
+}
+
+export interface FormItemSlotExtraProps {
+	form: FormInstance;
+	formItem: FormItemInstance;
 }

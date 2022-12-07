@@ -6,35 +6,37 @@
 		:no-style="noStyle"
 		:colon="colon"
 	>
-		<slot v-if="!autoBinding" v-bind="slotData" />
-		<template v-else>
-			<component
-				v-for="(vNode, index) in getVNodesFromDefaultSlot()"
-				:is="vNode"
-				:key="vNode.patchFlag"
-				v-bind="index === inputNodeIndex ? getInputItemProps(vNode) : undefined"
-			/>
-		</template>
+		<EzFormItemAutoBindingInput
+			:autoBinding="autoBinding"
+			:blurEventPropName="blurEventPropName"
+			:changeEventPropName="changeEventPropName"
+			:inputNodeIndex="inputNodeIndex"
+			:valuePropName="valuePropName"
+			v-slot="data"
+		>
+			<slot v-bind="data" />
+		</EzFormItemAutoBindingInput>
 
 		<template v-if="meta.error" #errors>
-			<slot name="errors" :errors="meta.error">
+			<slot
+				name="errors"
+				:errors="meta.error"
+				:form="formInstance"
+				:formItem="formItemInstance"
+			>
 				<span v-for="message in meta.error?.messages">{{ message }}</span>
 			</slot>
 		</template>
 		<template v-if="$slots.extra" #extra>
-			<slot name="extra" :form="injectedForm" :formItem="formItemInstance" />
+			<slot name="extra" :form="formInstance" :formItem="formItemInstance" />
 		</template>
 	</EzFormItemView>
 </template>
 
 <script lang="ts" setup>
+import EzFormItemAutoBindingInput from "@/components/EzFormItemAutoBindingInput.vue";
 import EzFormItemView from "@/components/EzFormItemView.vue";
-import {
-	useFormItem,
-	useFormItemAutoBinding,
-	useHandleFormItemEmit,
-	useInjectForm,
-} from "@/composables";
+import { useFormItemComponentLogics } from "@/composables";
 import type { FormInstance, FormItemInstance } from "@/models";
 import { getFormItemDefinePropsObject } from "@/utilities";
 
@@ -44,16 +46,12 @@ const emit = defineEmits<{
 	(event: "change", value: any, form: FormInstance): void;
 }>();
 
-const injectedForm = useInjectForm();
-const formItemInstance = useFormItem(props);
+const { formItemInstance, formInstance } = useFormItemComponentLogics(
+	props,
+	emit
+);
+
 const { meta, requiredMarkString } = formItemInstance;
-
-// Handle emit
-useHandleFormItemEmit(formItemInstance, emit);
-
-// Handle slots
-const { getInputItemProps, slotData, getVNodesFromDefaultSlot } =
-	useFormItemAutoBinding(formItemInstance, props);
 
 defineExpose<FormItemInstance>(formItemInstance);
 </script>
