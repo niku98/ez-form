@@ -19,7 +19,7 @@
 </template>
 
 <script lang="ts" setup>
-import { formProps } from "ant-design-vue/es/form";
+import { formProps } from "ant-design-vue/lib/form";
 import { provide } from "vue";
 import {
 	getFormDefinePropsObject,

@@ -52,7 +52,7 @@
 
 <script lang="ts" setup>
 import { FormItem as AFormItem } from "ant-design-vue";
-import { formItemProps } from "ant-design-vue/es/form";
+import { formItemProps } from "ant-design-vue/lib/form";
 import { computed } from "vue";
 import {
 	FormItemEmitter,
