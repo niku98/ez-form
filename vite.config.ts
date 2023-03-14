@@ -120,7 +120,7 @@ export default defineConfig({
 
 				if (filePath.includes("getDefinePropsObjects.d.ts")) {
 					content =
-						"import { FormInstance, FormItemValueTransformer, NamePath, Rule, Rules, ValidateMessages, ValidateTrigger } from '../models';\n" +
+						"import { FormInstance, FormItemValueTransformer, NamePath, Rule, Rules, ValidateMessages, ValidateTrigger } from '../../models';\n" +
 						content;
 
 					content = content.replace(
