@@ -32,6 +32,7 @@ Easy & Fast Form
 ✍ **Validation:** Validate your form very easy with Async validator.
 
 🛠️ **Simple:** Starting build your form with no configuration.
+
 🔌 **Devtool:** Inspect your forms with Vue Devtool.
 
 <br>

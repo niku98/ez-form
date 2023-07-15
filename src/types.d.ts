@@ -1,11 +1,9 @@
-import FormVue from "@/components/EzForm.vue";
-import FormItemVue from "@/components/EzFormItem.vue";
-import FormListVue from "@/components/EzFormList.vue";
+import { EzForm, EzFormItem, EzFormList } from "./index";
 
 declare module "@vue/runtime-core" {
 	export interface GlobalComponents {
-		EzForm: typeof FormVue;
-		EzFormItem: typeof FormItemVue;
-		EzFormList: typeof FormListVue;
+		EzForm: typeof EzForm;
+		EzFormItem: typeof EzFormItem;
+		EzFormList: typeof EzFormList;
 	}
 }

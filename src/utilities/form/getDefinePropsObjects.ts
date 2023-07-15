@@ -1,4 +1,4 @@
-import {
+import type {
 	FormInstance,
 	FormItemInstance,
 	FormItemValueTransformer,
@@ -6,6 +6,7 @@ import {
 	NamePath,
 	Rule,
 	Rules,
+	ValidateError,
 	ValidateMessages,
 	ValidateTrigger,
 } from "@/models";
@@ -51,6 +52,22 @@ export const getFormDefinePropsObject = () => {
 			type: Boolean as PropType<boolean>,
 			default: true,
 		},
+		onSubmit: {
+			required: false,
+			type: Function as PropType<(values: any) => void>,
+		},
+		onChange: {
+			required: false,
+			type: Function as PropType<(values: any) => void>,
+		},
+		onError: {
+			required: false,
+			type: Function as PropType<(errors: ValidateError[]) => void>,
+		},
+		onReset: {
+			required: false,
+			type: Function as PropType<() => void>,
+		},
 	} as const;
 };
 
@@ -79,6 +96,7 @@ export const getFormItemDefinePropsObject = () => {
 		changeEventPropName: {
 			required: false,
 			type: String as PropType<string>,
+			default: "input",
 		},
 		blurEventPropName: {
 			required: false,

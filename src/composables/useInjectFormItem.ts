@@ -1,5 +1,5 @@
-import { FieldMeta, FormItemInstance } from "@/models";
-import { PrivateFormItemInstance } from "@/models/PrivateInstances";
+import type { FieldMeta, FormItemInstance } from "@/models";
+import type { PrivateFormItemInstance } from "@/models/PrivateInstances";
 import { uniqueId } from "@/utilities";
 import { $formItemInjectKey } from "@/utilities/constants";
 import { computed, getCurrentInstance, inject, reactive } from "vue";
@@ -14,7 +14,9 @@ const getFaked = (): PrivateFormItemInstance => ({
 	registerFormField() {},
 	unRegisterFormField() {},
 	clearValidate() {},
-	async validate() {},
+	async validate() {
+		return {};
+	},
 	meta: reactive<FieldMeta>({
 		rawValue: undefined,
 		transformedValue: undefined,

@@ -20,14 +20,14 @@
 			<div v-for="field in fields" :key="field.key">
 				<EzFormItem
 					label="Display name"
-					:name="field.getPath('displayName')"
+					:name="field.getNamePath('displayName')"
 					:rules="[{ required: true }]"
 				>
 					<input />
 				</EzFormItem>
 				<EzFormItem
 					label="Age"
-					:name="field.getPath('age')"
+					:name="field.getNamePath('age')"
 					:rules="[{ required: true }]"
 				>
 					<input type="number" />

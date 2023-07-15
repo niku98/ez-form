@@ -1,18 +1,23 @@
-import {
+import type {
 	PrivateFormInstance,
 	PrivateFormItemInstance,
 	PrivateFormListInstance,
 } from "@/models/PrivateInstances";
 
 export interface DevtoolInstance {
-	addForm(name: string, instance: PrivateFormInstance): void;
+	addForm(
+		name: string,
+		instance: PrivateFormInstance,
+		componentUid: string
+	): void;
 	removeForm(name: string): void;
 	updateFormName(old: string, name: string): void;
 
 	addFormItem(
 		form: string,
 		name: string,
-		instance: PrivateFormItemInstance
+		instance: PrivateFormItemInstance,
+		componentUid: string
 	): void;
 	removeFormItem(form: string, name: string): void;
 	updateFormItemName(form: string, old: string, name: string): void;
@@ -25,7 +30,8 @@ export interface DevtoolInstance {
 	addFormList(
 		form: string,
 		name: string,
-		instance: PrivateFormListInstance
+		instance: PrivateFormListInstance,
+		componentUid: string
 	): void;
 	removeFormList(form: string, name: string): void;
 	updateFormListName(form: string, old: string, name: string): void;
@@ -49,6 +55,7 @@ export interface DevtoolFormData {
 	type: DevToolDataType.Form;
 	name: string;
 	instance: PrivateFormInstance;
+	componentUid: string;
 }
 
 export interface DevtoolFormItemData {
@@ -56,6 +63,7 @@ export interface DevtoolFormItemData {
 	name: string;
 	instance: PrivateFormItemInstance;
 	form: string;
+	componentUid: string;
 }
 
 export interface DevtoolFormListData {
@@ -63,6 +71,7 @@ export interface DevtoolFormListData {
 	name: string;
 	instance: PrivateFormListInstance;
 	form: string;
+	componentUid: string;
 }
 
 export type DevToolNodeData =

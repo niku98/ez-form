@@ -1,16 +1,16 @@
 import {
 	DevToolDataType,
-	DevtoolFormData,
-	DevtoolFormItemData,
-	DevtoolFormListData,
-	DevtoolInstance,
-	DevToolNodeData,
+	type DevtoolFormData,
+	type DevtoolFormItemData,
+	type DevtoolFormListData,
+	type DevtoolInstance,
+	type DevToolNodeData,
 } from "@/devtool/models";
 import { debounce } from "@/utilities";
 import {
-	CustomInspectorNode,
-	DevtoolsPluginApi,
 	setupDevtoolsPlugin,
+	type CustomInspectorNode,
+	type DevtoolsPluginApi,
 } from "@vue/devtools-api";
 const INSPECTOR_ID = "ez-form-inspector";
 let devtoolApi: DevtoolsPluginApi<{}> | undefined;
@@ -18,15 +18,16 @@ let SELECTED_FORM: DevtoolFormData | undefined;
 let SELECTED_ITEM: DevtoolFormItemData | undefined;
 let SELECTED_LIST: DevtoolFormListData | undefined;
 let SELECTED_LIST_ITEM_INDEX: number | undefined;
-
+let componentInstances: any[] = [];
 const formNodes: DevToolNodeData[] = [];
 
 export const devtoolInstance: DevtoolInstance = {
-	addForm(name, instance) {
+	addForm(name, instance, componentUid) {
 		formNodes.push({
 			type: DevToolDataType.Form,
 			name,
 			instance,
+			componentUid,
 		});
 		this?.sendInspectorTree();
 	},
@@ -48,12 +49,13 @@ export const devtoolInstance: DevtoolInstance = {
 			this.sendInspectorTree();
 		}
 	},
-	addFormItem(form, name, instance) {
+	addFormItem(form, name, instance, componentUid) {
 		formNodes.push({
 			type: DevToolDataType.Item,
 			name,
 			instance,
 			form,
+			componentUid,
 		});
 		this.sendInspectorTree();
 	},
@@ -107,12 +109,13 @@ export const devtoolInstance: DevtoolInstance = {
 			this.sendInspectorTree();
 		}
 	},
-	addFormList(form, name, instance) {
+	addFormList(form, name, instance, componentUid) {
 		formNodes.push({
 			type: DevToolDataType.List,
 			name,
 			instance,
 			form,
+			componentUid,
 		});
 		this.sendInspectorTree();
 	},
@@ -327,8 +330,9 @@ export default function setupDevtool(app: any) {
 				],
 			});
 
-			api.on.getInspectorTree((payload) => {
+			api.on.getInspectorTree(async (payload) => {
 				if (payload.inspectorId === INSPECTOR_ID) {
+					componentInstances = await api.getComponentInstances(app);
 					payload.rootNodes = castFormNodesToInspectorNodes(
 						formNodes.filter(({ name }) => {
 							return name.includes(payload.filter);
@@ -337,7 +341,7 @@ export default function setupDevtool(app: any) {
 				}
 			});
 
-			api.on.getInspectorState((payload) => {
+			api.on.getInspectorState(async (payload) => {
 				SELECTED_FORM = undefined;
 				SELECTED_ITEM = undefined;
 				SELECTED_LIST = undefined;
@@ -357,6 +361,23 @@ export default function setupDevtool(app: any) {
 				if (!foundNode) {
 					return;
 				}
+
+				// Highlight element
+				const instance = componentInstances.find(
+					(instance) => instance.uid.toString() === foundNode.componentUid
+				);
+
+				if (instance) {
+					api.highlightElement(instance);
+					const bound = await api.getComponentBounds(instance);
+
+					window.scrollTo({
+						top: bound.top + window.scrollY - 16,
+						left: bound.left,
+						behavior: "smooth",
+					});
+				}
+
 				if (foundNode.type === DevToolDataType.Form) {
 					SELECTED_FORM = foundNode;
 

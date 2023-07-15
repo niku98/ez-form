@@ -1,4 +1,4 @@
-import { FormInstance, FormMeta } from "@/models";
+import type { FormInstance, FormMeta } from "@/models";
 import { uniqueId } from "@/utilities";
 import { $formInjectKey } from "@/utilities/constants";
 import { getCurrentInstance, inject, reactive } from "vue";
@@ -17,7 +17,9 @@ export default function useInjectForm() {
 			setFieldValue() {},
 			reset() {},
 			clearValidate() {},
-			async validate() {},
+			async validate() {
+				return {};
+			},
 			submit() {
 				return undefined as any;
 			},

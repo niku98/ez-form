@@ -7,7 +7,7 @@ import type {
 	FormItemProps,
 	NamePath,
 } from "@/models";
-import { PrivateFormItemInstance } from "@/models/PrivateInstances";
+import type { PrivateFormItemInstance } from "@/models/PrivateInstances";
 import { castNamePathToString, globalFormInstances } from "@/utilities";
 import { onBeforeUnmount, ref, watch } from "vue";
 

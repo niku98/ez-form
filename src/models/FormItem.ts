@@ -1,12 +1,12 @@
-import { NamePath } from "@/models/Base";
-import { FormInstance } from "@/models/Form";
-import {
+import type { NamePath } from "@/models/Base";
+import type { FormInstance } from "@/models/Form";
+import type {
 	Rule,
 	ValidateError,
 	ValidateOption,
 	ValidateTrigger,
 } from "@/models/Validation";
-import { ComputedRef } from "vue";
+import type { ComputedRef } from "vue";
 
 export interface FieldMeta {
 	/**
@@ -79,4 +79,12 @@ export interface FormItemSlotErrorsProps {
 export interface FormItemSlotExtraProps {
 	form: FormInstance;
 	formItem: FormItemInstance;
+}
+
+export interface InputItemProps {
+	value: any;
+	onInput: (event: any) => void;
+	onChange: (event: any) => void;
+	onBlur: () => void;
+	id: string;
 }

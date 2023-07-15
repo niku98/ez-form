@@ -1,6 +1,6 @@
 import useForm from "@/composables/useForm";
-import { FormEmitter, FormInstance, FormSettings } from "@/models";
-import { PrivateFormInstance } from "@/models/PrivateInstances";
+import type { FormEmitter, FormInstance, FormSettings } from "@/models";
+import type { PrivateFormInstance } from "@/models/PrivateInstances";
 import { clone, debounce, provideFormInstance } from "@/utilities";
 import { watch } from "vue";
 

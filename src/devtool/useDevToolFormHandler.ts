@@ -1,6 +1,7 @@
 import { devtoolInstance } from "@/devtool/setupDevtool";
-import { PrivateFormInstance } from "@/models/PrivateInstances";
-import { onBeforeUnmount, watch } from "vue";
+import type { PrivateFormInstance } from "@/models/PrivateInstances";
+import { uniqueId } from "@/utilities";
+import { getCurrentInstance, onBeforeUnmount, watch } from "vue";
 
 export default function useDevtoolFormHandler(
 	formInstance: PrivateFormInstance
@@ -9,7 +10,13 @@ export default function useDevtoolFormHandler(
 		return;
 	}
 
-	devtoolInstance?.addForm(formInstance.meta.name, formInstance);
+	const componentInstance = getCurrentInstance();
+
+	devtoolInstance?.addForm(
+		formInstance.meta.name,
+		formInstance,
+		componentInstance?.uid?.toString?.() ?? uniqueId()
+	);
 
 	watch(
 		() => formInstance.meta.name,
@@ -21,7 +28,7 @@ export default function useDevtoolFormHandler(
 	);
 
 	watch(
-		() => formInstance.meta.values,
+		() => [formInstance.meta.values, formInstance.meta.errors],
 		() => {
 			devtoolInstance.sendInspectorState();
 		}

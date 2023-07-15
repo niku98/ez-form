@@ -1,5 +1,5 @@
-import { FieldMeta, FormListInstance } from "@/models";
-import { PrivateFormListInstance } from "@/models/PrivateInstances";
+import type { FieldMeta, FormListInstance } from "@/models";
+import type { PrivateFormListInstance } from "@/models/PrivateInstances";
 import { uniqueId } from "@/utilities";
 import { $formListInjectKey } from "@/utilities/constants";
 import { computed, getCurrentInstance, inject, reactive } from "vue";
@@ -7,7 +7,9 @@ import { computed, getCurrentInstance, inject, reactive } from "vue";
 const getFaked = (): PrivateFormListInstance => ({
 	__IS_FAKE__: true,
 	props: { name: "" },
-	async validate() {},
+	async validate() {
+		return {};
+	},
 	clearValidate() {},
 	registerFormField() {},
 	unRegisterFormField() {},
@@ -25,7 +27,6 @@ const getFaked = (): PrivateFormListInstance => ({
 	fields: computed(() => []),
 	namePrefix: computed(() => []),
 	listValues: computed(() => []),
-	errors: computed(() => []),
 	swap() {},
 	updateProps() {},
 	resetItem() {},
@@ -48,6 +49,10 @@ const getFaked = (): PrivateFormListInstance => ({
 		return [];
 	},
 	add() {},
+	insert() {},
+	shift() {},
+	unshift() {},
+	pop() {},
 });
 
 export default function useInjectFormList() {

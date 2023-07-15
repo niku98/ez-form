@@ -1,4 +1,8 @@
-import { FormInstance, FormItemInstance, FormListInstance } from "@/models";
+import type {
+	FormInstance,
+	FormItemInstance,
+	FormListInstance,
+} from "@/models";
 import { reactive } from "vue";
 
 export const $ezFormPluginInjectKey = Symbol("ezFormInjectKey");

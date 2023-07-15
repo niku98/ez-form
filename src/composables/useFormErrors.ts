@@ -1,11 +1,11 @@
 import useInjectPrivateForm from "@/composables/useInjectPrivateForm";
-import { NamePath, ValidateError } from "@/models";
+import type { NamePath, ValidateError } from "@/models";
 import {
 	castNamePathToString,
 	computedWithTarget,
 	debounce,
 } from "@/utilities";
-import { computed, ComputedRef, Ref, unref } from "vue";
+import { computed, unref, type ComputedRef, type Ref } from "vue";
 
 export default function useFormErrors(
 	namePath?: NamePath | Ref<NamePath | undefined>

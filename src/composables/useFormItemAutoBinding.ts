@@ -1,6 +1,6 @@
 import useInjectForm from "@/composables/useInjectForm";
-import { FormItemInstance, FormItemSlotProps } from "@/models";
-import { computed, Fragment, h, Slot, useSlots, VNode } from "vue";
+import type { FormItemInstance, FormItemSlotProps } from "@/models";
+import { Fragment, computed, h, useSlots, type Slot, type VNode } from "vue";
 
 export default function useFormItemAutoBinding(
 	formItemInstance: FormItemInstance,

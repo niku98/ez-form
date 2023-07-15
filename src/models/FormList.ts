@@ -1,8 +1,8 @@
-import { NamePath } from "@/models/Base";
-import { FormInstance } from "@/models/Form";
-import { FormItemInstance, FormItemProps } from "@/models/FormItem";
-import { ValidateError } from "@/models/Validation";
-import { ComputedRef, UnwrapRef } from "vue";
+import type { NamePath } from "@/models/Base";
+import type { FormInstance } from "@/models/Form";
+import type { FormItemInstance, FormItemProps } from "@/models/FormItem";
+import type { ValidateError } from "@/models/Validation";
+import type { ComputedRef, UnwrapRef } from "vue";
 
 export interface FormListProps extends Omit<FormItemProps, "formItem"> {
 	defaultValue?: any[];
@@ -20,13 +20,6 @@ export interface FormListInstance
 	listValues: ComputedRef<any[]>;
 	namePrefix: ComputedRef<(string | number)[]>;
 	fields: ComputedRef<FormListField[]>;
-	/**
-	 * Use to get all errors of form list.
-	 * But because of performance issue, it will be removed in next version.
-	 * You should use getErrors and hasError instead.
-	 * @deprecated Since 1.3.0
-	 */
-	errors: ComputedRef<ValidateError[]>;
 	getNamePath(index: number, name: NamePath): string;
 	getErrors(index?: number): ValidateError[];
 	hasError(index: number): boolean;

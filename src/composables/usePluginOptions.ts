@@ -1,4 +1,4 @@
-import { PluginOptions } from "@/models";
+import type { PluginOptions } from "@/models";
 import { $ezFormPluginInjectKey } from "@/utilities";
 import { inject } from "vue";
 
