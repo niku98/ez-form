@@ -1,13 +1,13 @@
-import { NamePath } from "@/models/Base";
-import { FormItemInstance } from "@/models/FormItem";
-import {
+import type { NamePath } from "@/models/Base";
+import type { FormItemInstance } from "@/models/FormItem";
+import type {
 	Rules,
 	ValidateError,
 	ValidateMessages,
 	ValidateOption,
 	ValidateTrigger,
 } from "@/models/Validation";
-import { ComputedRef } from "vue";
+import type { ComputedRef } from "vue";
 
 export interface FormMeta<Values = any> {
 	name: string;

@@ -1,5 +1,5 @@
 import useInjectForm from "@/composables/useInjectForm";
-import { PrivateFormInstance } from "@/models/PrivateInstances";
+import type { PrivateFormInstance } from "@/models/PrivateInstances";
 
 export default function useInjectPrivateForm() {
 	const injectedForm = useInjectForm();

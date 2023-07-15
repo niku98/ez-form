@@ -1,4 +1,4 @@
-import { FormItemInstance } from "@/models";
+import type { FormItemInstance } from "@/models";
 import { $formItemInjectKey } from "@/utilities/constants";
 import { provide } from "vue";
 

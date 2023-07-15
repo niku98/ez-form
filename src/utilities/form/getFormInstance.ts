@@ -1,6 +1,6 @@
-import { FormInstance } from "@/models";
+import type { FormInstance } from "@/models";
 import { globalFormInstances } from "@/utilities/constants";
-import { computed, ComputedRef } from "vue";
+import { computed, type ComputedRef } from "vue";
 
 /**
  * Using form name to get form instance from anywhere in you app.

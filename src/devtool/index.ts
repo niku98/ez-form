@@ -1,5 +1,5 @@
 import setupDevtool from "@/devtool/setupDevtool";
-import { Plugin } from "vue";
+import type { Plugin } from "vue";
 
 const EzFormDevtool: Plugin = {
 	install(app) {

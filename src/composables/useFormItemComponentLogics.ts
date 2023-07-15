@@ -1,12 +1,12 @@
 import useFormItem from "@/composables/useFormItem";
 import useInjectForm from "@/composables/useInjectForm";
-import {
+import type {
 	FormInstance,
 	FormItemEmitter,
 	FormItemInstance,
 	FormItemProps,
 } from "@/models";
-import { PrivateFormItemInstance } from "@/models/PrivateInstances";
+import type { PrivateFormItemInstance } from "@/models/PrivateInstances";
 import { clone, debounce, provideFormItemInstance } from "@/utilities";
 import { watch } from "vue";
 

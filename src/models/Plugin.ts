@@ -1,4 +1,4 @@
-import { ValidateMessages } from "@/models/Validation";
+import type { ValidateMessages } from "@/models/Validation";
 
 export interface PluginOptions {
 	validateMessages?: ValidateMessages;

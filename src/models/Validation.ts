@@ -1,5 +1,5 @@
-import { NamePath } from "@/models/Base";
-import {
+import type { NamePath } from "@/models/Base";
+import type {
 	RuleItem as ARuleItem,
 	ValidateMessages as AsyncValidateMessages,
 } from "async-validator";

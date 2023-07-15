@@ -1,12 +1,12 @@
-import EzForm from "@/components/EzForm.vue";
-import EzFormErrors from "@/components/EzFormErrors.vue";
-import EzFormItem from "@/components/EzFormItem.vue";
-import EzFormItemAutoBindingInput from "@/components/EzFormItemAutoBindingInput.vue";
-import EzFormList from "@/components/EzFormList.vue";
+import EzForm from "@/components/EzForm";
+import EzFormErrors from "@/components/EzFormErrors";
+import EzFormItem from "@/components/EzFormItem";
+import EzFormItemAutoBindingInput from "@/components/EzFormItemAutoBindingInput";
+import EzFormList from "@/components/EzFormList";
 import { EzFormDevtool, setupDevtool } from "@/devtool";
-import { PluginOptions } from "@/models";
+import type { PluginOptions } from "@/models";
 import { $ezFormPluginInjectKey } from "@/utilities";
-import { Plugin } from "vue";
+import type { Plugin } from "vue";
 
 export * from "@/composables";
 export {
@@ -47,11 +47,11 @@ export type {
 } from "./models";
 export {
 	EzForm,
-	EzFormItem,
-	EzFormList,
 	EzFormDevtool,
-	EzFormItemAutoBindingInput,
 	EzFormErrors,
+	EzFormItem,
+	EzFormItemAutoBindingInput,
+	EzFormList,
 };
 
 const defaultOptions: PluginOptions = {};

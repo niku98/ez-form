@@ -1,4 +1,4 @@
-import { FormListInstance } from "@/models";
+import type { FormListInstance } from "@/models";
 import { $formListInjectKey } from "@/utilities/constants";
 import { provide } from "vue";
 

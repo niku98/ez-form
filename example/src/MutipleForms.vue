@@ -115,11 +115,7 @@
 </template>
 
 <script lang="ts" setup>
-import EzForm from "@/components/EzForm.vue";
-import EzFormItem from "@/components/EzFormItem.vue";
-import EzFormList from "@/components/EzFormList.vue";
-import { useForm, useFormItem } from "@/composables";
-import { getFormListInstance } from "@/utilities";
+import { getFormListInstance, useForm, useFormItem } from "@niku/ez-form";
 
 const defaultList = new Array(2).fill({ displayName: "test", age: 20 });
 
@@ -128,6 +124,7 @@ function handleSubmit(values: any) {
 }
 
 const form = useForm();
+
 const form2 = useForm();
 
 // const formList = useFormList({});

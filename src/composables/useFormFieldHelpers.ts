@@ -1,13 +1,14 @@
 import useInjectPrivateForm from "@/composables/useInjectPrivateForm";
 import useEzFormPluginOptions from "@/composables/usePluginOptions";
-import {
+import type {
 	FieldMeta,
 	FormInstance,
 	FormItemInstance,
 	FormItemProps,
+	NamePath,
 	ValidateOption,
 } from "@/models";
-import { PrivateFormInstance } from "@/models/PrivateInstances";
+import type { PrivateFormInstance } from "@/models/PrivateInstances";
 import {
 	castNamePathToString,
 	castPath,
@@ -17,7 +18,6 @@ import {
 	uniqueId,
 } from "@/utilities";
 import ValidationSchema from "async-validator";
-import { NamePath } from "dist";
 import {
 	computed,
 	isReactive,
@@ -25,10 +25,10 @@ import {
 	onBeforeMount,
 	reactive,
 	ref,
-	Ref,
 	shallowReactive,
 	toRaw,
 	watch,
+	type Ref,
 } from "vue";
 
 export default function useFormFieldHelpers(inputProps?: FormItemProps) {

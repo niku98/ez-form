@@ -1,7 +1,7 @@
 import { devtoolInstance } from "@/devtool/setupDevtool";
-import { PrivateFormListInstance } from "@/models/PrivateInstances";
-import { castNamePathToString } from "@/utilities";
-import { onBeforeUnmount, watch } from "vue";
+import type { PrivateFormListInstance } from "@/models/PrivateInstances";
+import { castNamePathToString, uniqueId } from "@/utilities";
+import { getCurrentInstance, onBeforeUnmount, watch } from "vue";
 export default function useDevtoolFormListHandler(
 	formListInstance: PrivateFormListInstance
 ) {
@@ -10,6 +10,8 @@ export default function useDevtoolFormListHandler(
 			return () => {};
 		};
 	}
+
+	const componentInstance = getCurrentInstance();
 
 	onBeforeUnmount(() => {
 		if (formListInstance.meta.name) {
@@ -32,7 +34,8 @@ export default function useDevtoolFormListHandler(
 			devtoolInstance.addFormList(
 				formListInstance.meta.formName,
 				castNamePathToString(formListInstance.meta.name),
-				formListInstance
+				formListInstance,
+				componentInstance?.uid?.toString?.() ?? uniqueId()
 			);
 		}
 

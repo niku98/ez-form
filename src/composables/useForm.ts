@@ -13,7 +13,7 @@ import type {
 	ValidateError,
 	ValidateOption,
 } from "@/models";
-import { PrivateFormInstance } from "@/models/PrivateInstances";
+import type { PrivateFormInstance } from "@/models/PrivateInstances";
 import {
 	castNamePathToString,
 	castPath,
@@ -34,13 +34,12 @@ import {
 	isReactive,
 	onBeforeUnmount,
 	reactive,
-	Ref,
 	ref,
 	toRaw,
 	toRef,
 	unref,
 	watch,
-	watchEffect,
+	type Ref,
 } from "vue";
 
 /**
@@ -49,7 +48,7 @@ import {
  * @returns
  */
 export default function useForm<
-	Values extends object = Record<string | number | symbol, any>
+	Values extends object = Record<PropertyKey, any>
 >(props?: FormSettings): FormInstance<Values> {
 	const pluginOptions = useEzFormPluginOptions();
 
@@ -233,14 +232,16 @@ export default function useForm<
 		});
 	}
 
-	watchEffect(
+	watch(
+		fields,
 		debounce(() => {
 			formMeta.errors = objectValues(fields)
 				.map((field) => {
 					return field.error;
 				})
 				.filter((error) => error !== undefined) as ValidateError[];
-		}, 500)
+		}, 500),
+		{ immediate: true }
 	);
 
 	// Reset

@@ -1,7 +1,7 @@
-import { FormListInstance, NamePath } from "@/models";
+import type { FormListInstance, NamePath } from "@/models";
 import { globalFormInstances } from "@/utilities/constants";
 import { castNamePathToString } from "@/utilities/object";
-import { computed, ComputedRef } from "vue";
+import { computed, type ComputedRef } from "vue";
 
 /**
  * Using form name and name path to get form list instance from anywhere in you app.

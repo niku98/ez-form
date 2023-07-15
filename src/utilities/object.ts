@@ -1,5 +1,5 @@
-import { NamePath } from "@/models";
-import { Ref } from "vue";
+import type { NamePath } from "@/models";
+import type { Ref } from "vue";
 
 export function emptyObject<T>(obj: T): T {
 	for (const key in obj) {
@@ -21,7 +21,7 @@ export function clearObject<T extends { [key: string]: any }>(obj: T): T {
 	return obj;
 }
 
-export function clone<T extends any[] | Object>(input: T): T {
+export function clone<T>(input: T): T {
 	const output: any = Array.isArray(input) ? ([] as any[]) : {};
 
 	for (const key in input) {
@@ -113,6 +113,7 @@ export function deleteFrom(input: any, path: NamePath) {
 		key && delete input[key];
 	}
 }
+
 type ExposeRef<T> = T extends Ref<infer K> ? K : T;
 type ExposeRefs<
 	T extends Record<string, any>,
@@ -126,6 +127,7 @@ type ObjectValuesReturnType<T> = T extends Record<any, infer K>
 		? ExposeRefs<K>[]
 		: any[]
 	: any[];
+
 export function objectValues<T extends object>(
 	object: T
 ): ObjectValuesReturnType<T> {

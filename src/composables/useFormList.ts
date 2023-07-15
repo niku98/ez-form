@@ -1,6 +1,6 @@
 import useFormFieldHelpers from "@/composables/useFormFieldHelpers";
 import useDevtoolFormListHandler from "@/devtool/useDevtoolFormListHandler";
-import {
+import type {
 	FieldMeta,
 	FormInstance,
 	FormListInstance,
@@ -8,7 +8,7 @@ import {
 	NamePath,
 	ValidateError,
 } from "@/models";
-import { PrivateFormListInstance } from "@/models/PrivateInstances";
+import type { PrivateFormListInstance } from "@/models/PrivateInstances";
 import {
 	castNamePathToString,
 	castPath,
@@ -58,8 +58,6 @@ export default function useFormList(
 			};
 		});
 	});
-
-	const errors = computed(() => []);
 
 	function getItemFields(index: number) {
 		return objectValues(injectedForm.fields).filter(({ name }) => {
@@ -200,7 +198,6 @@ export default function useFormList(
 		listValues,
 		namePrefix,
 		fields,
-		errors,
 		reset: resetFieldMeta,
 		registerFormField,
 		unRegisterFormField,

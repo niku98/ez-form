@@ -1,19 +1,22 @@
 {
-	"files": [],
-	"references": [
-		{
-			"path": "./tsconfig.vite-config.json"
-		},
-		{
-			"path": "./tsconfig.app.json"
-		}
-	],
 	"compilerOptions": {
+		"target": "ESNext",
+		"allowJs": false,
+		"module": "ESNext",
 		"paths": {
-			"@niku/ez-form": ["./dist/index"]
+			"@niku/ez-form": ["./dist"],
+			"@/*": ["./src/*"]
 		},
-		"outDir": "./dist",
-		"declaration": false,
-		"preserveSymlinks": true
-	}
+		"baseUrl": "./",
+		"outDir": "./dist_types",
+		"declaration": true,
+		"preserveSymlinks": true,
+		"isolatedModules": true,
+		"strict": true,
+		"jsx": "preserve",
+		"jsxImportSource": "vue",
+		"moduleResolution": "NodeNext"
+	},
+	"exclude": ["dist"],
+	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
 }

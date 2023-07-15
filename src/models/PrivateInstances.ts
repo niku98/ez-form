@@ -1,7 +1,7 @@
-import { FormField, FormInstance, FormSettings } from "@/models/Form";
-import { FormItemInstance, FormItemProps } from "@/models/FormItem";
-import { FormListInstance, FormListProps } from "@/models/FormList";
-import { UnwrapRef } from "vue";
+import type { FormField, FormInstance, FormSettings } from "@/models/Form";
+import type { FormItemInstance, FormItemProps } from "@/models/FormItem";
+import type { FormListInstance, FormListProps } from "@/models/FormList";
+import type { UnwrapRef } from "vue";
 
 export interface PrivateFormInstance<V extends object = any>
 	extends FormInstance<V> {

@@ -1,4 +1,4 @@
-import { ref, Ref, watch, WatchOptions, WatchSource } from "vue";
+import { ref, watch, type Ref, type WatchOptions, type WatchSource } from "vue";
 
 export function isEqual(firstInput: any, secondInput: any) {
 	const firstType = typeof firstInput;
