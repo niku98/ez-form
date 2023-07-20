@@ -1,7 +1,13 @@
 <template>
 	<EzForm @submit="handleSubmit">
 		<EzFormItem label="Test" name="test" validate-first no-style>
-			<input />
+			<Input />
+			<Select>
+				<SelectOption value="1">Test</SelectOption>
+				<SelectOption value="2">Test 2</SelectOption>
+				<SelectOption value="3">Test 3</SelectOption>
+				<SelectOption value="4">Test 4</SelectOption>
+			</Select>
 		</EzFormItem>
 		<EzFormItem
 			label="First name"
@@ -41,6 +47,7 @@
 
 <script lang="ts" setup>
 import { EzForm } from "@niku/ez-form";
+import { Input, Select, SelectOption } from "ant-design-vue";
 
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup

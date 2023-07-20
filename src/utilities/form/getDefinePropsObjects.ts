@@ -96,7 +96,6 @@ export const getFormItemDefinePropsObject = () => {
 		changeEventPropName: {
 			required: false,
 			type: String as PropType<string>,
-			default: "input",
 		},
 		blurEventPropName: {
 			required: false,
