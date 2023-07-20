@@ -2,7 +2,7 @@
 	"name": "@niku/ez-form",
 	"title": "Ez Form",
 	"description": "Powerful, Easy-to-use form package",
-	"version": "1.4.0",
+	"version": "1.4.1",
 	"main": "./index.js",
 	"module": "./index.mjs",
 	"types": "./index.d.ts",
