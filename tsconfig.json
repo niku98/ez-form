@@ -1,22 +1,31 @@
 {
+	"$schema": "https://json.schemastore.org/tsconfig",
 	"compilerOptions": {
-		"target": "ESNext",
 		"allowJs": false,
-		"module": "ESNext",
-		"paths": {
-			"@niku/ez-form": ["./dist"],
-			"@/*": ["./src/*"]
-		},
-		"baseUrl": "./",
-		"outDir": "./dist_types",
+		"allowSyntheticDefaultImports": true,
+		"allowUnreachableCode": false,
+		"allowUnusedLabels": false,
+		"baseUrl": ".",
+		"checkJs": false,
 		"declaration": true,
-		"preserveSymlinks": true,
+		"declarationMap": true,
+		"esModuleInterop": true,
+		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
+		"lib": ["DOM", "DOM.Iterable", "ES2020"],
+		"module": "ESNext",
+		"moduleResolution": "NodeNext",
+		"noImplicitAny": true,
+		"noImplicitReturns": true,
+		"noImplicitThis": true,
+		"noUncheckedIndexedAccess": true,
+		"noUnusedLocals": false,
+		"noUnusedParameters": false,
+		"resolveJsonModule": true,
+		"skipLibCheck": true,
 		"strict": true,
-		"jsx": "preserve",
-		"jsxImportSource": "vue",
-		"moduleResolution": "NodeNext"
+		"strictNullChecks": true,
+		"target": "ESNext"
 	},
-	"exclude": ["dist"],
-	"include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue"]
+	"include": [".eslintrc.cjs"]
 }

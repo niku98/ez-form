@@ -1,0 +1,52 @@
+{
+	"name": "@niku/ez-form-core",
+	"private": false,
+	"version": "0.0.0",
+	"description": "Powerful, type-safe, easy-to-use form package",
+	"author": {
+		"name": "Niku",
+		"email": "phammah.1221998@gmail.com",
+		"url": "https://github.com/niku98"
+	},
+	"repository": {
+		"url": "https://github.com/niku98/ez-form"
+	},
+	"homepage": "https://niku98.github.io/ez-form",
+	"license": "MIT",
+	"type": "module",
+	"main": "./dist/index.cjs",
+	"module": "./dist/index.js",
+	"types": "./dist/index.d.ts",
+	"typings": "./dist/index.d.ts",
+	"scripts": {
+		"dev": "tsup --watch",
+		"build": "tsup",
+		"test": "vitest",
+		"coverage": "vitest run --coverage"
+	},
+	"peerDependencies": {
+		"async-validator": "^4.2.5",
+		"yup": "^1.2.0",
+		"zod": "^3.21.4"
+	},
+	"peerDependenciesMeta": {
+		"async-validator": {
+			"optional": true
+		},
+		"yup": {
+			"optional": true
+		},
+		"zod": {
+			"optional": true
+		}
+	},
+	"devDependencies": {
+		"@types/node": "^20.4.2",
+		"async-validator": "^4.2.5",
+		"jsdom": "^22.1.0",
+		"tsup": "^7.1.0",
+		"typescript": "^5.1.6",
+		"yup": "^1.2.0",
+		"zod": "^3.21.4"
+	}
+}

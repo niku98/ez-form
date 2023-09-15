@@ -1,15 +1,6 @@
 {
 	"editor.formatOnSave": true,
 	"editor.formatOnPaste": true,
-	"[typescriptreact]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[typescript]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
-	"[jsonc]": {
-		"editor.defaultFormatter": "esbenp.prettier-vscode"
-	},
 	"typescript.preferences.importModuleSpecifier": "non-relative",
 	"files.eol": "\n",
 	"html.autoClosingTags": true,
@@ -20,8 +11,8 @@
 	"javascript.updateImportsOnFileMove.enabled": "always",
 	"typescript.updateImportsOnFileMove.enabled": "always",
 	"editor.codeActionsOnSave": {
-		"source.organizeImports": true
+		"source.organizeImports": true,
+		"source.fixAll.eslint": true
 	},
-	"css.customData": [".vscode/css_custom_data.json"],
-	"cSpell.words": ["Antd", "composables", "Pinia"]
+	"eslint.validate": ["javascript"]
 }

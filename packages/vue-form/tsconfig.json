@@ -1,0 +1,36 @@
+{
+	"extends": "../../tsconfig.json",
+	"compilerOptions": {
+		"target": "ES2020",
+		"useDefineForClassFields": true,
+		"lib": ["ES2020", "DOM", "DOM.Iterable"],
+		"module": "ESNext",
+		"skipLibCheck": true,
+		"baseUrl": ".",
+		"paths": {
+			"src/*": ["./src/*"]
+		},
+
+		/* Bundler mode */
+		"moduleResolution": "Bundler",
+		"allowImportingTsExtensions": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"noEmit": true,
+		"verbatimModuleSyntax": true,
+
+		/* Linting */
+		"strict": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noFallthroughCasesInSwitch": true
+	},
+	"include": [
+		"src",
+		"__tests__/**/*.vue",
+		"./tsup.config.ts",
+		"src/types.ts",
+		"vitest.config.ts",
+		"__tests__"
+	]
+}

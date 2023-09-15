@@ -1,6 +1,6 @@
-node_modules
-.DS_Store
+
+.nx/installation
+.nx/cache
+
 dist
-dist-ssr
-*.local
-*.zip
+node_modules

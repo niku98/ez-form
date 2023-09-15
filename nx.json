@@ -1,0 +1,23 @@
+{
+	"tasksRunnerOptions": {
+		"default": {
+			"runner": "nx-cloud",
+			"options": {
+				"cacheableOperations": [],
+				"accessToken": "NWIyMmQ4NGUtZGVhMy00M2YxLWI1MTYtNTU5OGY0YjlhYmM4fHJlYWQtd3JpdGU="
+			}
+		}
+	},
+	"defaultBase": "main",
+	"installation": {
+		"version": "16.5.2"
+	},
+	"affected": {
+		"defaultBase": "main"
+	},
+	"targetDefaults": {
+		"build": {
+			"dependsOn": ["^build"]
+		}
+	}
+}

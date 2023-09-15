@@ -1,72 +1,40 @@
 {
-	"name": "@niku/ez-form",
-	"title": "Ez Form",
-	"description": "Powerful, Easy-to-use form package",
-	"version": "1.4.1",
-	"main": "./index.js",
-	"module": "./index.mjs",
-	"types": "./index.d.ts",
+	"name": "ez-form",
+	"version": "1.0.0",
+	"main": "index.js",
 	"license": "MIT",
-	"private": false,
-	"author": {
-		"name": "Niku",
-		"url": "https://github.com/niku98",
-		"email": "phammanh.1221998@gmail.com"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/niku98/ez-form"
-	},
-	"homepage": "https://niku98.github.io/ez-form",
+	"private": true,
 	"scripts": {
-		"dev": "tsup --watch --onSuccess 'yarn build:style && yarn post-build && yarn prepare-example && yarn example dev'",
-		"build": "tsup",
-		"post-build": "yarn copy:package-json && yarn copy:types && yarn copy:readme",
-		"build:style": "sass --no-source-map ./src/styles/index.scss ./dist/styles/index.css && cp ./src/styles/index.scss ./dist/styles/index.scss",
-		"copy:types": "cp src/types.d.ts dist/types.d.ts",
-		"copy:package-json": "cp package.json dist/package.json",
-		"copy:readme": "cp README.md dist/README.md",
-		"link-package": "cd dist && yarn unlink && yarn link && cd ..",
-		"docs:dev": "vitepress dev docs --port 8989",
-		"docs:build": "vitepress build docs",
-		"docs:serve": "vitepress serve docs",
-		"vitepress": "vitepress",
-		"preview": "vite preview",
-		"example": "yarn --cwd example",
-		"prepare-example": "yarn link-package && yarn example && yarn example link @niku/ez-form"
-	},
-	"publishConfig": {
-		"access": "public"
-	},
-	"keywords": [
-		"vue",
-		"vue3",
-		"vue 3",
-		"vuejs",
-		"vue-form",
-		"vuejs-form",
-		"form",
-		"form-handling",
-		"validate",
-		"validation",
-		"validator"
-	],
-	"dependencies": {
-		"@vue/devtools-api": "^6.5.0",
-		"async-validator": "^4.2.5"
-	},
-	"peerDependencies": {
-		"vue": "^3.0.0"
+		"nx": "nx",
+		"build": "nx run-many --projects=packages/** --target=build --parallel=5",
+		"dev": "nx run-many --projects=packages/** --target=dev --parallel=5",
+		"test": "vitest",
+		"publish-packages": "node scripts/publish.js"
 	},
 	"devDependencies": {
-		"@types/jsdom": "^20.0.0",
-		"@types/node": "^18.11.9",
-		"@vitejs/plugin-vue": "^3.1.2",
-		"ant-design-vue": "^3.2.20",
-		"sass": "^1.55.0",
-		"tsup": "^7.1.0",
-		"typescript": "^5.1.3",
-		"vitepress": "^1.0.0-beta.1",
-		"vue": "^3.0.0"
-	}
+		"@solidjs/router": "^0.8.2",
+		"@solidjs/testing-library": "^0.8.4",
+		"@testing-library/jest-dom": "^5.17.0",
+		"@testing-library/react": "^14.0.0",
+		"@testing-library/react-hooks": "^8.0.1",
+		"@testing-library/user-event": "^14.4.3",
+		"@testing-library/vue": "^7.0.0",
+		"@vitejs/plugin-vue": "^4.2.3",
+		"@vitest/coverage-v8": "^0.33.0",
+		"@vitest/ui": "^0.33.0",
+		"jsdom": "^22.1.0",
+		"nx": "16.5.2",
+		"nx-cloud": "latest",
+		"vite-plugin-solid": "^2.7.0",
+		"vitest": "^0.33.0",
+		"fast-glob": "^3.3.1",
+		"semver": "^7.5.4"
+	},
+	"nx": {
+		"targets": {}
+	},
+	"workspaces": [
+		"packages/*"
+	],
+	"packageManager": "yarn@1.22.17"
 }
