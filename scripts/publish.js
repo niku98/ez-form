@@ -114,7 +114,7 @@ function isPackageChanged(packagePath) {
 		return true;
 	}
 
-	return getChangedFiles(tags[tags.length - 1]).some((path) =>
+	return getChangedFiles(tags[tags.length - 2]).some((path) =>
 		path.startsWith(packagePath)
 	);
 }
