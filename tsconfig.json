@@ -13,7 +13,7 @@
 		"forceConsistentCasingInFileNames": true,
 		"isolatedModules": true,
 		"lib": ["DOM", "DOM.Iterable", "ES2020"],
-		"module": "ESNext",
+		"module": "NodeNext",
 		"moduleResolution": "NodeNext",
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
@@ -26,6 +26,5 @@
 		"strict": true,
 		"strictNullChecks": true,
 		"target": "ESNext"
-	},
-	"include": [".eslintrc.cjs"]
+	}
 }

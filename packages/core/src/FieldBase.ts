@@ -182,6 +182,8 @@ export default abstract class FieldBaseInstance<
 				}
 
 				if (!result.valid) {
+					result.errors = this.normalizeValidateErrors(result.errors);
+
 					this.setMetaKey("errors", result.errors);
 					this.trigger("error", result.errors);
 				} else {
@@ -202,4 +204,20 @@ export default abstract class FieldBaseInstance<
 		this.validationPromise.reject({ cancelled: true });
 		this.validationPromise = undefined;
 	};
+
+	normalizeValidateErrors(errors: ValidateError[]) {
+		return errors.map((error) => {
+			return {
+				...error,
+				messages: this.options.label
+					? error.messages.map((message) => {
+							return message.replace(
+								new RegExp(this.name, "g"),
+								this.options.label ?? ""
+							);
+					  })
+					: error.messages,
+			};
+		});
+	}
 }

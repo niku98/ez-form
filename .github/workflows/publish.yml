@@ -7,6 +7,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    if: ${{ github.repository == 'niku98/ez-form' && github.repository_owner == 'niku98' }}
     steps:
       - uses: actions/checkout@v3
         with:
@@ -14,16 +15,16 @@ jobs:
       - uses: actions/setup-node@v3
         with:
           node-version: 18
-          cache: yarn
+          cache: pnpm
           registry-url: "https://registry.npmjs.org"
 
       - name: Install dependencies
-        run: yarn install --frozen-lockfile
+        run: pnpm install --frozen-lockfile
 
       - name: Build
-        run: yarn build && yarn build:style && yarn post-build
+        run: pnpm build
 
       - name: Publish
-        run: cd ./dist && npm publish
+        run: pnpm publish-packages ${{ github.ref_name }}
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

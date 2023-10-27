@@ -5,8 +5,12 @@ import { argv } from "process";
 import * as semver from "semver";
 
 function publish() {
-	const releaseTag = semver.parse(argv[2]);
-	if (!releaseTag) {
+	const inputVer = argv[2];
+
+	const releaseVer = semver.parse(inputVer.split("@")[0]);
+	const releaseTag = inputVer.split("@")[1];
+
+	if (!releaseVer) {
 		console.error("[Tag] is not provided or it is invalid.");
 		return;
 	}
@@ -14,7 +18,7 @@ function publish() {
 	const packages = getInternalPackages();
 	const changedPackages = packages.filter((pkg) => {
 		if (
-			semver.compare(getLatestPackageVersion(pkg.name), releaseTag.version) >= 0
+			semver.compare(getLatestPackageVersion(pkg.name), releaseVer.version) >= 0
 		) {
 			return false;
 		}
@@ -34,7 +38,7 @@ function publish() {
 				const result = replacePackageVersion(
 					pkg.packageJson,
 					changedPackage.name,
-					releaseTag.version
+					releaseVer.version
 				);
 
 				if (result && !changedPackages.includes(pkg)) {
@@ -45,15 +49,19 @@ function publish() {
 	}
 	console.info("Updated packages dependencies.");
 
-	console.log(changedPackages.map((pkg) => pkg.packageJson));
-
 	console.info("Updating changed packages version...");
 	changedPackages.forEach((pkg) => {
-		pkg.version = releaseTag.version;
-		pkg.packageJson.version = releaseTag.version;
+		pkg.version = releaseVer.version;
+		pkg.packageJson.version = releaseVer.version;
 		writePackageJsonFile(pkg.packageJson, pkg.packageJsonPath);
 	});
 	console.info("Updated changed packages version.");
+
+	console.info("Publishing packages...");
+	changedPackages.forEach((pkg) => {
+		publishPackage(pkg.folder, releaseTag);
+	});
+	console.info("All changed packages are published...");
 }
 publish();
 
@@ -123,4 +131,8 @@ function getChangedFiles(latestTag) {
 
 function writePackageJsonFile(packageJson, path) {
 	writeFileSync(path, JSON.stringify(packageJson, undefined, 2));
+}
+
+function publishPackage(path, tag) {
+	execSync(`cd ${path} && npm publish${tag ? " --tag " + tag : ""}`);
 }

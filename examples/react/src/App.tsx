@@ -1,4 +1,9 @@
-import { asyncFieldSchema, asyncSchema, useForm } from "@niku/ez-form-react";
+import {
+	FieldErrors,
+	asyncFieldSchema,
+	asyncSchema,
+	useForm,
+} from "@niku/ez-form-react";
 import { useState } from "react";
 import "./App.css";
 import reactLogo from "./assets/react.svg";
@@ -70,6 +75,7 @@ function LoginPage() {
 				</form.Field>
 				<form.Field
 					name="password"
+					label="Test"
 					validationSchema={asyncFieldSchema({
 						type: "string",
 						pattern: new RegExp("^(?=.*[A-Za-z])(?=.*d)[A-Za-zd]{8,}$"),
@@ -77,6 +83,9 @@ function LoginPage() {
 					})}
 				>
 					<input data-testid="passwordInput" type="password" />
+					<FieldErrors>
+						{(errors) => errors?.map((error) => error.messages)}
+					</FieldErrors>
 				</form.Field>
 
 				<br />
