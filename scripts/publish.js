@@ -134,5 +134,9 @@ function writePackageJsonFile(packageJson, path) {
 }
 
 function publishPackage(path, tag) {
-	execSync(`cd ${path} && npm publish${tag ? " --tag " + tag : ""}`);
+	execSync(
+		`cd ${path} && npm publish${
+			tag ? " --tag " + tag : ""
+		} --access=public --no-git-checks --registry https://registry.npmjs.org`
+	);
 }

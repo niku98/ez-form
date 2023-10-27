@@ -25,6 +25,12 @@
 		"build": "tsup",
 		"lint": "eslint src --ext ts,tsx --report-unused-disable-directives --max-warnings 0"
 	},
+	"files": [
+		"dist",
+		"LICENSE",
+		"README.md",
+		"package.json"
+	],
 	"dependencies": {
 		"@niku/ez-form-core": "*"
 	},
