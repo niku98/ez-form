@@ -7,13 +7,13 @@ import {
 import { castPath, mapValues } from "src/utilities";
 import { toArray } from "src/utilities/array";
 import { createControlledPromise } from "src/utilities/promise";
-import { filterRuleByTrigger, usingZod } from "src/validation";
+import { filterRuleByTrigger, usingZod } from "src/validation/utilities";
 import ValidationSchema, {
 	FieldValidationSchema,
 	SELF_KEY,
 	ValidationOptions,
 } from "src/validation/ValidationSchema";
-import type { Schema, ZodErrorMap, z } from "zod";
+import type { Schema, z, ZodErrorMap } from "zod";
 
 export interface ZodRuleItem extends Omit<ValidationOption, "validateFirst"> {
 	schema: Schema | ((values: any) => Schema);
@@ -91,7 +91,7 @@ async function zodParse<T extends object>(
 					typeof rule.schema === "function" ? rule.schema(values) : rule.schema
 				)
 			).safeParse(values, {
-				errorMap,
+				errorMap: errorMap || undefined,
 			});
 
 			if (result.success === true) {

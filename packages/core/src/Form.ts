@@ -57,7 +57,7 @@ export default class FormInstance<
 				rules: {},
 				preserveValues: false,
 				enableReinitialize: false,
-				validateMessages: {},
+				validateMessages: undefined,
 				validateTrigger: "change",
 			},
 			options

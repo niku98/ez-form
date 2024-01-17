@@ -10,6 +10,7 @@
 		"build": "nx run-many --projects=packages/** --target=build --parallel=5",
 		"dev": "nx run-many --projects=packages/** --target=dev --parallel=5",
 		"test": "vitest",
+		"test:coverage": "vitest test --coverage",
 		"publish-packages": "node scripts/publish.js"
 	},
 	"devDependencies": {
@@ -29,7 +30,7 @@
 		"nx-cloud": "latest",
 		"semver": "^7.5.4",
 		"vite-plugin-solid": "^2.7.0",
-		"vitest": "^0.33.0"
+		"vitest": "^1.2.0"
 	},
 	"nx": {
 		"targets": {}

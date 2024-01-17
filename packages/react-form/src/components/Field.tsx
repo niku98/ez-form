@@ -13,7 +13,6 @@ import type { ReactElement, ReactNode } from "react";
 import fieldContext from "src/contexts/fieldContext";
 import useField from "src/hooks/useField";
 import useFormContext from "src/hooks/useFormContext";
-import { BindingFieldInput } from "src/index";
 import type { FieldNameProps } from "src/utilities";
 
 export type FieldProps<
@@ -30,12 +29,10 @@ export type FieldProps<
 				value: FieldValue;
 				meta: FieldMeta;
 		  }) => ReactNode);
-	inputIndex?: number;
 } & Omit<FieldOptions<FieldValue, FormValue>, "name">;
 
 export default function Field<FormValues, ParentValue = FormValues>({
 	children,
-	inputIndex,
 	...options
 }: FieldProps<FormValues, ParentValue>) {
 	const field = useField<FormValues, ParentValue>(options as any);
@@ -45,11 +42,9 @@ export default function Field<FormValues, ParentValue = FormValues>({
 
 	return (
 		<fieldContext.Provider value={{ field: field as any }}>
-			<BindingFieldInput inputIndex={inputIndex}>
-				{typeof children === "function"
-					? children?.({ form, field, value, meta })
-					: children}
-			</BindingFieldInput>
+			{typeof children === "function"
+				? children?.({ form, field, value, meta })
+				: children}
 		</fieldContext.Provider>
 	);
 }

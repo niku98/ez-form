@@ -6,10 +6,10 @@ import {
 	type FieldOptions,
 	type GetKeys,
 } from "@niku/ez-form-core";
-import { EzBindingFieldInput, useField } from "src/index";
+import { useField } from "src/index";
 import { useInjectForm } from "src/provides/form";
 import { fieldProps, type FieldNameProps } from "src/utilities/field";
-import { defineComponent, h } from "vue";
+import { defineComponent } from "vue";
 
 export type FieldProps<
 	FormValues,
@@ -29,19 +29,12 @@ const FieldImpl = defineComponent({
 		const meta = field.useFieldMeta();
 
 		return () =>
-			h(
-				EzBindingFieldInput,
-				{
-					inputIndex: props.inputIndex,
-				},
-				() =>
-					ctx.slots.default?.({
-						field,
-						form,
-						value: value.value,
-						meta: meta.value,
-					})
-			);
+			ctx.slots.default?.({
+				field,
+				form,
+				value: value.value,
+				meta: meta.value,
+			});
 	},
 });
 

@@ -2,7 +2,9 @@
 	<Form>
 		<form v-bind="form.getFormProps()">
 			<Field name="username">
-				<input data-testid="usernameInput" />
+				<EzBindingFieldInput>
+					<input data-testid="usernameInput" />
+				</EzBindingFieldInput>
 				<FieldErrors v-slot="{ errors }">
 					<span data-testid="usernameErrors">
 						<template
@@ -13,7 +15,9 @@
 				</FieldErrors>
 			</Field>
 			<Field name="password" :validationSchema="passwordValidationSchema">
-				<input data-testid="passwordInput" type="password" />
+				<EzBindingFieldInput>
+					<input data-testid="passwordInput" type="password" />
+				</EzBindingFieldInput>
 				<FieldErrors v-slot="{ errors }">
 					<span data-testid="passwordErrors">
 						<template
@@ -29,6 +33,7 @@
 
 <script lang="ts" setup>
 import {
+	EzBindingFieldInput,
 	EzFieldErrors as FieldErrors,
 	useForm,
 	type FieldValidationSchema,

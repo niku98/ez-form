@@ -4,7 +4,10 @@ import { defineConfig } from "vitest/config";
 export default defineConfig({
 	plugins: [vue()],
 	resolve: {
-		alias: [{ find: "src", replacement: path.resolve(__dirname, "src") }],
+		alias: [
+			{ find: "src", replacement: path.resolve(__dirname, "src") },
+			{ find: "__tests__", replacement: path.resolve(__dirname, "__tests__") },
+		],
 	},
 	define: {
 		"process.env.VTL_SKIP_AUTO_CLEANUP": true,
@@ -14,7 +17,6 @@ export default defineConfig({
 		environment: "jsdom",
 		setupFiles: ["./__tests__/setup.ts"],
 		deps: {
-			registerNodeLoader: true,
 			inline: [/vue/, /@vue\/test-utils/],
 		},
 	},

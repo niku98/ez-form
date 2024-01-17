@@ -170,6 +170,10 @@ export default abstract class FieldBaseInstance<
 			return this.validationPromise;
 		}
 
+		if (this.form.options.validateMessages) {
+			validationSchema.updateMessages(this.form.options.validateMessages);
+		}
+
 		validationSchema
 			?.validate(this.form.getValues() as any, {
 				selfFieldName: this.name,

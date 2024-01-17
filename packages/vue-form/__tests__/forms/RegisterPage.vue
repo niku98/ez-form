@@ -2,10 +2,14 @@
 	<Form>
 		<form v-bind="form.getFormProps()">
 			<Field name="username">
-				<input data-testid="usernameInput" />
+				<EzBindingFieldInput>
+					<input data-testid="usernameInput" />
+				</EzBindingFieldInput>
 			</Field>
 			<Field name="password" :validationSchema="passwordValidationSchema">
-				<input data-testid="passwordInput" type="password" />
+				<EzBindingFieldInput>
+					<input data-testid="passwordInput" type="password" />
+				</EzBindingFieldInput>
 				<FieldErrors v-slot="{ errors }">
 					<span data-testid="passwordErrors">
 						<template
@@ -19,7 +23,9 @@
 				name="confirmPassword"
 				:validationSchema="confirmPasswordValidationSchema"
 			>
-				<input data-testid="confirmPasswordInput" type="password" />
+				<EzBindingFieldInput>
+					<input data-testid="confirmPasswordInput" type="password" />
+				</EzBindingFieldInput>
 				<FieldErrors v-slot="{ errors }">
 					<span data-testid="confirmPasswordErrors">
 						<template
@@ -30,10 +36,14 @@
 				</FieldErrors>
 			</Field>
 			<Field name="address.lineOne">
-				<input data-testid="addressLineOneInput" type="address" />
+				<EzBindingFieldInput>
+					<input data-testid="addressLineOneInput" type="address" />
+				</EzBindingFieldInput>
 			</Field>
 			<Field name="address.lineTwo">
-				<input data-testid="addressLineTwoInput" type="address" />
+				<EzBindingFieldInput>
+					<input data-testid="addressLineTwoInput" type="address" />
+				</EzBindingFieldInput>
 			</Field>
 			<ObserveField name="username" v-slot="{ value }">
 				<span data-testid="observeUsername">{{ value }}</span>
@@ -47,7 +57,11 @@
 
 <script lang="ts" setup>
 import type { FieldValidationSchema } from "@niku/ez-form-core";
-import { EzFieldErrors as FieldErrors, useForm } from "src/index";
+import {
+	EzBindingFieldInput,
+	EzFieldErrors as FieldErrors,
+	useForm,
+} from "src/index";
 export interface RegisterForm {
 	username: string;
 	password: string;

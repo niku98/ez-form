@@ -3,10 +3,14 @@
 		<div>
 			<div v-for="field in fieldsInfo" :key="field.key">
 				<Field :index="field.index" name="username">
-					<input :data-testid="`users.username.${field.index}`" />
+					<EzBindingFieldInput>
+						<input :data-testid="`users.username.${field.index}`" />
+					</EzBindingFieldInput>
 				</Field>
 				<Field :index="field.index" name="password">
-					<input :data-testid="`users.password.${field.index}`" />
+					<EzBindingFieldInput>
+						<input :data-testid="`users.password.${field.index}`" />
+					</EzBindingFieldInput>
 				</Field>
 			</div>
 
@@ -21,7 +25,11 @@
 	</Form>
 </template>
 <script lang="ts" setup>
-import { useForm, type FieldArrayInstance } from "src/index";
+import {
+	EzBindingFieldInput,
+	useForm,
+	type FieldArrayInstance,
+} from "src/index";
 
 export interface User {
 	username: string;
