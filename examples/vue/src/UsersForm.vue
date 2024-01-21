@@ -23,7 +23,7 @@
 	</Form>
 </template>
 <script lang="ts" setup>
-import { EzBindingFieldInput, useForm } from "@niku/ez-form-vue";
+import { useForm } from "@niku/ez-form-vue";
 
 export interface User {
 	username: string;

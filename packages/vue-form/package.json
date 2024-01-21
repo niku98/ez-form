@@ -19,12 +19,14 @@
 	"typings": "./dist/index.d.ts",
 	"exports": {
 		".": {
-			"default": "./dist/index.cjs",
+			"default": "./dist/index.js",
 			"import": "./dist/index.js",
+			"require": "./dist/index.cjs",
 			"types": "./dist/index.d.ts"
 		},
 		"./plugin": {
-			"default": "./dist/plugin.cjs",
+			"default": "./dist/plugin.js",
+			"require": "./dist/plugin.cjs",
 			"import": "./dist/plugin.js",
 			"types": "./dist/plugin.d.ts"
 		}

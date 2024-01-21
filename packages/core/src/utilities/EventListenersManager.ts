@@ -17,10 +17,10 @@ export class EventListenersManager<
 		this.listeners = {} as Listeners<ListEvents>;
 	}
 
-	protected trigger<K extends keyof ListEvents>(
+	protected trigger = <K extends keyof ListEvents>(
 		event: K,
 		...params: ListEvents[K]
-	) {
+	) => {
 		this.eventTriggerIds[event as string] = this.eventTriggerIds[
 			event as string
 		]
@@ -35,9 +35,12 @@ export class EventListenersManager<
 			}
 			listener(...params);
 		});
-	}
+	};
 
-	on<K extends keyof ListEvents>(event: K, listener: Listener<ListEvents[K]>) {
+	on = <K extends keyof ListEvents>(
+		event: K,
+		listener: Listener<ListEvents[K]>
+	) => {
 		const listeners = this.listeners[event];
 
 		if (listeners) {
@@ -49,9 +52,12 @@ export class EventListenersManager<
 		return () => {
 			this.off(event, listener);
 		};
-	}
+	};
 
-	off<K extends keyof ListEvents>(event: K, listener: Listener<ListEvents[K]>) {
+	off = <K extends keyof ListEvents>(
+		event: K,
+		listener: Listener<ListEvents[K]>
+	) => {
 		const listeners = this.listeners[event];
 
 		if (listeners) {
@@ -59,5 +65,5 @@ export class EventListenersManager<
 		} else {
 			throw new Error(`${this} is doesn't have event "${String(event)}"`);
 		}
-	}
+	};
 }
