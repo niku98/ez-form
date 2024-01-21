@@ -29,7 +29,7 @@
 		"src",
 		"__tests__/**/*.vue",
 		"./tsup.config.ts",
-		"src/global..d.ts",
+		"src/types.ts",
 		"vitest.config.ts",
 		"__tests__"
 	]

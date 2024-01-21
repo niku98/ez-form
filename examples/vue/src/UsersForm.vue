@@ -3,10 +3,14 @@
 		<div>
 			<div v-for="field in fieldsInfo" :key="field.key">
 				<Field :index="field.index" name="username">
-					<input :data-testid="`users.username.${field.index}`" />
+					<EzBindingFieldInput>
+						<input :data-testid="`users.username.${field.index}`" />
+					</EzBindingFieldInput>
 				</Field>
 				<Field :index="field.index" name="password">
-					<input :data-testid="`users.password.${field.index}`" />
+					<EzBindingFieldInput>
+						<input :data-testid="`users.password.${field.index}`" />
+					</EzBindingFieldInput>
 				</Field>
 			</div>
 
@@ -19,7 +23,7 @@
 	</Form>
 </template>
 <script lang="ts" setup>
-import { useForm } from "@niku/ez-form-vue";
+import { EzBindingFieldInput, useForm } from "@niku/ez-form-vue";
 
 export interface User {
 	username: string;

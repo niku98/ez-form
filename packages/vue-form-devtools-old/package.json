@@ -1,5 +1,5 @@
 {
-	"name": "@niku/ez-form-vue",
+	"name": "@niku/ez-form-vue-devtools-old",
 	"private": false,
 	"version": "0.0.0",
 	"description": "Powerful, type-safe, easy-to-use form package",
@@ -17,18 +17,6 @@
 	"module": "./dist/index.js",
 	"types": "./dist/index.d.ts",
 	"typings": "./dist/index.d.ts",
-	"exports": {
-		".": {
-			"default": "./dist/index.cjs",
-			"import": "./dist/index.js",
-			"types": "./dist/index.d.ts"
-		},
-		"./plugin": {
-			"default": "./dist/plugin.cjs",
-			"import": "./dist/plugin.js",
-			"types": "./dist/plugin.d.ts"
-		}
-	},
 	"publishConfig": {
 		"access": "public"
 	},
@@ -46,32 +34,10 @@
 	],
 	"dependencies": {
 		"@niku/ez-form-core": "*",
-		"@vue/devtools-api": "^7.0.11"
-	},
-	"peerDependencies": {
-		"async-validator": "^4.2.5",
-		"vue": "^3.0.0",
-		"yup": "^1.2.0",
-		"zod": "^3.21.4"
-	},
-	"peerDependenciesMeta": {
-		"async-validator": {
-			"optional": true
-		},
-		"yup": {
-			"optional": true
-		},
-		"zod": {
-			"optional": true
-		}
+		"@vue/devtools-api": "^6.5.1"
 	},
 	"devDependencies": {
-		"@typescript-eslint/eslint-plugin": "^5.61.0",
-		"@typescript-eslint/parser": "^5.61.0",
-		"eslint": "^8.44.0",
-		"eslint-plugin-vue": "9.15.1",
 		"tsup": "^7.1.0",
-		"typescript": "^5.0.2",
-		"vue": "^3.0.0"
+		"typescript": "^5.0.2"
 	}
 }

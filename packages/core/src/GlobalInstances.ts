@@ -1,6 +1,6 @@
 import FieldBaseInstance from "src/FieldBase";
 import FormInstance from "src/Form";
-import { EventListenersManager } from "src/utilities";
+import { EventListenersManager, clone } from "src/utilities";
 
 type GlobalInstanceMap = Record<
 	string,
@@ -18,7 +18,7 @@ class GlobalInstances extends EventListenersManager<GlobalInstancesEvents> {
 	private instances: GlobalInstanceMap = {};
 
 	private triggerChange = () => {
-		this.trigger("change", this.instances);
+		this.trigger("change", clone(this.instances));
 	};
 
 	getGroup = (name: string) => {

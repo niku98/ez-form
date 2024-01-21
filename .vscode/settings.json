@@ -14,5 +14,6 @@
 		"source.organizeImports": true,
 		"source.fixAll.eslint": true
 	},
-	"eslint.validate": ["javascript"]
+	"eslint.validate": ["javascript"],
+	"typescript.tsdk": "node_modules/typescript/lib"
 }

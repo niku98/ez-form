@@ -1,8 +1,10 @@
 type Listeners<T> = {
-	[P in keyof T]?: Set<(...param: T[P] extends [] ? T[P] : any[]) => void>;
+	[P in keyof T]?: Set<
+		(...param: T[P] extends Array<any> ? T[P] : any[]) => void
+	>;
 };
 
-type Listener<E> = (...param: E extends [] ? E : any[]) => void;
+type Listener<E> = (...param: E extends Array<any> ? E : any[]) => void;
 
 export class EventListenersManager<
 	ListEvents extends { [key: string]: any[] }

@@ -11,6 +11,7 @@ export type FieldArrayEvents<Value, FormValues> = {
 	"change:value": [value: Value, oldValue: Value];
 	"change:meta": [meta: FieldMeta];
 	error: [errors: ValidateError[]];
+	reset: [];
 	push: [value: Value, ...items: GetArrayItemType<Value>[]];
 	pop: [value: Value, oldItem: GetArrayItemType<Value>];
 	shift: [value: Value, oldItem: GetArrayItemType<Value>];
@@ -126,13 +127,16 @@ export default class FieldArrayInstance<
 		return this.fields;
 	}
 
+	// --------------------
+	// Start Utils
+	// --------------------
 	push = (...items: ToArray<FieldValue>[number][]) => {
 		const newFields = this.copyFields();
 		if (Array.isArray(newFields)) {
 			newFields.push(...items);
 			this.keys.push(...items.map(() => uniqueId()));
 
-			this.fields = newFields as any;
+			this.fields = newFields;
 
 			this.trigger("push", newFields, ...items);
 		}
@@ -244,4 +248,31 @@ export default class FieldArrayInstance<
 			this.trigger("move", newFields, fromIndex, toIndex);
 		}
 	};
+	// --------------------
+	// Start Utils
+	// --------------------
+
+	getItemErrors(index: number): ValidateError[] {
+		return (
+			this.meta.errors?.filter((error) => {
+				return (
+					error.field.startsWith(`${this.name}[${index}]`) ||
+					error.field.startsWith(`${this.name}.${index}`)
+				);
+			}) ?? []
+		);
+	}
+
+	getItemValue(index: number) {
+		return Array.isArray(this.fields) ? this.fields[index] : undefined;
+	}
+
+	getItemFieldInstances(index: number) {
+		return this.form.filterFields((field) => {
+			return (
+				(field.name as string).startsWith(`${this.name}[${index}]`) ||
+				(field.name as string).startsWith(`${this.name}.${index}`)
+			);
+		});
+	}
 }

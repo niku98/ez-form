@@ -9,7 +9,13 @@ import {
 	ValidationResult,
 } from "src/models";
 import { GetKeys } from "src/models/Utilities";
-import { EventListenersManager, set, uniqueId } from "src/utilities";
+import {
+	EventListenersManager,
+	clone,
+	get,
+	set,
+	uniqueId,
+} from "src/utilities";
 import {
 	ControlledPromise,
 	createControlledPromise,
@@ -22,6 +28,7 @@ export type DefaultFieldEvents<Value> = {
 	"change:value": [value: Value, oldValue: Value];
 	"change:meta": [meta: FieldMeta];
 	error: [errors: ValidateError[]];
+	reset: [];
 };
 
 export default abstract class FieldBaseInstance<
@@ -55,7 +62,14 @@ export default abstract class FieldBaseInstance<
 	initialize = (notify = true) => {
 		this.name = this.options.name;
 		const oldValue = this.value;
-		this.value = (this.getValue() ?? this.options.initialValue) as FieldValue;
+		this.value = (clone(get(this.form.options.initialValues, this.name)) ??
+			this.options.initialValue) as FieldValue;
+
+		this.form.setFieldValue(this.name, this.value as any, {
+			validate: false,
+			dirty: false,
+			touched: false,
+		});
 
 		this.meta = {
 			dirty: false,
@@ -117,6 +131,12 @@ export default abstract class FieldBaseInstance<
 
 		this.trigger("change:value", this.value, oldValue);
 		this.trigger("change", this);
+	};
+
+	// Handle reset
+	reset = () => {
+		this.initialize();
+		this.trigger("reset");
 	};
 
 	// Handle validate
@@ -207,6 +227,11 @@ export default abstract class FieldBaseInstance<
 
 		this.validationPromise.reject({ cancelled: true });
 		this.validationPromise = undefined;
+	};
+
+	clearValidate = () => {
+		this.cancelValidate();
+		this.setMetaKey("errors", []);
 	};
 
 	normalizeValidateErrors(errors: ValidateError[]) {

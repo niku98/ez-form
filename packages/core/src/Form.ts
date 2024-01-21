@@ -239,6 +239,19 @@ export default class FormInstance<
 		return result;
 	};
 
+	filterFields = (
+		compareFn: (field: FieldBaseInstance<unknown, Values>) => boolean
+	): FieldBaseInstance<unknown, Values>[] => {
+		const result: FieldBaseInstance<unknown, Values>[] = [];
+		this.fields.forEach((field) => {
+			if (compareFn(field)) {
+				result.push(field);
+			}
+		});
+
+		return result;
+	};
+
 	// Handle Field value
 	setFieldValue = <N extends GetKeys<Values>>(
 		name: N,
@@ -382,6 +395,14 @@ export default class FormInstance<
 		this.validationPromise = undefined;
 		this.fields.forEach((field) => {
 			field.cancelValidate();
+		});
+	};
+
+	clearValidate = () => {
+		this.cancelValidate();
+		this.setMetaKey("errors", []);
+		this.fields.forEach((field) => {
+			field.clearValidate();
 		});
 	};
 }

@@ -6,6 +6,7 @@ export type FieldEvents<Value> = {
 	"change:value": [value: Value, oldValue: Value];
 	"change:meta": [meta: FieldMeta];
 	error: [errors: ValidateError[]];
+	reset: [];
 };
 
 export default class FieldInstance<
