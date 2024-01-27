@@ -9,7 +9,7 @@ import {
 import { useField } from "src/index";
 import { useInjectForm } from "src/provides/form";
 import { fieldProps, type FieldNameProps } from "src/utilities/field";
-import { defineComponent } from "vue";
+import { defineComponent, getCurrentInstance } from "vue";
 
 export type FieldProps<
 	FormValues,
@@ -27,6 +27,11 @@ const FieldImpl = defineComponent({
 		const form = useInjectForm();
 		const value = field.useFieldValue();
 		const meta = field.useFieldMeta();
+
+		const componentInstance = getCurrentInstance();
+		if (componentInstance) {
+			field.uid = componentInstance.uid.toString();
+		}
 
 		return () =>
 			ctx.slots.default?.({

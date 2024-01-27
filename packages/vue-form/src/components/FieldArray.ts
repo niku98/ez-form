@@ -9,7 +9,7 @@ import {
 import useFieldArray from "src/composables/useFieldArray";
 import { useInjectForm } from "src/provides/form";
 import { fieldProps, type FieldNameProps } from "src/utilities/field";
-import { defineComponent } from "vue";
+import { defineComponent, getCurrentInstance } from "vue";
 
 export type FieldArrayProps<
 	FormValues,
@@ -28,6 +28,11 @@ const FieldArrayImpl = defineComponent({
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
 		const field = useFieldArray(props as any);
 		const form = useInjectForm();
+
+		const componentInstance = getCurrentInstance();
+		if (componentInstance) {
+			field.uid = componentInstance.uid.toString();
+		}
 
 		return () =>
 			ctx.slots.default?.({ field, form, fieldsInfo: field.getFieldsInfo() });

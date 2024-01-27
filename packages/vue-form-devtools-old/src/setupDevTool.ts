@@ -252,6 +252,7 @@ export default function setupDevtool(app: any) {
 				SELECTED_ITEM = undefined;
 				SELECTED_LIST = undefined;
 				SELECTED_LIST_ITEM_INDEX = undefined;
+				api.unhighlightElement();
 
 				const foundNode = formNodes.find((node) => {
 					if (node.type === DevToolDataType.Form) {

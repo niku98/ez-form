@@ -2,7 +2,7 @@
 import type { FormInstance, FormOptions } from "@niku/ez-form-core";
 import { useForm } from "src/index";
 import { formProps } from "src/utilities/form";
-import { defineComponent } from "vue";
+import { defineComponent, getCurrentInstance } from "vue";
 
 export interface FormProps<FormValues> extends FormOptions<FormValues> {
 	form?: FormInstance<FormValues>;
@@ -13,7 +13,11 @@ const FormImpl = defineComponent({
 	props: formProps(),
 	setup(props, ctx) {
 		// eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-		useForm(props as any);
+		const form = useForm(props as any);
+		const componentInstance = getCurrentInstance();
+		if (componentInstance) {
+			form.uid = componentInstance.uid.toString();
+		}
 		return () => ctx.slots.default?.();
 	},
 });
