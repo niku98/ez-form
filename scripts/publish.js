@@ -17,9 +17,7 @@ function publish() {
 
 	const packages = getInternalPackages();
 	const changedPackages = packages.filter((pkg) => {
-		if (
-			semver.compare(getLatestPackageVersion(pkg.name), releaseVer.version) >= 0
-		) {
+		if (semver.compare(pkg.version, releaseVer.version) >= 0) {
 			return false;
 		}
 
@@ -32,6 +30,12 @@ function publish() {
 	}
 
 	console.info("Updating packages dependencies...");
+	changedPackages.forEach((changedPackage) => {
+		packages.forEach((pkg) => {
+			replacePackageVersion(changedPackage.packageJson, pkg.name, pkg.version);
+		});
+	});
+
 	for (let index = 0; index < 3; index++) {
 		for (const pkg of packages) {
 			changedPackages.forEach((changedPackage) => {
@@ -57,6 +61,9 @@ function publish() {
 	});
 	console.info("Updated changed packages version.");
 
+	console.info("All changed packages:");
+	console.info("  " + changedPackages.map(({ name }) => name).join("\n  "));
+
 	console.info("Publishing packages...");
 	changedPackages.forEach((pkg) => {
 		publishPackage(pkg.folder, releaseTag);
@@ -78,7 +85,7 @@ function getInternalPackages() {
 			folder: path.replace("/package.json", ""),
 			packageJsonPath: path,
 			name: packageJson.name,
-			version: packageJson.version,
+			version: getLatestPackageVersion(packageJson.name),
 			packageJson,
 		};
 	});
@@ -102,7 +109,7 @@ function replacePackageVersion(packageJson, packageName, version) {
 
 function getLatestPackageVersion(packageName) {
 	try {
-		return execSync(`npm view ${packageName} version`).toString("utf8");
+		return execSync(`npm view ${packageName} version`).toString("utf8").trim();
 	} catch (error) {
 		return "0.0.0";
 	}

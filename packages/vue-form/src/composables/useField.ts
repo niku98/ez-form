@@ -115,6 +115,9 @@ export default function useField<
 				get name() {
 					return `${form.uid}-${field.name as string}`;
 				},
+				get id() {
+					return `${form.uid}-${field.name as string}`;
+				},
 			};
 		}
 
@@ -135,6 +138,9 @@ export default function useField<
 				return field.handleBlur(e);
 			},
 			get name() {
+				return `${form.uid}-${field.name as string}`;
+			},
+			get id() {
 				return `${form.uid}-${field.name as string}`;
 			},
 		};

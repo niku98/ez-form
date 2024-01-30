@@ -107,6 +107,9 @@ export default function useField<
 				get name() {
 					return `${form.uid}-${fieldInstance.name as string}`;
 				},
+				get id() {
+					return `${form.uid}-${fieldInstance.name as string}`;
+				},
 			};
 		};
 
