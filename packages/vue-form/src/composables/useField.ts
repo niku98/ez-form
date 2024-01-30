@@ -112,6 +112,9 @@ export default function useField<
 				onChange: (e: any) => field.handleChange(e),
 				onInput: (e: any) => field.handleChange(e),
 				onBlur: (e: Event) => field.handleBlur(e),
+				get name() {
+					return `${form.uid}-${field.name as string}`;
+				},
 			};
 		}
 
@@ -130,6 +133,9 @@ export default function useField<
 			},
 			[onBlurPropName]: (e: Event) => {
 				return field.handleBlur(e);
+			},
+			get name() {
+				return `${form.uid}-${field.name as string}`;
 			},
 		};
 	};

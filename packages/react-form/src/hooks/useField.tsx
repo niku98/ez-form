@@ -104,6 +104,9 @@ export default function useField<
 				[onBlurPropName]: (e: Event) => {
 					return fieldInstance.handleBlur(e);
 				},
+				get name() {
+					return `${form.uid}-${fieldInstance.name as string}`;
+				},
 			};
 		};
 
