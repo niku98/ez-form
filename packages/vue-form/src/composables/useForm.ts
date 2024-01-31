@@ -26,7 +26,15 @@ import {
 import { provideForm } from "src/provides/form";
 import { handleEventPrevent } from "src/utilities/event";
 import { clearUndefinedProperties } from "src/utilities/object";
-import { h, onBeforeUnmount, watch, type Ref, type Slots } from "vue";
+import {
+	h,
+	onBeforeUnmount,
+	toValue,
+	watch,
+	type MaybeRef,
+	type Ref,
+	type Slots,
+} from "vue";
 
 declare module "@niku/ez-form-core" {
 	interface FormInstance<Values> {
@@ -55,10 +63,10 @@ export interface UseFormProps<FormValues> extends FormOptions<FormValues> {
 }
 
 export default function useForm<FormValues>(
-	options: UseFormProps<FormValues> = {}
+	options: MaybeRef<UseFormProps<FormValues>> = {}
 ) {
 	function getForm() {
-		const { form: optionsForm, ...otherOptions } = options;
+		const { form: optionsForm, ...otherOptions } = toValue(options);
 		if (optionsForm) {
 			optionsForm.updateOptions({
 				...optionsForm.options,
@@ -68,7 +76,7 @@ export default function useForm<FormValues>(
 			return optionsForm;
 		}
 
-		const form = new FormInstance(options);
+		const form = new FormInstance(toValue(options));
 
 		form.useField = useField as any;
 		form.useFieldArray = useFieldArray as any;
@@ -115,9 +123,9 @@ export default function useForm<FormValues>(
 	const form = getForm();
 
 	watch(
-		() => options,
-		() => {
-			const { form: optionsForm, ...otherOptions } = options;
+		() => toValue(options),
+		(newOptions) => {
+			const { form: optionsForm, ...otherOptions } = newOptions;
 
 			form.updateOptions({
 				...optionsForm?.options,

@@ -25,7 +25,16 @@ import {
 import { provideFieldArray } from "src/provides/fieldArray";
 import { useInjectForm } from "src/provides/form";
 import type { FieldNameProps } from "src/utilities/field";
-import { computed, h, onBeforeUnmount, watch, type Ref, type Slots } from "vue";
+import {
+	computed,
+	h,
+	onBeforeUnmount,
+	toValue,
+	watch,
+	type MaybeRef,
+	type Ref,
+	type Slots,
+} from "vue";
 
 declare module "@niku/ez-form-core" {
 	interface FieldArrayInstance<FieldValue, FormValues> {
@@ -58,21 +67,22 @@ export default function useFieldArray<
 	FormValues = unknown,
 	ParentValue = FormValues,
 	N extends GetKeys<ParentValue> = GetKeys<ParentValue>
->(options: UseFieldArrayProps<FormValues, ParentValue, N>) {
+>(options: MaybeRef<UseFieldArrayProps<FormValues, ParentValue, N>>) {
 	const form = useInjectForm<FormValues>();
 
 	const name = computed(() => {
+		const optionsValue = toValue(options);
 		return (
-			typeof options.index === "number"
-				? [options.namePrefix, options.index, options.name]
-				: [options.namePrefix, options.name]
+			typeof optionsValue.index === "number"
+				? [optionsValue.namePrefix, optionsValue.index, optionsValue.name]
+				: [optionsValue.namePrefix, optionsValue.name]
 		)
 			.filter((d) => d !== undefined)
 			.join(".");
 	});
 
 	const field = new FieldArrayInstance(form, {
-		...options,
+		...toValue(options),
 		name: name.value as any,
 	});
 
@@ -121,10 +131,10 @@ export default function useFieldArray<
 	}) as any;
 
 	watch(
-		() => options,
-		() => {
+		() => toValue(options),
+		(newOptions) => {
 			field.updateOptions({
-				...options,
+				...newOptions,
 				name: name.value as any,
 			});
 		}

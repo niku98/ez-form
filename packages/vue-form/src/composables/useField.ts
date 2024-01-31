@@ -26,9 +26,10 @@ import type { FieldNameProps } from "src/utilities/field";
 import {
 	computed,
 	h,
-	isReactive,
 	onBeforeUnmount,
+	toValue,
 	watch,
+	type MaybeRef,
 	type Ref,
 	type Slots,
 	type VNode,
@@ -72,21 +73,22 @@ export default function useField<
 	FormValues = unknown,
 	ParentValue = FormValues,
 	N extends GetKeys<ParentValue> = GetKeys<ParentValue>
->(options: UseFieldProps<FormValues, ParentValue, N>) {
+>(options: MaybeRef<UseFieldProps<FormValues, ParentValue, N>>) {
 	const form = useInjectForm<FormValues>();
 
 	const name = computed(() => {
+		const optionsValue = toValue(options);
 		return (
-			typeof options.index === "number"
-				? [options.namePrefix, options.index, options.name]
-				: [options.namePrefix, options.name]
+			typeof optionsValue.index === "number"
+				? [optionsValue.namePrefix, optionsValue.index, optionsValue.name]
+				: [optionsValue.namePrefix, optionsValue.name]
 		)
 			.filter((d) => d !== undefined)
 			.join(".");
 	});
 
 	const field = new FieldInstance(form, {
-		...options,
+		...toValue(options),
 		name: name.value as any,
 	});
 
@@ -174,12 +176,15 @@ export default function useField<
 		return h(EzFieldArray as any, { namePrefix: field.name, ...props }, slots);
 	}) as any;
 
-	watch(isReactive(options) ? options : () => options, () => {
-		field.updateOptions({
-			...options,
-			name: name.value as any,
-		});
-	});
+	watch(
+		() => toValue(options),
+		(newOptions) => {
+			field.updateOptions({
+				...newOptions,
+				name: name.value as any,
+			});
+		}
+	);
 
 	const unmount = field.mount();
 
